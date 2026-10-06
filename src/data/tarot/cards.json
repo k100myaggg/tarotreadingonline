@@ -1,0 +1,3009 @@
+[
+  {
+    "id": "major_00_fool",
+    "number": 0,
+    "name": {
+      "en": "The Fool",
+      "hi": "द फूल (मूर्ख)",
+      "ja": "愚者"
+    },
+    "element": "air",
+    "association": "Uranus",
+    "keywords": {
+      "upright": [
+        "new beginnings",
+        "innocence",
+        "spontaneity",
+        "leap of faith"
+      ],
+      "reversed": [
+        "recklessness",
+        "risk-taking",
+        "naivety",
+        "hesitation"
+      ]
+    },
+    "meanings": {
+      "upright": "A call to embark upon a brave new journey with an untroubled spirit. Trust in the cosmos and step off the cliff edge with confidence.",
+      "reversed": "A warning against reckless impulsivity or staying paralyzed at the threshold when intuition calls for a leap."
+    },
+    "symbolism": [
+      "white rose",
+      "cliff edge",
+      "small companion dog",
+      "shining sun",
+      "wandering pack"
+    ],
+    "numerology": 0,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_00_fool.webp"
+  },
+  {
+    "id": "major_01_magician",
+    "number": 1,
+    "name": {
+      "en": "The Magician",
+      "hi": "द मैजिशियन (जादूगर)",
+      "ja": "魔術師"
+    },
+    "element": "air",
+    "association": "Mercury",
+    "keywords": {
+      "upright": [
+        "manifestation",
+        "resourcefulness",
+        "inspired action",
+        "mastery"
+      ],
+      "reversed": [
+        "manipulation",
+        "latent talent",
+        "scattered energy",
+        "trickery"
+      ]
+    },
+    "meanings": {
+      "upright": "You hold all four tools upon the altar: mind, passion, emotion, and substance. Channel divine will into tangible reality.",
+      "reversed": "Potential left dormant, or willpower clouded by deception. Align your inner motive before executing outer action."
+    },
+    "symbolism": [
+      "infinity sign (lemniscate)",
+      "ouroboros belt",
+      "altar table",
+      "four suit symbols",
+      "red roses and white lilies"
+    ],
+    "numerology": 1,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_01_magician.webp"
+  },
+  {
+    "id": "major_02_high_priestess",
+    "number": 2,
+    "name": {
+      "en": "The High Priestess",
+      "hi": "द हाई प्रीस्टेस (प्रधान पुजारिन)",
+      "ja": "女教皇"
+    },
+    "element": "water",
+    "association": "Moon",
+    "keywords": {
+      "upright": [
+        "intuition",
+        "sacred knowledge",
+        "divine feminine",
+        "subconscious mind"
+      ],
+      "reversed": [
+        "secretiveness",
+        "disconnected intuition",
+        "repressed feelings",
+        "superficiality"
+      ]
+    },
+    "meanings": {
+      "upright": "Sit quietly between the twin pillars of light and shadow. The answer you seek is not in external noise, but in silent inner knowing.",
+      "reversed": "You are ignoring your intuitive whispers in favor of logical rationalizations. Return to stillness and listen."
+    },
+    "symbolism": [
+      "twin pillars Boaz and Jachin",
+      "pomegranate veil",
+      "crescent moon",
+      "TORA scroll",
+      "blue robes"
+    ],
+    "numerology": 2,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_02_high_priestess.webp"
+  },
+  {
+    "id": "major_03_empress",
+    "number": 3,
+    "name": {
+      "en": "The Empress",
+      "hi": "द एम्प्रेस (महारानी)",
+      "ja": "女帝"
+    },
+    "element": "earth",
+    "association": "Venus",
+    "keywords": {
+      "upright": [
+        "abundance",
+        "fertility",
+        "nurturing",
+        "sensory beauty",
+        "creativity"
+      ],
+      "reversed": [
+        "creative block",
+        "overdependence",
+        "depletion",
+        "smothering"
+      ]
+    },
+    "meanings": {
+      "upright": "A golden season of fruition, creative birth, and sensory nourishment. Nature blossoms around your endeavors.",
+      "reversed": "Overgiving has drained your inner spring. Prioritize radical self-care and restore harmony with your physical vessel."
+    },
+    "symbolism": [
+      "twelve-star crown",
+      "pomegranate gown",
+      "wheat field",
+      "waterfall",
+      "Venusian shield"
+    ],
+    "numerology": 3,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_03_empress.webp"
+  },
+  {
+    "id": "major_04_emperor",
+    "number": 4,
+    "name": {
+      "en": "The Emperor",
+      "hi": "द एम्परर (सम्राट)",
+      "ja": "皇帝"
+    },
+    "element": "fire",
+    "association": "Aries",
+    "keywords": {
+      "upright": [
+        "authority",
+        "structure",
+        "discipline",
+        "protective power",
+        "stability"
+      ],
+      "reversed": [
+        "tyranny",
+        "rigidity",
+        "loss of control",
+        "inefficiency"
+      ]
+    },
+    "meanings": {
+      "upright": "Erect stable boundaries and build structures built to endure. Calm leadership and disciplined focus will secure victory.",
+      "reversed": "Stubborn micromanagement or chaotic lack of discipline. Distinguish legitimate authority from arbitrary control."
+    },
+    "symbolism": [
+      "stone throne with rams' heads",
+      "ankh scepter",
+      "orb of sovereignty",
+      "red armor",
+      "arid mountain backdrop"
+    ],
+    "numerology": 4,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_04_emperor.webp"
+  },
+  {
+    "id": "major_05_hierophant",
+    "number": 5,
+    "name": {
+      "en": "The Hierophant",
+      "hi": "द हायरोफेंट (धर्माचार्य)",
+      "ja": "法皇"
+    },
+    "element": "earth",
+    "association": "Taurus",
+    "keywords": {
+      "upright": [
+        "spiritual tradition",
+        "mentorship",
+        "shared beliefs",
+        "higher wisdom"
+      ],
+      "reversed": [
+        "rebellion",
+        "blind orthodoxy",
+        "dogma",
+        "unconventional paths"
+      ]
+    },
+    "meanings": {
+      "upright": "Seek wisdom from proven traditions, reputable lineages, or an enlightened mentor. Conformity to timeless principles brings peace.",
+      "reversed": "Breaking free from suffocating dogma. Construct your own internal spiritual philosophy rather than following outdated scripts."
+    },
+    "symbolism": [
+      "triple crown",
+      "papal cross",
+      "crossed golden keys",
+      "twin acolytes",
+      "sacred pillars"
+    ],
+    "numerology": 5,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_05_hierophant.webp"
+  },
+  {
+    "id": "major_06_lovers",
+    "number": 6,
+    "name": {
+      "en": "The Lovers",
+      "hi": "द लवर्स (प्रेमी)",
+      "ja": "恋人"
+    },
+    "element": "air",
+    "association": "Gemini",
+    "keywords": {
+      "upright": [
+        "sacred union",
+        "harmony",
+        "moral alignment",
+        "life choice"
+      ],
+      "reversed": [
+        "disharmony",
+        "internal conflict",
+        "misaligned values",
+        "hasty decisions"
+      ]
+    },
+    "meanings": {
+      "upright": "A profound soul union and an essential crossroads of personal values. Choosing with total integrity unites polarities.",
+      "reversed": "A misalignment between heart and actions, or tension within a core relationship. Re-examine the principles you stand for."
+    },
+    "symbolism": [
+      "Archangel Raphael",
+      "Adam and Eve",
+      "Tree of Life and Tree of Knowledge",
+      "volcano peak",
+      "radiant sun"
+    ],
+    "numerology": 6,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_06_lovers.webp"
+  },
+  {
+    "id": "major_07_chariot",
+    "number": 7,
+    "name": {
+      "en": "The Chariot",
+      "hi": "द चेरियट (विजयी रथ)",
+      "ja": "戦車"
+    },
+    "element": "water",
+    "association": "Cancer",
+    "keywords": {
+      "upright": [
+        "willpower",
+        "triumph",
+        "focused intent",
+        "overcoming obstacles"
+      ],
+      "reversed": [
+        "loss of direction",
+        "aggression",
+        "force without finesse",
+        "obstacle paralysis"
+      ]
+    },
+    "meanings": {
+      "upright": "Harmonizing opposing forces through pure resolve. Direct the black and white sphinxes with the reins of mental clarity toward your goal.",
+      "reversed": "Reins slipping from your grasp. Either aggressive brute force is backfiring, or momentum has stalled through indecision."
+    },
+    "symbolism": [
+      "starry canopy",
+      "twin sphinxes",
+      "armor with crescent moons",
+      "walled fortress",
+      "winged shield"
+    ],
+    "numerology": 7,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_07_chariot.webp"
+  },
+  {
+    "id": "major_08_strength",
+    "number": 8,
+    "name": {
+      "en": "Strength",
+      "hi": "स्ट्रेंग्थ (आत्मबल)",
+      "ja": "力"
+    },
+    "element": "fire",
+    "association": "Leo",
+    "keywords": {
+      "upright": [
+        "courage",
+        "gentle mastery",
+        "compassion",
+        "inner fortitude"
+      ],
+      "reversed": [
+        "self-doubt",
+        "raw instinctual outburst",
+        "exhaustion",
+        "timidity"
+      ]
+    },
+    "meanings": {
+      "upright": "True power does not conquer with the sword; it calms the roaring lion with an open hand, immense patience, and radical love.",
+      "reversed": "Doubt creeping into your spirit, or primal anger spilling out uncontrolled. Tame your inner beasts with gentleness, not shame."
+    },
+    "symbolism": [
+      "infinity lemniscate",
+      "lion gently held",
+      "garland of roses",
+      "white robe",
+      "peaceful golden background"
+    ],
+    "numerology": 8,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_08_strength.webp"
+  },
+  {
+    "id": "major_09_hermit",
+    "number": 9,
+    "name": {
+      "en": "The Hermit",
+      "hi": "द हर्मिट (एकांतवासी ज्ञानी)",
+      "ja": "隠者"
+    },
+    "element": "earth",
+    "association": "Virgo",
+    "keywords": {
+      "upright": [
+        "solitude",
+        "inner light",
+        "soul searching",
+        "philosophical guidance"
+      ],
+      "reversed": [
+        "isolation",
+        "loneliness",
+        "withdrawing out of fear",
+        "ignoring counsel"
+      ]
+    },
+    "meanings": {
+      "upright": "Retreat from worldly chatter into the tranquil sanctuary of self-inquiry. The lantern you hold illuminates the single next step.",
+      "reversed": "Loneliness disguised as wisdom. Emerging back into the warmth of fellowship is now required; do not hide in shadows."
+    },
+    "symbolism": [
+      "six-pointed star lantern",
+      "pilgrim's staff",
+      "grey cloak",
+      "snow-covered mountain peak"
+    ],
+    "numerology": 9,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_09_hermit.webp"
+  },
+  {
+    "id": "major_10_wheel_of_fortune",
+    "number": 10,
+    "name": {
+      "en": "Wheel of Fortune",
+      "hi": "व्हील ऑफ फॉर्च्यून (भाग्य चक्र)",
+      "ja": "運命の輪"
+    },
+    "element": "fire",
+    "association": "Jupiter",
+    "keywords": {
+      "upright": [
+        "cycles of destiny",
+        "karmic turning point",
+        "luck",
+        "inevitable change"
+      ],
+      "reversed": [
+        "bad luck",
+        "resisting inevitable change",
+        "setbacks",
+        "breaking cycles"
+      ]
+    },
+    "meanings": {
+      "upright": "The cosmic wheel turns inexorably. A stroke of destiny shifts the board in your favor. Remain centered at the wheel's still hub.",
+      "reversed": "Temporary downturns in external fortune. Recognize the pattern repeating in your life so you may consciously step off the karmic loop."
+    },
+    "symbolism": [
+      "letters TARO / ROTA",
+      "Hebrew Tetragrammaton",
+      "winged creatures of the four Evangelists",
+      "Anubis and Typhon",
+      "Sphinx with sword"
+    ],
+    "numerology": 10,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_10_wheel_of_fortune.webp"
+  },
+  {
+    "id": "major_11_justice",
+    "number": 11,
+    "name": {
+      "en": "Justice",
+      "hi": "जस्टिस (न्याय)",
+      "ja": "正義"
+    },
+    "element": "air",
+    "association": "Libra",
+    "keywords": {
+      "upright": [
+        "truth",
+        "karmic fairness",
+        "cause and effect",
+        "clear perception"
+      ],
+      "reversed": [
+        "unfairness",
+        "dishonesty",
+        "bias",
+        "evading accountability"
+      ]
+    },
+    "meanings": {
+      "upright": "The two-edged sword cuts away delusion while the golden scales weigh deeds with total impartiality. Truth emerges victorious.",
+      "reversed": "Unequal treatment, self-deception, or rationalizing an unfair compromise. Own your part in the equation with courage."
+    },
+    "symbolism": [
+      "upright double-edged sword",
+      "golden balance scales",
+      "purple veil",
+      "stone pillars",
+      "square clasp"
+    ],
+    "numerology": 11,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_11_justice.webp"
+  },
+  {
+    "id": "major_12_hanged_man",
+    "number": 12,
+    "name": {
+      "en": "The Hanged Man",
+      "hi": "द हैंग्ड मैन (समर्पित दृष्टा)",
+      "ja": "吊るされた男"
+    },
+    "element": "water",
+    "association": "Neptune",
+    "keywords": {
+      "upright": [
+        "surrender",
+        "new perspective",
+        "sacred pause",
+        "enlightenment through letting go"
+      ],
+      "reversed": [
+        "pointless martyrdom",
+        "stagnation",
+        "resistance",
+        "indecision"
+      ]
+    },
+    "meanings": {
+      "upright": "Voluntary stillness. By hanging upside down in sacred surrender, worldly paradigms invert and profound spiritual clarity descends.",
+      "reversed": "Martyring yourself for no constructive purpose, or struggling against a necessary period of incubation. Let go of the struggle."
+    },
+    "symbolism": [
+      "living wooden T-cross",
+      "golden halo",
+      "crossed leg (figure 4)",
+      "calm serene face",
+      "inverted viewpoint"
+    ],
+    "numerology": 12,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_12_hanged_man.webp"
+  },
+  {
+    "id": "major_13_death",
+    "number": 13,
+    "name": {
+      "en": "Death",
+      "hi": "डेथ (रूपांतरण / काल)",
+      "ja": "死神"
+    },
+    "element": "water",
+    "association": "Scorpio",
+    "keywords": {
+      "upright": [
+        "profound transformation",
+        "end of an era",
+        "rebirth",
+        "shedding the old"
+      ],
+      "reversed": [
+        "clinging to decay",
+        "fear of change",
+        "lingering stagnation",
+        "delayed rebirth"
+      ]
+    },
+    "meanings": {
+      "upright": "A definitive closing of an outdated chapter so life may renew itself. The black armor clears the field; sunrise gleams on the horizon.",
+      "reversed": "White-knuckling onto dead roots out of terror of the void. Allow the dry leaves to fall so spring may blossom."
+    },
+    "symbolism": [
+      "mystic white rose banner",
+      "rising golden sun between towers",
+      "skeletal knight in black armor",
+      "fallen king and praying child",
+      "river of life"
+    ],
+    "numerology": 13,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_13_death.webp"
+  },
+  {
+    "id": "major_14_temperance",
+    "number": 14,
+    "name": {
+      "en": "Temperance",
+      "hi": "टेम्परेंस (संतुलन / सामंजस्य)",
+      "ja": "節制"
+    },
+    "element": "fire",
+    "association": "Sagittarius",
+    "keywords": {
+      "upright": [
+        "alchemy",
+        "moderation",
+        "patience",
+        "synthesis of opposites"
+      ],
+      "reversed": [
+        "excess",
+        "imbalance",
+        "hastiness",
+        "clashing elements"
+      ]
+    },
+    "meanings": {
+      "upright": "The angel pours the liquid of life between two golden urns without spilling a drop. Practice gentle patience and harmonizing balance.",
+      "reversed": "Extreme swings, overindulgence, or pushing for immediate answers before the potion has properly brewed. Seek the middle path."
+    },
+    "symbolism": [
+      "winged angel",
+      "pouring water between two cups",
+      "one foot in water and one on land",
+      "blooming irises",
+      "distant crowned mountain"
+    ],
+    "numerology": 14,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_14_temperance.webp"
+  },
+  {
+    "id": "major_15_devil",
+    "number": 15,
+    "name": {
+      "en": "The Devil",
+      "hi": "द डेविल (माया / बंधन)",
+      "ja": "悪魔"
+    },
+    "element": "earth",
+    "association": "Capricorn",
+    "keywords": {
+      "upright": [
+        "shadow self",
+        "attachments",
+        "material illusions",
+        "breaking chains"
+      ],
+      "reversed": [
+        "freedom",
+        "reclaiming autonomy",
+        "overcoming addiction",
+        "seeing through illusion"
+      ]
+    },
+    "meanings": {
+      "upright": "Notice that the chains around the human necks are loose enough to lift off at any moment. Confront your shadow and dismantle self-imposed bondage.",
+      "reversed": "The illusion cracks; you are waking up to freedom. Breaking destructive loops and regaining sovereignty over your psyche."
+    },
+    "symbolism": [
+      "horned Baphomet figure",
+      "loose chains around neck",
+      "inverted pentagram",
+      "half-cube pedestal",
+      "torch touching grapes"
+    ],
+    "numerology": 15,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_15_devil.webp"
+  },
+  {
+    "id": "major_16_tower",
+    "number": 16,
+    "name": {
+      "en": "The Tower",
+      "hi": "द टॉवर (अचानक जागृति / ध्वंस)",
+      "ja": "塔"
+    },
+    "element": "fire",
+    "association": "Mars",
+    "keywords": {
+      "upright": [
+        "sudden revelation",
+        "shattering of false structures",
+        "liberation",
+        "breakthrough"
+      ],
+      "reversed": [
+        "disaster averted",
+        "delaying inevitable collapse",
+        "fear of suffering"
+      ]
+    },
+    "meanings": {
+      "upright": "A divine bolt of lightning strikes the crown of ego-built fortresses. What felt secure was built on falsehood; welcome the liberating truth.",
+      "reversed": "Clinging to a crumbling foundation or barely dodging an acute shock. Rebuild upon bedrock rather than brittle pride."
+    },
+    "symbolism": [
+      "lightning striking crown",
+      "falling figures",
+      "flames from windows",
+      "rocky crag foundation",
+      "twenty-two drops of fire"
+    ],
+    "numerology": 16,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_16_tower.webp"
+  },
+  {
+    "id": "major_17_star",
+    "number": 17,
+    "name": {
+      "en": "The Star",
+      "hi": "द स्टार (आशा / दिव्य प्रकाश)",
+      "ja": "星"
+    },
+    "element": "air",
+    "association": "Aquarius",
+    "keywords": {
+      "upright": [
+        "hope",
+        "serenity",
+        "spiritual blessing",
+        "inspiration",
+        "renewal"
+      ],
+      "reversed": [
+        "discouragement",
+        "cynicism",
+        "despair",
+        "dimmed faith"
+      ]
+    },
+    "meanings": {
+      "upright": "After the tempest, the evening star shines with celestial radiance. Drink deeply from peace, hope, and cosmic alignment.",
+      "reversed": "Loss of belief and temporary disillusionment. The star still burns above; lift your eyes from the mud and reconnect to your dreams."
+    },
+    "symbolism": [
+      "eight-pointed golden star",
+      "seven smaller stars",
+      "maiden pouring water on earth and pool",
+      "ibis bird on acacia tree"
+    ],
+    "numerology": 17,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_17_star.webp"
+  },
+  {
+    "id": "major_18_moon",
+    "number": 18,
+    "name": {
+      "en": "The Moon",
+      "hi": "द मून (रहस्य / भ्रम)",
+      "ja": "月"
+    },
+    "element": "water",
+    "association": "Pisces",
+    "keywords": {
+      "upright": [
+        "subconscious",
+        "dreams",
+        "unconscious fear",
+        "illusion",
+        "intuition in fog"
+      ],
+      "reversed": [
+        "fog lifting",
+        "release of fear",
+        "truth unmasked",
+        "misinterpretation"
+      ]
+    },
+    "meanings": {
+      "upright": "The winding path through the shadows where wolves howl and the crayfish emerges from the deep. Do not mistake night shadows for reality.",
+      "reversed": "Clarity returns as dawn nears. Secrets are brought to light, and lingering anxieties dissolve in the warmth of day."
+    },
+    "symbolism": [
+      "full moon with droplets",
+      "dog and wolf howling",
+      "crayfish crawling from pool",
+      "twin towers",
+      "winding path into mountains"
+    ],
+    "numerology": 18,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_18_moon.webp"
+  },
+  {
+    "id": "major_19_sun",
+    "number": 19,
+    "name": {
+      "en": "The Sun",
+      "hi": "द सन (उल्लास / तेज)",
+      "ja": "太陽"
+    },
+    "element": "fire",
+    "association": "Sun",
+    "keywords": {
+      "upright": [
+        "joy",
+        "vitality",
+        "triumph",
+        "radiant clarity",
+        "exuberance"
+      ],
+      "reversed": [
+        "temporary cloudiness",
+        "unrealized optimism",
+        "need for humility"
+      ]
+    },
+    "meanings": {
+      "upright": "Unclouded brilliance, child-like vitality, and overflowing warmth. Everything you touch is blessed with clarity and success.",
+      "reversed": "The sun is behind passing clouds; warmth remains, but confidence may be briefly shaken. Focus on gratitude to restore your light."
+    },
+    "symbolism": [
+      "radiant smiling sun",
+      "naked child on white horse",
+      "red feather and banner",
+      "sunflower wall",
+      "straight and wavy rays"
+    ],
+    "numerology": 19,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_19_sun.webp"
+  },
+  {
+    "id": "major_20_judgement",
+    "number": 20,
+    "name": {
+      "en": "Judgement",
+      "hi": "जजमेंट (महान पुकार / पुनर्जन्म)",
+      "ja": "審判"
+    },
+    "element": "fire",
+    "association": "Pluto",
+    "keywords": {
+      "upright": [
+        "spiritual awakening",
+        "reckoning",
+        "calling",
+        "absolution"
+      ],
+      "reversed": [
+        "self-doubt",
+        "ignoring the call",
+        "harsh self-criticism",
+        "regret"
+      ]
+    },
+    "meanings": {
+      "upright": "The archangel sounds the golden trumpet. Rise from the crypts of past mistakes, absolved and transformed. Answer your highest vocation.",
+      "reversed": "Paralyzed by remorse or second-guessing an intuitive awakening. Forgive your past self; the past has no claim on you."
+    },
+    "symbolism": [
+      "Archangel Gabriel with banner",
+      "trumpet call",
+      "figures rising from stone crypts with open arms",
+      "ocean and icy peaks"
+    ],
+    "numerology": 20,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_20_judgement.webp"
+  },
+  {
+    "id": "major_21_world",
+    "number": 21,
+    "name": {
+      "en": "The World",
+      "hi": "द वर्ल्ड (पूर्णता / ब्रह्मांड)",
+      "ja": "世界"
+    },
+    "element": "earth",
+    "association": "Saturn",
+    "keywords": {
+      "upright": [
+        "fulfillment",
+        "wholeness",
+        "completion of cycle",
+        "cosmic integration"
+      ],
+      "reversed": [
+        "unfinished business",
+        "seeking closure",
+        "shortcuts",
+        "stalled completion"
+      ]
+    },
+    "meanings": {
+      "upright": "The cosmic dance is complete. All elements synthesize into unbroken harmony. Celebrate your triumph and prepare for the next spiraling octave.",
+      "reversed": "Almost at the finish line, but one lingering loose end needs tying up. Do not quit before crossing the threshold of true closure."
+    },
+    "symbolism": [
+      "green laurel wreath",
+      "dancing figure with twin wands",
+      "red ribbons",
+      "four cherubic elemental beasts in four corners"
+    ],
+    "numerology": 21,
+    "arcana": "major",
+    "suit": null,
+    "image": "/cards/major_21_world.webp"
+  },
+  {
+    "id": "minor_wands_ace",
+    "number": 1,
+    "name": {
+      "en": "Ace of Wands",
+      "hi": "ऐस ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）のエース"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "fresh spark",
+        "new opportunity",
+        "raw potential",
+        "divine gift"
+      ],
+      "reversed": [
+        "missed opportunity",
+        "hesitation",
+        "stifled potential",
+        "false start"
+      ]
+    },
+    "meanings": {
+      "upright": "The pure primordial seed of Passion, willpower, action, inspiration, vitality offered from the heavens. Seize this raw potential with both hands.",
+      "reversed": "A delay in manifesting this fresh spark, or ignoring an inspired opening."
+    },
+    "symbolism": [
+      "wands",
+      "ace iconography",
+      "fire"
+    ],
+    "numerology": 1,
+    "image": "/cards/minor_wands_ace.webp"
+  },
+  {
+    "id": "minor_wands_two",
+    "number": 2,
+    "name": {
+      "en": "Two of Wands",
+      "hi": "टू ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の2"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "planning",
+        "decisions",
+        "balance",
+        "partnership"
+      ],
+      "reversed": [
+        "indecision",
+        "imbalance",
+        "conflict of interest",
+        "overextended"
+      ]
+    },
+    "meanings": {
+      "upright": "Weighing choices and balancing dual forces within the domain of Wands.",
+      "reversed": "Difficulty maintaining equilibrium or hesitating to commit to a direction."
+    },
+    "symbolism": [
+      "wands",
+      "two iconography",
+      "fire"
+    ],
+    "numerology": 2,
+    "image": "/cards/minor_wands_two.webp"
+  },
+  {
+    "id": "minor_wands_three",
+    "number": 3,
+    "name": {
+      "en": "Three of Wands",
+      "hi": "थ्री ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の3"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "expansion",
+        "collaboration",
+        "initial progress",
+        "growth"
+      ],
+      "reversed": [
+        "delays",
+        "creative friction",
+        "lack of teamwork",
+        "setbacks"
+      ]
+    },
+    "meanings": {
+      "upright": "The first tangible fruit of your effort; synthesis and momentum are taking hold.",
+      "reversed": "Friction in execution or frustration with early results; patience is required."
+    },
+    "symbolism": [
+      "wands",
+      "three iconography",
+      "fire"
+    ],
+    "numerology": 3,
+    "image": "/cards/minor_wands_three.webp"
+  },
+  {
+    "id": "minor_wands_four",
+    "number": 4,
+    "name": {
+      "en": "Four of Wands",
+      "hi": "फोर ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の4"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "foundation",
+        "stability",
+        "security",
+        "consolidation"
+      ],
+      "reversed": [
+        "rigidity",
+        "boredom",
+        "fear of loss",
+        "instability"
+      ]
+    },
+    "meanings": {
+      "upright": "A solid sanctuary and resting point where energy is safely held and protected.",
+      "reversed": "Holding on too tightly or feeling trapped by comfortable confinement."
+    },
+    "symbolism": [
+      "wands",
+      "four iconography",
+      "fire"
+    ],
+    "numerology": 4,
+    "image": "/cards/minor_wands_four.webp"
+  },
+  {
+    "id": "minor_wands_five",
+    "number": 5,
+    "name": {
+      "en": "Five of Wands",
+      "hi": "फाइव ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の5"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "challenge",
+        "conflict",
+        "inflection point",
+        "growth through tension"
+      ],
+      "reversed": [
+        "resolution",
+        "compromise",
+        "prolonged struggle",
+        "healing"
+      ]
+    },
+    "meanings": {
+      "upright": "Disruption that tests your resilience and forces a necessary upgrade in perception.",
+      "reversed": "Easing of the struggle or learning to let go of unnecessary competitive friction."
+    },
+    "symbolism": [
+      "wands",
+      "five iconography",
+      "fire"
+    ],
+    "numerology": 5,
+    "image": "/cards/minor_wands_five.webp"
+  },
+  {
+    "id": "minor_wands_six",
+    "number": 6,
+    "name": {
+      "en": "Six of Wands",
+      "hi": "सिक्स ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の6"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "harmony",
+        "victory",
+        "reconciliation",
+        "generosity"
+      ],
+      "reversed": [
+        "imbalance",
+        "delayed recognition",
+        "one-sidedness",
+        "nostalgia"
+      ]
+    },
+    "meanings": {
+      "upright": "Sweet relief and harmonious flow restored after the five's stormy trials.",
+      "reversed": "Conditional support or looking backward instead of moving forward."
+    },
+    "symbolism": [
+      "wands",
+      "six iconography",
+      "fire"
+    ],
+    "numerology": 6,
+    "image": "/cards/minor_wands_six.webp"
+  },
+  {
+    "id": "minor_wands_seven",
+    "number": 7,
+    "name": {
+      "en": "Seven of Wands",
+      "hi": "सेवन ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の7"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "strategy",
+        "discernment",
+        "perseverance",
+        "inner assessment"
+      ],
+      "reversed": [
+        "overwhelm",
+        "poor strategy",
+        "giving up",
+        "compromised ethics"
+      ]
+    },
+    "meanings": {
+      "upright": "A test of character requiring wise strategy, boundaries, and patience.",
+      "reversed": "Feeling cornered or recognizing that an old approach is no longer sustainable."
+    },
+    "symbolism": [
+      "wands",
+      "seven iconography",
+      "fire"
+    ],
+    "numerology": 7,
+    "image": "/cards/minor_wands_seven.webp"
+  },
+  {
+    "id": "minor_wands_eight",
+    "number": 8,
+    "name": {
+      "en": "Eight of Wands",
+      "hi": "एट ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の8"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "acceleration",
+        "dedicated focus",
+        "rapid movement"
+      ],
+      "reversed": [
+        "burnout",
+        "haste",
+        "scattered efforts",
+        "misdirected energy"
+      ]
+    },
+    "meanings": {
+      "upright": "Focused craftsmanship and rapid transmission of energy toward concrete outcomes.",
+      "reversed": "Frustration with slow pacing or feeling rushed into sloppy decisions."
+    },
+    "symbolism": [
+      "wands",
+      "eight iconography",
+      "fire"
+    ],
+    "numerology": 8,
+    "image": "/cards/minor_wands_eight.webp"
+  },
+  {
+    "id": "minor_wands_nine",
+    "number": 9,
+    "name": {
+      "en": "Nine of Wands",
+      "hi": "नाइन ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の9"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "resilience",
+        "near completion",
+        "inner strength",
+        "gratitude"
+      ],
+      "reversed": [
+        "exhaustion",
+        "defensiveness",
+        "fatigue",
+        "fear of the last mile"
+      ]
+    },
+    "meanings": {
+      "upright": "The summit is within sight. Summon your remaining stamina and stand your ground.",
+      "reversed": "Weariness from protracted vigilance; lay down defensive armor and rest."
+    },
+    "symbolism": [
+      "wands",
+      "nine iconography",
+      "fire"
+    ],
+    "numerology": 9,
+    "image": "/cards/minor_wands_nine.webp"
+  },
+  {
+    "id": "minor_wands_ten",
+    "number": 10,
+    "name": {
+      "en": "Ten of Wands",
+      "hi": "टेन ऑफ वांड्स (लाठी/अग्नि)",
+      "ja": "ワンド（杖）の10"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "culmination",
+        "completion",
+        "legacy",
+        "full cycle"
+      ],
+      "reversed": [
+        "overburden",
+        "collapse",
+        "need to delegate",
+        "resisting the end"
+      ]
+    },
+    "meanings": {
+      "upright": "The full expression and culmination of the suit's journey before the cycle resets.",
+      "reversed": "Carrying unnecessary weight across the threshold; shed the burden."
+    },
+    "symbolism": [
+      "wands",
+      "ten iconography",
+      "fire"
+    ],
+    "numerology": 10,
+    "image": "/cards/minor_wands_ten.webp"
+  },
+  {
+    "id": "minor_wands_page",
+    "number": 11,
+    "name": {
+      "en": "Page of Wands",
+      "hi": "पेज ऑफ वांड्स (लाठी/अग्नि) (संदेशवाहक)",
+      "ja": "ワンド（杖）のペイジ"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "curiosity",
+        "enthusiastic study",
+        "messages",
+        "new perspective"
+      ],
+      "reversed": [
+        "immaturity",
+        "procrastination",
+        "bad news",
+        "daydreaming"
+      ]
+    },
+    "meanings": {
+      "upright": "An eager learner and carrier of messages, bringing youthful curiosity and fresh tidings.",
+      "reversed": "Difficulty translating creative whims into disciplined execution."
+    },
+    "symbolism": [
+      "wands",
+      "page iconography",
+      "fire"
+    ],
+    "numerology": 11,
+    "image": "/cards/minor_wands_page.webp"
+  },
+  {
+    "id": "minor_wands_knight",
+    "number": 12,
+    "name": {
+      "en": "Knight of Wands",
+      "hi": "नाइट ऑफ वांड्स (लाठी/अग्नि) (योद्धा)",
+      "ja": "ワンド（杖）のナイト"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "quest",
+        "determination",
+        "chivalric drive",
+        "adventure"
+      ],
+      "reversed": [
+        "recklessness",
+        "unpredictability",
+        "burnout",
+        "hot-headedness"
+      ]
+    },
+    "meanings": {
+      "upright": "Galloping with passionate dedication on a clear quest; courageous pursuit of objectives.",
+      "reversed": "Charging blindly without evaluating terrain, or sudden halts in momentum."
+    },
+    "symbolism": [
+      "wands",
+      "knight iconography",
+      "fire"
+    ],
+    "numerology": 12,
+    "image": "/cards/minor_wands_knight.webp"
+  },
+  {
+    "id": "minor_wands_queen",
+    "number": 13,
+    "name": {
+      "en": "Queen of Wands",
+      "hi": "क्वीन ऑफ वांड्स (लाठी/अग्नि) (रानी)",
+      "ja": "ワンド（杖）のクイーン"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "emotional maturity",
+        "embodied confidence",
+        "intuitive grace",
+        "fertility"
+      ],
+      "reversed": [
+        "jealousy",
+        "coldness",
+        "insecurity",
+        "emotional withdrawal"
+      ]
+    },
+    "meanings": {
+      "upright": "The mature feminine embodiment of Wands: radiant, sovereign, and deeply wise.",
+      "reversed": "Insecurity eroding your warmth, or demanding perfection from others."
+    },
+    "symbolism": [
+      "wands",
+      "queen iconography",
+      "fire"
+    ],
+    "numerology": 13,
+    "image": "/cards/minor_wands_queen.webp"
+  },
+  {
+    "id": "minor_wands_king",
+    "number": 14,
+    "name": {
+      "en": "King of Wands",
+      "hi": "किंग ऑफ वांड्स (लाठी/अग्नि) (राजा)",
+      "ja": "ワンド（杖）のキング"
+    },
+    "arcana": "minor",
+    "suit": "wands",
+    "element": "fire",
+    "association": "Wands Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "sovereign leadership",
+        "authority",
+        "mature vision"
+      ],
+      "reversed": [
+        "tyranny",
+        "stubbornness",
+        "abuse of power",
+        "ineffective command"
+      ]
+    },
+    "meanings": {
+      "upright": "The full external mastery and command over Wands; fair, wise, and grounded authority.",
+      "reversed": "Dictatorial control or abdication of adult responsibility in crisis."
+    },
+    "symbolism": [
+      "wands",
+      "king iconography",
+      "fire"
+    ],
+    "numerology": 14,
+    "image": "/cards/minor_wands_king.webp"
+  },
+  {
+    "id": "minor_cups_ace",
+    "number": 1,
+    "name": {
+      "en": "Ace of Cups",
+      "hi": "ऐस ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）のエース"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "fresh spark",
+        "new opportunity",
+        "raw potential",
+        "divine gift"
+      ],
+      "reversed": [
+        "missed opportunity",
+        "hesitation",
+        "stifled potential",
+        "false start"
+      ]
+    },
+    "meanings": {
+      "upright": "The pure primordial seed of Emotions, intuition, love, relationships, spiritual flow offered from the heavens. Seize this raw potential with both hands.",
+      "reversed": "A delay in manifesting this fresh spark, or ignoring an inspired opening."
+    },
+    "symbolism": [
+      "cups",
+      "ace iconography",
+      "water"
+    ],
+    "numerology": 1,
+    "image": "/cards/minor_cups_ace.webp"
+  },
+  {
+    "id": "minor_cups_two",
+    "number": 2,
+    "name": {
+      "en": "Two of Cups",
+      "hi": "टू ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の2"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "planning",
+        "decisions",
+        "balance",
+        "partnership"
+      ],
+      "reversed": [
+        "indecision",
+        "imbalance",
+        "conflict of interest",
+        "overextended"
+      ]
+    },
+    "meanings": {
+      "upright": "Weighing choices and balancing dual forces within the domain of Cups.",
+      "reversed": "Difficulty maintaining equilibrium or hesitating to commit to a direction."
+    },
+    "symbolism": [
+      "cups",
+      "two iconography",
+      "water"
+    ],
+    "numerology": 2,
+    "image": "/cards/minor_cups_two.webp"
+  },
+  {
+    "id": "minor_cups_three",
+    "number": 3,
+    "name": {
+      "en": "Three of Cups",
+      "hi": "थ्री ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の3"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "expansion",
+        "collaboration",
+        "initial progress",
+        "growth"
+      ],
+      "reversed": [
+        "delays",
+        "creative friction",
+        "lack of teamwork",
+        "setbacks"
+      ]
+    },
+    "meanings": {
+      "upright": "The first tangible fruit of your effort; synthesis and momentum are taking hold.",
+      "reversed": "Friction in execution or frustration with early results; patience is required."
+    },
+    "symbolism": [
+      "cups",
+      "three iconography",
+      "water"
+    ],
+    "numerology": 3,
+    "image": "/cards/minor_cups_three.webp"
+  },
+  {
+    "id": "minor_cups_four",
+    "number": 4,
+    "name": {
+      "en": "Four of Cups",
+      "hi": "फोर ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の4"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "foundation",
+        "stability",
+        "security",
+        "consolidation"
+      ],
+      "reversed": [
+        "rigidity",
+        "boredom",
+        "fear of loss",
+        "instability"
+      ]
+    },
+    "meanings": {
+      "upright": "A solid sanctuary and resting point where energy is safely held and protected.",
+      "reversed": "Holding on too tightly or feeling trapped by comfortable confinement."
+    },
+    "symbolism": [
+      "cups",
+      "four iconography",
+      "water"
+    ],
+    "numerology": 4,
+    "image": "/cards/minor_cups_four.webp"
+  },
+  {
+    "id": "minor_cups_five",
+    "number": 5,
+    "name": {
+      "en": "Five of Cups",
+      "hi": "फाइव ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の5"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "challenge",
+        "conflict",
+        "inflection point",
+        "growth through tension"
+      ],
+      "reversed": [
+        "resolution",
+        "compromise",
+        "prolonged struggle",
+        "healing"
+      ]
+    },
+    "meanings": {
+      "upright": "Disruption that tests your resilience and forces a necessary upgrade in perception.",
+      "reversed": "Easing of the struggle or learning to let go of unnecessary competitive friction."
+    },
+    "symbolism": [
+      "cups",
+      "five iconography",
+      "water"
+    ],
+    "numerology": 5,
+    "image": "/cards/minor_cups_five.webp"
+  },
+  {
+    "id": "minor_cups_six",
+    "number": 6,
+    "name": {
+      "en": "Six of Cups",
+      "hi": "सिक्स ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の6"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "harmony",
+        "victory",
+        "reconciliation",
+        "generosity"
+      ],
+      "reversed": [
+        "imbalance",
+        "delayed recognition",
+        "one-sidedness",
+        "nostalgia"
+      ]
+    },
+    "meanings": {
+      "upright": "Sweet relief and harmonious flow restored after the five's stormy trials.",
+      "reversed": "Conditional support or looking backward instead of moving forward."
+    },
+    "symbolism": [
+      "cups",
+      "six iconography",
+      "water"
+    ],
+    "numerology": 6,
+    "image": "/cards/minor_cups_six.webp"
+  },
+  {
+    "id": "minor_cups_seven",
+    "number": 7,
+    "name": {
+      "en": "Seven of Cups",
+      "hi": "सेवन ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の7"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "strategy",
+        "discernment",
+        "perseverance",
+        "inner assessment"
+      ],
+      "reversed": [
+        "overwhelm",
+        "poor strategy",
+        "giving up",
+        "compromised ethics"
+      ]
+    },
+    "meanings": {
+      "upright": "A test of character requiring wise strategy, boundaries, and patience.",
+      "reversed": "Feeling cornered or recognizing that an old approach is no longer sustainable."
+    },
+    "symbolism": [
+      "cups",
+      "seven iconography",
+      "water"
+    ],
+    "numerology": 7,
+    "image": "/cards/minor_cups_seven.webp"
+  },
+  {
+    "id": "minor_cups_eight",
+    "number": 8,
+    "name": {
+      "en": "Eight of Cups",
+      "hi": "एट ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の8"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "acceleration",
+        "dedicated focus",
+        "rapid movement"
+      ],
+      "reversed": [
+        "burnout",
+        "haste",
+        "scattered efforts",
+        "misdirected energy"
+      ]
+    },
+    "meanings": {
+      "upright": "Focused craftsmanship and rapid transmission of energy toward concrete outcomes.",
+      "reversed": "Frustration with slow pacing or feeling rushed into sloppy decisions."
+    },
+    "symbolism": [
+      "cups",
+      "eight iconography",
+      "water"
+    ],
+    "numerology": 8,
+    "image": "/cards/minor_cups_eight.webp"
+  },
+  {
+    "id": "minor_cups_nine",
+    "number": 9,
+    "name": {
+      "en": "Nine of Cups",
+      "hi": "नाइन ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の9"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "resilience",
+        "near completion",
+        "inner strength",
+        "gratitude"
+      ],
+      "reversed": [
+        "exhaustion",
+        "defensiveness",
+        "fatigue",
+        "fear of the last mile"
+      ]
+    },
+    "meanings": {
+      "upright": "The summit is within sight. Summon your remaining stamina and stand your ground.",
+      "reversed": "Weariness from protracted vigilance; lay down defensive armor and rest."
+    },
+    "symbolism": [
+      "cups",
+      "nine iconography",
+      "water"
+    ],
+    "numerology": 9,
+    "image": "/cards/minor_cups_nine.webp"
+  },
+  {
+    "id": "minor_cups_ten",
+    "number": 10,
+    "name": {
+      "en": "Ten of Cups",
+      "hi": "टेन ऑफ कप्स (प्याले/जल)",
+      "ja": "カップ（杯）の10"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "culmination",
+        "completion",
+        "legacy",
+        "full cycle"
+      ],
+      "reversed": [
+        "overburden",
+        "collapse",
+        "need to delegate",
+        "resisting the end"
+      ]
+    },
+    "meanings": {
+      "upright": "The full expression and culmination of the suit's journey before the cycle resets.",
+      "reversed": "Carrying unnecessary weight across the threshold; shed the burden."
+    },
+    "symbolism": [
+      "cups",
+      "ten iconography",
+      "water"
+    ],
+    "numerology": 10,
+    "image": "/cards/minor_cups_ten.webp"
+  },
+  {
+    "id": "minor_cups_page",
+    "number": 11,
+    "name": {
+      "en": "Page of Cups",
+      "hi": "पेज ऑफ कप्स (प्याले/जल) (संदेशवाहक)",
+      "ja": "カップ（杯）のペイジ"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "curiosity",
+        "enthusiastic study",
+        "messages",
+        "new perspective"
+      ],
+      "reversed": [
+        "immaturity",
+        "procrastination",
+        "bad news",
+        "daydreaming"
+      ]
+    },
+    "meanings": {
+      "upright": "An eager learner and carrier of messages, bringing youthful curiosity and fresh tidings.",
+      "reversed": "Difficulty translating creative whims into disciplined execution."
+    },
+    "symbolism": [
+      "cups",
+      "page iconography",
+      "water"
+    ],
+    "numerology": 11,
+    "image": "/cards/minor_cups_page.webp"
+  },
+  {
+    "id": "minor_cups_knight",
+    "number": 12,
+    "name": {
+      "en": "Knight of Cups",
+      "hi": "नाइट ऑफ कप्स (प्याले/जल) (योद्धा)",
+      "ja": "カップ（杯）のナイト"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "quest",
+        "determination",
+        "chivalric drive",
+        "adventure"
+      ],
+      "reversed": [
+        "recklessness",
+        "unpredictability",
+        "burnout",
+        "hot-headedness"
+      ]
+    },
+    "meanings": {
+      "upright": "Galloping with passionate dedication on a clear quest; courageous pursuit of objectives.",
+      "reversed": "Charging blindly without evaluating terrain, or sudden halts in momentum."
+    },
+    "symbolism": [
+      "cups",
+      "knight iconography",
+      "water"
+    ],
+    "numerology": 12,
+    "image": "/cards/minor_cups_knight.webp"
+  },
+  {
+    "id": "minor_cups_queen",
+    "number": 13,
+    "name": {
+      "en": "Queen of Cups",
+      "hi": "क्वीन ऑफ कप्स (प्याले/जल) (रानी)",
+      "ja": "カップ（杯）のクイーン"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "emotional maturity",
+        "embodied confidence",
+        "intuitive grace",
+        "fertility"
+      ],
+      "reversed": [
+        "jealousy",
+        "coldness",
+        "insecurity",
+        "emotional withdrawal"
+      ]
+    },
+    "meanings": {
+      "upright": "The mature feminine embodiment of Cups: radiant, sovereign, and deeply wise.",
+      "reversed": "Insecurity eroding your warmth, or demanding perfection from others."
+    },
+    "symbolism": [
+      "cups",
+      "queen iconography",
+      "water"
+    ],
+    "numerology": 13,
+    "image": "/cards/minor_cups_queen.webp"
+  },
+  {
+    "id": "minor_cups_king",
+    "number": 14,
+    "name": {
+      "en": "King of Cups",
+      "hi": "किंग ऑफ कप्स (प्याले/जल) (राजा)",
+      "ja": "カップ（杯）のキング"
+    },
+    "arcana": "minor",
+    "suit": "cups",
+    "element": "water",
+    "association": "Cups Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "sovereign leadership",
+        "authority",
+        "mature vision"
+      ],
+      "reversed": [
+        "tyranny",
+        "stubbornness",
+        "abuse of power",
+        "ineffective command"
+      ]
+    },
+    "meanings": {
+      "upright": "The full external mastery and command over Cups; fair, wise, and grounded authority.",
+      "reversed": "Dictatorial control or abdication of adult responsibility in crisis."
+    },
+    "symbolism": [
+      "cups",
+      "king iconography",
+      "water"
+    ],
+    "numerology": 14,
+    "image": "/cards/minor_cups_king.webp"
+  },
+  {
+    "id": "minor_swords_ace",
+    "number": 1,
+    "name": {
+      "en": "Ace of Swords",
+      "hi": "ऐस ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）のエース"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "fresh spark",
+        "new opportunity",
+        "raw potential",
+        "divine gift"
+      ],
+      "reversed": [
+        "missed opportunity",
+        "hesitation",
+        "stifled potential",
+        "false start"
+      ]
+    },
+    "meanings": {
+      "upright": "The pure primordial seed of Intellect, truth, mental clarity, conflict, perception offered from the heavens. Seize this raw potential with both hands.",
+      "reversed": "A delay in manifesting this fresh spark, or ignoring an inspired opening."
+    },
+    "symbolism": [
+      "swords",
+      "ace iconography",
+      "air"
+    ],
+    "numerology": 1,
+    "image": "/cards/minor_swords_ace.webp"
+  },
+  {
+    "id": "minor_swords_two",
+    "number": 2,
+    "name": {
+      "en": "Two of Swords",
+      "hi": "टू ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の2"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "planning",
+        "decisions",
+        "balance",
+        "partnership"
+      ],
+      "reversed": [
+        "indecision",
+        "imbalance",
+        "conflict of interest",
+        "overextended"
+      ]
+    },
+    "meanings": {
+      "upright": "Weighing choices and balancing dual forces within the domain of Swords.",
+      "reversed": "Difficulty maintaining equilibrium or hesitating to commit to a direction."
+    },
+    "symbolism": [
+      "swords",
+      "two iconography",
+      "air"
+    ],
+    "numerology": 2,
+    "image": "/cards/minor_swords_two.webp"
+  },
+  {
+    "id": "minor_swords_three",
+    "number": 3,
+    "name": {
+      "en": "Three of Swords",
+      "hi": "थ्री ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の3"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "expansion",
+        "collaboration",
+        "initial progress",
+        "growth"
+      ],
+      "reversed": [
+        "delays",
+        "creative friction",
+        "lack of teamwork",
+        "setbacks"
+      ]
+    },
+    "meanings": {
+      "upright": "The first tangible fruit of your effort; synthesis and momentum are taking hold.",
+      "reversed": "Friction in execution or frustration with early results; patience is required."
+    },
+    "symbolism": [
+      "swords",
+      "three iconography",
+      "air"
+    ],
+    "numerology": 3,
+    "image": "/cards/minor_swords_three.webp"
+  },
+  {
+    "id": "minor_swords_four",
+    "number": 4,
+    "name": {
+      "en": "Four of Swords",
+      "hi": "फोर ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の4"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "foundation",
+        "stability",
+        "security",
+        "consolidation"
+      ],
+      "reversed": [
+        "rigidity",
+        "boredom",
+        "fear of loss",
+        "instability"
+      ]
+    },
+    "meanings": {
+      "upright": "A solid sanctuary and resting point where energy is safely held and protected.",
+      "reversed": "Holding on too tightly or feeling trapped by comfortable confinement."
+    },
+    "symbolism": [
+      "swords",
+      "four iconography",
+      "air"
+    ],
+    "numerology": 4,
+    "image": "/cards/minor_swords_four.webp"
+  },
+  {
+    "id": "minor_swords_five",
+    "number": 5,
+    "name": {
+      "en": "Five of Swords",
+      "hi": "फाइव ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の5"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "challenge",
+        "conflict",
+        "inflection point",
+        "growth through tension"
+      ],
+      "reversed": [
+        "resolution",
+        "compromise",
+        "prolonged struggle",
+        "healing"
+      ]
+    },
+    "meanings": {
+      "upright": "Disruption that tests your resilience and forces a necessary upgrade in perception.",
+      "reversed": "Easing of the struggle or learning to let go of unnecessary competitive friction."
+    },
+    "symbolism": [
+      "swords",
+      "five iconography",
+      "air"
+    ],
+    "numerology": 5,
+    "image": "/cards/minor_swords_five.webp"
+  },
+  {
+    "id": "minor_swords_six",
+    "number": 6,
+    "name": {
+      "en": "Six of Swords",
+      "hi": "सिक्स ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の6"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "harmony",
+        "victory",
+        "reconciliation",
+        "generosity"
+      ],
+      "reversed": [
+        "imbalance",
+        "delayed recognition",
+        "one-sidedness",
+        "nostalgia"
+      ]
+    },
+    "meanings": {
+      "upright": "Sweet relief and harmonious flow restored after the five's stormy trials.",
+      "reversed": "Conditional support or looking backward instead of moving forward."
+    },
+    "symbolism": [
+      "swords",
+      "six iconography",
+      "air"
+    ],
+    "numerology": 6,
+    "image": "/cards/minor_swords_six.webp"
+  },
+  {
+    "id": "minor_swords_seven",
+    "number": 7,
+    "name": {
+      "en": "Seven of Swords",
+      "hi": "सेवन ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の7"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "strategy",
+        "discernment",
+        "perseverance",
+        "inner assessment"
+      ],
+      "reversed": [
+        "overwhelm",
+        "poor strategy",
+        "giving up",
+        "compromised ethics"
+      ]
+    },
+    "meanings": {
+      "upright": "A test of character requiring wise strategy, boundaries, and patience.",
+      "reversed": "Feeling cornered or recognizing that an old approach is no longer sustainable."
+    },
+    "symbolism": [
+      "swords",
+      "seven iconography",
+      "air"
+    ],
+    "numerology": 7,
+    "image": "/cards/minor_swords_seven.webp"
+  },
+  {
+    "id": "minor_swords_eight",
+    "number": 8,
+    "name": {
+      "en": "Eight of Swords",
+      "hi": "एट ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の8"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "acceleration",
+        "dedicated focus",
+        "rapid movement"
+      ],
+      "reversed": [
+        "burnout",
+        "haste",
+        "scattered efforts",
+        "misdirected energy"
+      ]
+    },
+    "meanings": {
+      "upright": "Focused craftsmanship and rapid transmission of energy toward concrete outcomes.",
+      "reversed": "Frustration with slow pacing or feeling rushed into sloppy decisions."
+    },
+    "symbolism": [
+      "swords",
+      "eight iconography",
+      "air"
+    ],
+    "numerology": 8,
+    "image": "/cards/minor_swords_eight.webp"
+  },
+  {
+    "id": "minor_swords_nine",
+    "number": 9,
+    "name": {
+      "en": "Nine of Swords",
+      "hi": "नाइन ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の9"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "resilience",
+        "near completion",
+        "inner strength",
+        "gratitude"
+      ],
+      "reversed": [
+        "exhaustion",
+        "defensiveness",
+        "fatigue",
+        "fear of the last mile"
+      ]
+    },
+    "meanings": {
+      "upright": "The summit is within sight. Summon your remaining stamina and stand your ground.",
+      "reversed": "Weariness from protracted vigilance; lay down defensive armor and rest."
+    },
+    "symbolism": [
+      "swords",
+      "nine iconography",
+      "air"
+    ],
+    "numerology": 9,
+    "image": "/cards/minor_swords_nine.webp"
+  },
+  {
+    "id": "minor_swords_ten",
+    "number": 10,
+    "name": {
+      "en": "Ten of Swords",
+      "hi": "टेन ऑफ स्वॉर्ड्स (तलवार/वायु)",
+      "ja": "ソード（剣）の10"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "culmination",
+        "completion",
+        "legacy",
+        "full cycle"
+      ],
+      "reversed": [
+        "overburden",
+        "collapse",
+        "need to delegate",
+        "resisting the end"
+      ]
+    },
+    "meanings": {
+      "upright": "The full expression and culmination of the suit's journey before the cycle resets.",
+      "reversed": "Carrying unnecessary weight across the threshold; shed the burden."
+    },
+    "symbolism": [
+      "swords",
+      "ten iconography",
+      "air"
+    ],
+    "numerology": 10,
+    "image": "/cards/minor_swords_ten.webp"
+  },
+  {
+    "id": "minor_swords_page",
+    "number": 11,
+    "name": {
+      "en": "Page of Swords",
+      "hi": "पेज ऑफ स्वॉर्ड्स (तलवार/वायु) (संदेशवाहक)",
+      "ja": "ソード（剣）のペイジ"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "curiosity",
+        "enthusiastic study",
+        "messages",
+        "new perspective"
+      ],
+      "reversed": [
+        "immaturity",
+        "procrastination",
+        "bad news",
+        "daydreaming"
+      ]
+    },
+    "meanings": {
+      "upright": "An eager learner and carrier of messages, bringing youthful curiosity and fresh tidings.",
+      "reversed": "Difficulty translating creative whims into disciplined execution."
+    },
+    "symbolism": [
+      "swords",
+      "page iconography",
+      "air"
+    ],
+    "numerology": 11,
+    "image": "/cards/minor_swords_page.webp"
+  },
+  {
+    "id": "minor_swords_knight",
+    "number": 12,
+    "name": {
+      "en": "Knight of Swords",
+      "hi": "नाइट ऑफ स्वॉर्ड्स (तलवार/वायु) (योद्धा)",
+      "ja": "ソード（剣）のナイト"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "quest",
+        "determination",
+        "chivalric drive",
+        "adventure"
+      ],
+      "reversed": [
+        "recklessness",
+        "unpredictability",
+        "burnout",
+        "hot-headedness"
+      ]
+    },
+    "meanings": {
+      "upright": "Galloping with passionate dedication on a clear quest; courageous pursuit of objectives.",
+      "reversed": "Charging blindly without evaluating terrain, or sudden halts in momentum."
+    },
+    "symbolism": [
+      "swords",
+      "knight iconography",
+      "air"
+    ],
+    "numerology": 12,
+    "image": "/cards/minor_swords_knight.webp"
+  },
+  {
+    "id": "minor_swords_queen",
+    "number": 13,
+    "name": {
+      "en": "Queen of Swords",
+      "hi": "क्वीन ऑफ स्वॉर्ड्स (तलवार/वायु) (रानी)",
+      "ja": "ソード（剣）のクイーン"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "emotional maturity",
+        "embodied confidence",
+        "intuitive grace",
+        "fertility"
+      ],
+      "reversed": [
+        "jealousy",
+        "coldness",
+        "insecurity",
+        "emotional withdrawal"
+      ]
+    },
+    "meanings": {
+      "upright": "The mature feminine embodiment of Swords: radiant, sovereign, and deeply wise.",
+      "reversed": "Insecurity eroding your warmth, or demanding perfection from others."
+    },
+    "symbolism": [
+      "swords",
+      "queen iconography",
+      "air"
+    ],
+    "numerology": 13,
+    "image": "/cards/minor_swords_queen.webp"
+  },
+  {
+    "id": "minor_swords_king",
+    "number": 14,
+    "name": {
+      "en": "King of Swords",
+      "hi": "किंग ऑफ स्वॉर्ड्स (तलवार/वायु) (राजा)",
+      "ja": "ソード（剣）のキング"
+    },
+    "arcana": "minor",
+    "suit": "swords",
+    "element": "air",
+    "association": "Swords Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "sovereign leadership",
+        "authority",
+        "mature vision"
+      ],
+      "reversed": [
+        "tyranny",
+        "stubbornness",
+        "abuse of power",
+        "ineffective command"
+      ]
+    },
+    "meanings": {
+      "upright": "The full external mastery and command over Swords; fair, wise, and grounded authority.",
+      "reversed": "Dictatorial control or abdication of adult responsibility in crisis."
+    },
+    "symbolism": [
+      "swords",
+      "king iconography",
+      "air"
+    ],
+    "numerology": 14,
+    "image": "/cards/minor_swords_king.webp"
+  },
+  {
+    "id": "minor_pentacles_ace",
+    "number": 1,
+    "name": {
+      "en": "Ace of Pentacles",
+      "hi": "ऐस ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）のエース"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "fresh spark",
+        "new opportunity",
+        "raw potential",
+        "divine gift"
+      ],
+      "reversed": [
+        "missed opportunity",
+        "hesitation",
+        "stifled potential",
+        "false start"
+      ]
+    },
+    "meanings": {
+      "upright": "The pure primordial seed of Material world, wealth, career, physical body, craftsmanship offered from the heavens. Seize this raw potential with both hands.",
+      "reversed": "A delay in manifesting this fresh spark, or ignoring an inspired opening."
+    },
+    "symbolism": [
+      "pentacles",
+      "ace iconography",
+      "earth"
+    ],
+    "numerology": 1,
+    "image": "/cards/minor_pentacles_ace.webp"
+  },
+  {
+    "id": "minor_pentacles_two",
+    "number": 2,
+    "name": {
+      "en": "Two of Pentacles",
+      "hi": "टू ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の2"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "planning",
+        "decisions",
+        "balance",
+        "partnership"
+      ],
+      "reversed": [
+        "indecision",
+        "imbalance",
+        "conflict of interest",
+        "overextended"
+      ]
+    },
+    "meanings": {
+      "upright": "Weighing choices and balancing dual forces within the domain of Pentacles.",
+      "reversed": "Difficulty maintaining equilibrium or hesitating to commit to a direction."
+    },
+    "symbolism": [
+      "pentacles",
+      "two iconography",
+      "earth"
+    ],
+    "numerology": 2,
+    "image": "/cards/minor_pentacles_two.webp"
+  },
+  {
+    "id": "minor_pentacles_three",
+    "number": 3,
+    "name": {
+      "en": "Three of Pentacles",
+      "hi": "थ्री ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の3"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "expansion",
+        "collaboration",
+        "initial progress",
+        "growth"
+      ],
+      "reversed": [
+        "delays",
+        "creative friction",
+        "lack of teamwork",
+        "setbacks"
+      ]
+    },
+    "meanings": {
+      "upright": "The first tangible fruit of your effort; synthesis and momentum are taking hold.",
+      "reversed": "Friction in execution or frustration with early results; patience is required."
+    },
+    "symbolism": [
+      "pentacles",
+      "three iconography",
+      "earth"
+    ],
+    "numerology": 3,
+    "image": "/cards/minor_pentacles_three.webp"
+  },
+  {
+    "id": "minor_pentacles_four",
+    "number": 4,
+    "name": {
+      "en": "Four of Pentacles",
+      "hi": "फोर ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の4"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "foundation",
+        "stability",
+        "security",
+        "consolidation"
+      ],
+      "reversed": [
+        "rigidity",
+        "boredom",
+        "fear of loss",
+        "instability"
+      ]
+    },
+    "meanings": {
+      "upright": "A solid sanctuary and resting point where energy is safely held and protected.",
+      "reversed": "Holding on too tightly or feeling trapped by comfortable confinement."
+    },
+    "symbolism": [
+      "pentacles",
+      "four iconography",
+      "earth"
+    ],
+    "numerology": 4,
+    "image": "/cards/minor_pentacles_four.webp"
+  },
+  {
+    "id": "minor_pentacles_five",
+    "number": 5,
+    "name": {
+      "en": "Five of Pentacles",
+      "hi": "फाइव ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の5"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "challenge",
+        "conflict",
+        "inflection point",
+        "growth through tension"
+      ],
+      "reversed": [
+        "resolution",
+        "compromise",
+        "prolonged struggle",
+        "healing"
+      ]
+    },
+    "meanings": {
+      "upright": "Disruption that tests your resilience and forces a necessary upgrade in perception.",
+      "reversed": "Easing of the struggle or learning to let go of unnecessary competitive friction."
+    },
+    "symbolism": [
+      "pentacles",
+      "five iconography",
+      "earth"
+    ],
+    "numerology": 5,
+    "image": "/cards/minor_pentacles_five.webp"
+  },
+  {
+    "id": "minor_pentacles_six",
+    "number": 6,
+    "name": {
+      "en": "Six of Pentacles",
+      "hi": "सिक्स ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の6"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "harmony",
+        "victory",
+        "reconciliation",
+        "generosity"
+      ],
+      "reversed": [
+        "imbalance",
+        "delayed recognition",
+        "one-sidedness",
+        "nostalgia"
+      ]
+    },
+    "meanings": {
+      "upright": "Sweet relief and harmonious flow restored after the five's stormy trials.",
+      "reversed": "Conditional support or looking backward instead of moving forward."
+    },
+    "symbolism": [
+      "pentacles",
+      "six iconography",
+      "earth"
+    ],
+    "numerology": 6,
+    "image": "/cards/minor_pentacles_six.webp"
+  },
+  {
+    "id": "minor_pentacles_seven",
+    "number": 7,
+    "name": {
+      "en": "Seven of Pentacles",
+      "hi": "सेवन ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の7"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "strategy",
+        "discernment",
+        "perseverance",
+        "inner assessment"
+      ],
+      "reversed": [
+        "overwhelm",
+        "poor strategy",
+        "giving up",
+        "compromised ethics"
+      ]
+    },
+    "meanings": {
+      "upright": "A test of character requiring wise strategy, boundaries, and patience.",
+      "reversed": "Feeling cornered or recognizing that an old approach is no longer sustainable."
+    },
+    "symbolism": [
+      "pentacles",
+      "seven iconography",
+      "earth"
+    ],
+    "numerology": 7,
+    "image": "/cards/minor_pentacles_seven.webp"
+  },
+  {
+    "id": "minor_pentacles_eight",
+    "number": 8,
+    "name": {
+      "en": "Eight of Pentacles",
+      "hi": "एट ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の8"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "acceleration",
+        "dedicated focus",
+        "rapid movement"
+      ],
+      "reversed": [
+        "burnout",
+        "haste",
+        "scattered efforts",
+        "misdirected energy"
+      ]
+    },
+    "meanings": {
+      "upright": "Focused craftsmanship and rapid transmission of energy toward concrete outcomes.",
+      "reversed": "Frustration with slow pacing or feeling rushed into sloppy decisions."
+    },
+    "symbolism": [
+      "pentacles",
+      "eight iconography",
+      "earth"
+    ],
+    "numerology": 8,
+    "image": "/cards/minor_pentacles_eight.webp"
+  },
+  {
+    "id": "minor_pentacles_nine",
+    "number": 9,
+    "name": {
+      "en": "Nine of Pentacles",
+      "hi": "नाइन ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の9"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "resilience",
+        "near completion",
+        "inner strength",
+        "gratitude"
+      ],
+      "reversed": [
+        "exhaustion",
+        "defensiveness",
+        "fatigue",
+        "fear of the last mile"
+      ]
+    },
+    "meanings": {
+      "upright": "The summit is within sight. Summon your remaining stamina and stand your ground.",
+      "reversed": "Weariness from protracted vigilance; lay down defensive armor and rest."
+    },
+    "symbolism": [
+      "pentacles",
+      "nine iconography",
+      "earth"
+    ],
+    "numerology": 9,
+    "image": "/cards/minor_pentacles_nine.webp"
+  },
+  {
+    "id": "minor_pentacles_ten",
+    "number": 10,
+    "name": {
+      "en": "Ten of Pentacles",
+      "hi": "टेन ऑफ पेंटाकल्स (सिक्के/पृथ्वी)",
+      "ja": "ペンタクル（金貨）の10"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "culmination",
+        "completion",
+        "legacy",
+        "full cycle"
+      ],
+      "reversed": [
+        "overburden",
+        "collapse",
+        "need to delegate",
+        "resisting the end"
+      ]
+    },
+    "meanings": {
+      "upright": "The full expression and culmination of the suit's journey before the cycle resets.",
+      "reversed": "Carrying unnecessary weight across the threshold; shed the burden."
+    },
+    "symbolism": [
+      "pentacles",
+      "ten iconography",
+      "earth"
+    ],
+    "numerology": 10,
+    "image": "/cards/minor_pentacles_ten.webp"
+  },
+  {
+    "id": "minor_pentacles_page",
+    "number": 11,
+    "name": {
+      "en": "Page of Pentacles",
+      "hi": "पेज ऑफ पेंटाकल्स (सिक्के/पृथ्वी) (संदेशवाहक)",
+      "ja": "ペンタクル（金貨）のペイジ"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "curiosity",
+        "enthusiastic study",
+        "messages",
+        "new perspective"
+      ],
+      "reversed": [
+        "immaturity",
+        "procrastination",
+        "bad news",
+        "daydreaming"
+      ]
+    },
+    "meanings": {
+      "upright": "An eager learner and carrier of messages, bringing youthful curiosity and fresh tidings.",
+      "reversed": "Difficulty translating creative whims into disciplined execution."
+    },
+    "symbolism": [
+      "pentacles",
+      "page iconography",
+      "earth"
+    ],
+    "numerology": 11,
+    "image": "/cards/minor_pentacles_page.webp"
+  },
+  {
+    "id": "minor_pentacles_knight",
+    "number": 12,
+    "name": {
+      "en": "Knight of Pentacles",
+      "hi": "नाइट ऑफ पेंटाकल्स (सिक्के/पृथ्वी) (योद्धा)",
+      "ja": "ペンタクル（金貨）のナイト"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "quest",
+        "determination",
+        "chivalric drive",
+        "adventure"
+      ],
+      "reversed": [
+        "recklessness",
+        "unpredictability",
+        "burnout",
+        "hot-headedness"
+      ]
+    },
+    "meanings": {
+      "upright": "Galloping with passionate dedication on a clear quest; courageous pursuit of objectives.",
+      "reversed": "Charging blindly without evaluating terrain, or sudden halts in momentum."
+    },
+    "symbolism": [
+      "pentacles",
+      "knight iconography",
+      "earth"
+    ],
+    "numerology": 12,
+    "image": "/cards/minor_pentacles_knight.webp"
+  },
+  {
+    "id": "minor_pentacles_queen",
+    "number": 13,
+    "name": {
+      "en": "Queen of Pentacles",
+      "hi": "क्वीन ऑफ पेंटाकल्स (सिक्के/पृथ्वी) (रानी)",
+      "ja": "ペンタクル（金貨）のクイーン"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "emotional maturity",
+        "embodied confidence",
+        "intuitive grace",
+        "fertility"
+      ],
+      "reversed": [
+        "jealousy",
+        "coldness",
+        "insecurity",
+        "emotional withdrawal"
+      ]
+    },
+    "meanings": {
+      "upright": "The mature feminine embodiment of Pentacles: radiant, sovereign, and deeply wise.",
+      "reversed": "Insecurity eroding your warmth, or demanding perfection from others."
+    },
+    "symbolism": [
+      "pentacles",
+      "queen iconography",
+      "earth"
+    ],
+    "numerology": 13,
+    "image": "/cards/minor_pentacles_queen.webp"
+  },
+  {
+    "id": "minor_pentacles_king",
+    "number": 14,
+    "name": {
+      "en": "King of Pentacles",
+      "hi": "किंग ऑफ पेंटाकल्स (सिक्के/पृथ्वी) (राजा)",
+      "ja": "ペンタクル（金貨）のキング"
+    },
+    "arcana": "minor",
+    "suit": "pentacles",
+    "element": "earth",
+    "association": "Pentacles Court / Pip",
+    "keywords": {
+      "upright": [
+        "mastery",
+        "sovereign leadership",
+        "authority",
+        "mature vision"
+      ],
+      "reversed": [
+        "tyranny",
+        "stubbornness",
+        "abuse of power",
+        "ineffective command"
+      ]
+    },
+    "meanings": {
+      "upright": "The full external mastery and command over Pentacles; fair, wise, and grounded authority.",
+      "reversed": "Dictatorial control or abdication of adult responsibility in crisis."
+    },
+    "symbolism": [
+      "pentacles",
+      "king iconography",
+      "earth"
+    ],
+    "numerology": 14,
+    "image": "/cards/minor_pentacles_king.webp"
+  }
+]

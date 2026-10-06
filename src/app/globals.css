@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-cosmic: #06050b;
+    --bg-card: rgba(14, 12, 24, 0.75);
+    --gold-primary: #d4af37;
+    --gold-bright: #f9e295;
+    --gold-dim: #997d26;
+    --gold-glow: rgba(212, 175, 55, 0.35);
+    --mystic-purple: #8b5cf6;
+    --mystic-dark: #100d1e;
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --text-gold: #e6ca65;
+  }
+
+  body {
+    background-color: var(--bg-cosmic);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+}
+
+/* Monospace labels and sacred geometry tags */
+.font-mono-sacred {
+  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "Courier New", monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Serif for sacred reading text */
+.font-serif-sacred {
+  font-family: "Cinzel", "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+}
+
+/* Restrained Gold Border & Glow */
+.gold-border {
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.08);
+}
+
+.gold-border-glow {
+  border: 1px solid rgba(243, 226, 149, 0.6);
+  box-shadow: 0 0 25px rgba(212, 175, 55, 0.35);
+}
+
+/* Glassmorphism panel */
+.mystic-panel {
+  background: rgba(13, 11, 23, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(212, 175, 55, 0.18);
+}
+
+/* Animated subtle shimmer */
+@keyframes goldShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer-gold {
+  background: linear-gradient(
+    90deg,
+    rgba(212, 175, 55, 0.1) 0%,
+    rgba(249, 226, 149, 0.4) 50%,
+    rgba(212, 175, 55, 0.1) 100%
+  );
+  background-size: 200% 100%;
+  animation: goldShimmer 4s infinite linear;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #090712;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.6);
+}

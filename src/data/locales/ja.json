@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "title": "Arcana 3D",
+    "subtitle": "神聖なAIタロット",
+    "reading": "鑑定を始める",
+    "daily": "今日の1枚",
+    "cards": "78枚のカード",
+    "spreads": "スプレッド一覧",
+    "dashboard": "旅の記録",
+    "credits": "クレジット"
+  },
+  "hero": {
+    "tagline": "伝統的なタロットと神聖なるAIの融合",
+    "headline": "3Dの宇宙空間で体験するAIタロット神殿",
+    "subheading": "問いを投げかけ、リアルタイム3Dでカードをシャッフルし、深遠なヘルメス思想に基づいたストリーミング鑑定を受け取りましょう。",
+    "cta": "神託を問う",
+    "dailyCta": "今日のカードを引く",
+    "exploreCards": "カード図鑑を見る"
+  },
+  "readingForm": {
+    "questionLabel": "いま心にある問いは何ですか？",
+    "questionPlaceholder": "例：今後数ヶ月における創作活動やキャリアの方向性について、どのようなエネルギーが働いていますか？",
+    "questionHint": "最大200文字。オープンな問いほど深い洞察が得られます。",
+    "optionsPrompt": "2つの道の選択で迷っていますか？（任意）",
+    "optionALabel": "選択肢 / 道A",
+    "optionAPlaceholder": "新しいプロジェクトや契約を受け入れる",
+    "optionBLabel": "選択肢 / 道B",
+    "optionBPlaceholder": "独立して新しい事業を始める",
+    "chooseSpread": "スプレッド（展開法）を選択",
+    "choosePersona": "鑑定リーダーを選択",
+    "shufflePrompt": "シャッフルして3D神殿へ進む",
+    "freeGuestNotice": "初回の鑑定は完全無料です。登録は不要です。"
+  },
+  "reader": {
+    "shufflingDeck": "78枚のアーキタイプをシャッフルしています...",
+    "fieldInstruction": "浮かぶカードフィールドから {required} 枚選んでください（現在 {selected} 枚選択中）",
+    "revealButton": "カードを開く",
+    "drawUnderway": "カードを配置し、鑑定リーダーの言葉を降ろしています...",
+    "streamIntro": "カードが神聖な秩序に従って現れました。",
+    "practicalStepTitle": "実践への導き（ネクストステップ）",
+    "followupTitle": "この展開についてさらに深く尋ねる",
+    "followupPlaceholder": "このスプレッドに関連した追加の質問を入力...",
+    "followupSend": "リーダーに質問する（1クレジット）",
+    "extraCardButton": "補助カード（ガイダンス）を引く（1クレジット）",
+    "disclaimer": "タロットは自己対話と直感のための鏡です。医療・法的アドバイスに代わるものではありません。"
+  },
+  "credits": {
+    "current": "残高",
+    "freeDaily": "毎日の無料クレジット",
+    "streakDays": "日連続記録",
+    "purchasePacks": "クレジットを購入",
+    "seekerPack": "シーカーパック (10クレジット) - $4.99",
+    "mysticPack": "ミスティックパック (30クレジット) - $11.99",
+    "oraclePack": "オラクルパック (100クレジット) - $29.99"
+  }
+}

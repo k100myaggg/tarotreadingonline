@@ -1,0 +1,256 @@
+[
+  {
+    "id": "single",
+    "name": {
+      "en": "Daily Light / Insight",
+      "hi": "दैनिक अंतर्दृष्टि (1 कार्ड)",
+      "ja": "デイリー・インサイト（1枚）"
+    },
+    "description": {
+      "en": "A focused single-card draw providing clear, concentrated guidance for today's energy or a single pressing question.",
+      "hi": "आज की ऊर्जा या किसी विशिष्ट प्रश्न के लिए स्पष्ट और केंद्रित मार्गदर्शन।",
+      "ja": "今日のエネルギーや差し迫った質問に対する、明確で凝縮されたメッセージ。"
+    },
+    "cardCount": 1,
+    "creditCost": 0,
+    "positions": [
+      {
+        "index": 0,
+        "name": {
+          "en": "The Core Insight",
+          "hi": "मूल अंतर्दृष्टि",
+          "ja": "中心的な洞察"
+        },
+        "hint": {
+          "en": "The central energetic lesson, hidden mirror, or primary guiding light.",
+          "hi": "केंद्रीय ऊर्जावान पाठ या प्राथमिक मार्गदर्शक प्रकाश।",
+          "ja": "今向き合うべき中心的なテーマと導きの光。"
+        },
+        "coordinates": { "x": 0, "y": 0, "z": 0 }
+      }
+    ]
+  },
+  {
+    "id": "three_card",
+    "name": {
+      "en": "Past, Present, Future",
+      "hi": "भूत, वर्तमान, भविष्य (3 कार्ड)",
+      "ja": "過去・現在・未来（3枚）"
+    },
+    "description": {
+      "en": "The classic timeline trinity revealing foundational roots, active forces, and emerging potential.",
+      "hi": "क्लासिक त्रिमूर्ति प्रसार: मूलभूत कारण, वर्तमान स्थिति और भविष्य की दिशा।",
+      "ja": "過去の起源、現在のエネルギー、そして現れつつある未来を明らかにするスプレッド。"
+    },
+    "cardCount": 3,
+    "creditCost": 1,
+    "positions": [
+      {
+        "index": 0,
+        "name": {
+          "en": "The Foundation (Past)",
+          "hi": "नींव / अतीत",
+          "ja": "基盤・過去"
+        },
+        "hint": {
+          "en": "Underlying causes, karmic roots, or lessons that set the current situation in motion.",
+          "hi": "वे कारक और पाठ जिन्होंने वर्तमान स्थिति की नींव रखी।",
+          "ja": "現在の状況を引き起こした要因や背景。"
+        },
+        "coordinates": { "x": -2.6, "y": 0, "z": 0 }
+      },
+      {
+        "index": 1,
+        "name": {
+          "en": "The Crossroads (Present)",
+          "hi": "दोराहा / वर्तमान",
+          "ja": "現在地・選択"
+        },
+        "hint": {
+          "en": "The dynamic reality you inhabit right now; immediate challenges or focal points.",
+          "hi": "वर्तमान की वास्तविक ऊर्जा और अभी ध्यान देने योग्य बिंदु।",
+          "ja": "今あなたが直面している生きた現実とテーマ。"
+        },
+        "coordinates": { "x": 0, "y": 0, "z": 0 }
+      },
+      {
+        "index": 2,
+        "name": {
+          "en": "The Horizon (Future)",
+          "hi": "क्षितिज / भविष्य",
+          "ja": "未来の地平"
+        },
+        "hint": {
+          "en": "The natural trajectory unfolding if current currents and awareness are sustained.",
+          "hi": "यदि वर्तमान दिशा बनी रहे, तो आगे प्रकट होने वाली ऊर्जा।",
+          "ja": "現在の流れを維持した場合に現れる可能性。"
+        },
+        "coordinates": { "x": 2.6, "y": 0, "z": 0 }
+      }
+    ]
+  },
+  {
+    "id": "decision_ab",
+    "name": {
+      "en": "Option A vs Option B",
+      "hi": "विकल्प क बनाम विकल्प ख (5 कार्ड)",
+      "ja": "選択肢A vs 選択肢B（5枚）"
+    },
+    "description": {
+      "en": "A balanced comparative spread for resolving forks in the road, evaluating immediate realities vs long-term outcomes.",
+      "hi": "दो रास्तों की तुलनात्मक समीक्षा: तात्कालिक ऊर्जा बनाम दीर्घकालिक परिणाम।",
+      "ja": "2つの岐路に立ったときの比較スプレッド。即時の現実と長期的な結末を照合します。"
+    },
+    "cardCount": 5,
+    "creditCost": 2,
+    "positions": [
+      {
+        "index": 0,
+        "name": {
+          "en": "Current Crossroads",
+          "hi": "वर्तमान चौराहा",
+          "ja": "現在の分岐点"
+        },
+        "hint": {
+          "en": "Your internal state and the fundamental core of the decision.",
+          "hi": "आपकी मनोदशा और निर्णय की केंद्रीय जड़।",
+          "ja": "決断に至った内なる状態と核心。"
+        },
+        "coordinates": { "x": 0, "y": -1.2, "z": 0 }
+      },
+      {
+        "index": 1,
+        "name": {
+          "en": "Option A: Immediate Reality",
+          "hi": "विकल्प क: तात्कालिक स्थिति",
+          "ja": "選択肢A：直近の展開"
+        },
+        "hint": {
+          "en": "The near-term experience, effort, and energy required by Path A.",
+          "hi": "विकल्प क चुनने पर निकट भविष्य में मिलने वाले अनुभव और प्रयास।",
+          "ja": "道Aを選んだ場合にすぐ直面する体験やエネルギー。"
+        },
+        "coordinates": { "x": -2.4, "y": 0.8, "z": 0 }
+      },
+      {
+        "index": 2,
+        "name": {
+          "en": "Option B: Immediate Reality",
+          "hi": "विकल्प ख: तात्कालिक स्थिति",
+          "ja": "選択肢B：直近の展開"
+        },
+        "hint": {
+          "en": "The near-term experience, effort, and energy required by Path B.",
+          "hi": "विकल्प ख चुनने पर निकट भविष्य में मिलने वाले अनुभव और प्रयास।",
+          "ja": "道Bを選んだ場合にすぐ直面する体験やエネルギー。"
+        },
+        "coordinates": { "x": 2.4, "y": 0.8, "z": 0 }
+      },
+      {
+        "index": 3,
+        "name": {
+          "en": "Option A: Long-term Horizon",
+          "hi": "विकल्प क: दूरगामी परिणाम",
+          "ja": "選択肢A：長期的結末"
+        },
+        "hint": {
+          "en": "The deeper fruition and evolution of choosing Path A.",
+          "hi": "विकल्प क का अंतिम फल और आध्यात्मिक परिपक्वता।",
+          "ja": "道Aを進み続けた先の実りと展開。"
+        },
+        "coordinates": { "x": -2.4, "y": 2.8, "z": 0 }
+      },
+      {
+        "index": 4,
+        "name": {
+          "en": "Option B: Long-term Horizon",
+          "hi": "विकल्प ख: दूरगामी परिणाम",
+          "ja": "選択肢B：長期的結末"
+        },
+        "hint": {
+          "en": "The deeper fruition and evolution of choosing Path B.",
+          "hi": "विकल्प ख का अंतिम फल और आध्यात्मिक परिपक्वता।",
+          "ja": "道Bを進み続けた先の実りと展開。"
+        },
+        "coordinates": { "x": 2.4, "y": 2.8, "z": 0 }
+      }
+    ]
+  },
+  {
+    "id": "celtic_cross",
+    "name": {
+      "en": "The Celtic Cross",
+      "hi": "द सेल्टिक क्रॉस (10 कार्ड)",
+      "ja": "ケルト十字（10枚）"
+    },
+    "description": {
+      "en": "The revered ancient 10-card architecture mapping subconscious roots, outer friction, conscious crowns, and ultimate fate.",
+      "hi": "10 कार्डों का प्राचीन और सर्वाधिक गहन प्रसार: आंतरिक, बाह्य और भविष्य की समग्र दृष्टि।",
+      "ja": "深層心理から外的な力、希望と恐れ、そして結末までを網羅する伝統的な10枚スプレッド。"
+    },
+    "cardCount": 10,
+    "creditCost": 3,
+    "positions": [
+      {
+        "index": 0,
+        "name": { "en": "The Heart / Present", "hi": "हृदय / वर्तमान", "ja": "現状・核心" },
+        "hint": { "en": "The primary atmosphere surrounding your querent energy.", "hi": "आपकी प्राथमिक ऊर्जा और वर्तमान मनोदशा।", "ja": "現在の中心的な状況。" },
+        "coordinates": { "x": -1.2, "y": 0, "z": 0 }
+      },
+      {
+        "index": 1,
+        "name": { "en": "The Cross / Obstacle", "hi": "बाधा / चुनौती", "ja": "交差・障害" },
+        "hint": { "en": "The immediate opposing force or catalyst testing you.", "hi": "मार्ग में खड़ा मुख्य अवरोध या उत्प्रेरक।", "ja": "直面している試練や抵抗。" },
+        "coordinates": { "x": -1.2, "y": 0, "z": 0.2 }
+      },
+      {
+        "index": 2,
+        "name": { "en": "The Root / Subconscious", "hi": "जड़ / अवचेतन", "ja": "根底・潜在意識" },
+        "hint": { "en": "Deep subconscious motivations and karmic bedrock.", "hi": "अवचेतन की गहरी भावनाएं और पुरानी नींव।", "ja": "深層心理に眠る動機や基盤。" },
+        "coordinates": { "x": -1.2, "y": -2.2, "z": 0 }
+      },
+      {
+        "index": 3,
+        "name": { "en": "The Passing Past", "hi": "बीतता हुआ अतीत", "ja": "去りゆく過去" },
+        "hint": { "en": "Energies now fading from your field of influence.", "hi": "वह ऊर्जा जो अब समाप्त हो रही है।", "ja": "影響力を失いつつある過去。" },
+        "coordinates": { "x": -3.2, "y": 0, "z": 0 }
+      },
+      {
+        "index": 4,
+        "name": { "en": "The Crown / Aspirations", "hi": "मुकुट / उच्च विचार", "ja": "王冠・目標" },
+        "hint": { "en": "Your conscious aspirations, ideals, or highest goal.", "hi": "सचेत लक्ष्य और सर्वोच्च आकांक्षाएं।", "ja": "意識的な理想や目指す高み。" },
+        "coordinates": { "x": -1.2, "y": 2.2, "z": 0 }
+      },
+      {
+        "index": 5,
+        "name": { "en": "The Near Future", "hi": "निकट भविष्य", "ja": "近い未来" },
+        "hint": { "en": "The immediate events and atmosphere arriving next.", "hi": "आगामी कुछ सप्ताहों में प्रकट होने वाली परिस्थिति।", "ja": "間もなく訪れる出来事や気配。" },
+        "coordinates": { "x": 0.8, "y": 0, "z": 0 }
+      },
+      {
+        "index": 6,
+        "name": { "en": "The Self / Stance", "hi": "स्वयं / दृष्टिकोण", "ja": "自己・姿勢" },
+        "hint": { "en": "How you perceive yourself and your posture.", "hi": "स्वयं के प्रति दृष्टिकोण और आंतरिक मनोबल।", "ja": "あなた自身の内的な態度。" },
+        "coordinates": { "x": 3.2, "y": -2.2, "z": 0 }
+      },
+      {
+        "index": 7,
+        "name": { "en": "The Environment", "hi": "वातावरण / अन्य लोग", "ja": "環境・他者" },
+        "hint": { "en": "External pressures, family, colleagues, and cosmic tides.", "hi": "आसपास के लोग, परिस्थितियां और सामाजिक प्रभाव।", "ja": "周囲の人々や外部環境からの影響。" },
+        "coordinates": { "x": 3.2, "y": -0.7, "z": 0 }
+      },
+      {
+        "index": 8,
+        "name": { "en": "Hopes & Fears", "hi": "आशाएं और भय", "ja": "希望と恐れ" },
+        "hint": { "en": "The secret wishes and lurking anxieties of your spirit.", "hi": "मन की गुप्त अभिलाषाएं और छिपे हुए डर।", "ja": "密かな願いと潜む不安。" },
+        "coordinates": { "x": 3.2, "y": 0.8, "z": 0 }
+      },
+      {
+        "index": 9,
+        "name": { "en": "The Final Outcome", "hi": "अंतिम निष्कर्ष", "ja": "最終結末" },
+        "hint": { "en": "The holistic resolution synthesizing all 9 cards.", "hi": "समस्त कार्डों का सम्मिलित परिणाम और अंतिम संदेश।", "ja": "すべての糸が織りなす総合的な結末。" },
+        "coordinates": { "x": 3.2, "y": 2.3, "z": 0 }
+      }
+    ]
+  }
+]

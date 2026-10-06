@@ -1,0 +1,56 @@
+{
+  "nav": {
+    "title": "Arcana 3D",
+    "subtitle": "Sacred AI Tarot",
+    "reading": "New Reading",
+    "daily": "Daily Draw",
+    "cards": "78 Cards",
+    "spreads": "Spreads",
+    "dashboard": "My Journey",
+    "credits": "Credits"
+  },
+  "hero": {
+    "tagline": "The Ancient Deck Meets Sovereign Intelligence",
+    "headline": "A Living 3D AI Tarot Sanctuary",
+    "subheading": "Ask your question, shuffle the floating deck in real-time 3D, and receive an authentic, streamed interpretation steeped in classical hermetic wisdom.",
+    "cta": "Consult the Oracle",
+    "dailyCta": "Claim Daily Card",
+    "exploreCards": "Browse Deck Archive"
+  },
+  "readingForm": {
+    "questionLabel": "What is the heart of your inquiry?",
+    "questionPlaceholder": "E.g., What energetic shift is calling me in my creative career over the next season?",
+    "questionHint": "Max 200 characters. Keep it open-ended for richer depth.",
+    "optionsPrompt": "Comparing two distinct paths? (Optional)",
+    "optionALabel": "Path / Option A",
+    "optionAPlaceholder": "Accepting the new studio contract",
+    "optionBLabel": "Path / Option B",
+    "optionBPlaceholder": "Staying independent and launching my venture",
+    "chooseSpread": "Select Sacred Geometry (Spread)",
+    "choosePersona": "Select Reader Persona",
+    "shufflePrompt": "Shuffle & Enter 3D Sanctuary",
+    "freeGuestNotice": "First reading is completely free — no account required."
+  },
+  "reader": {
+    "shufflingDeck": "Shuffling the 78 archetypal currents...",
+    "fieldInstruction": "Select {required} cards from the floating field ({selected} selected)",
+    "revealButton": "Reveal the Cards",
+    "drawUnderway": "Casting the spread and invoking the reader...",
+    "streamIntro": "The cards have aligned in sacred order.",
+    "practicalStepTitle": "Actionable Anchor",
+    "followupTitle": "Inquire Deeper into this Spread",
+    "followupPlaceholder": "Ask a follow-up question directly related to these cards...",
+    "followupSend": "Ask Reader (1 Credit)",
+    "extraCardButton": "Draw Clarifying Guidance Card (1 Credit)",
+    "disclaimer": "Tarot is a mirror for personal reflection and discernment. It does not replace medical, legal, or psychological care."
+  },
+  "credits": {
+    "current": "Balance",
+    "freeDaily": "Daily Free Claim",
+    "streakDays": "Day Streak",
+    "purchasePacks": "Acquire Credit Vessels",
+    "seekerPack": "Seeker Pack (10 Credits) - $4.99",
+    "mysticPack": "Mystic Pack (30 Credits) - $11.99",
+    "oraclePack": "Oracle Pack (100 Credits) - $29.99"
+  }
+}
