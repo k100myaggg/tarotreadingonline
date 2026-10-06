@@ -1,0 +1,118 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String             @id @default(cuid())
+  email         String?            @unique
+  name          String?
+  image         String?
+  defaultLocale String             @default("en")
+  createdAt     DateTime           @default(now())
+  updatedAt     DateTime           @updatedAt
+
+  creditLedger  CreditLedger?
+  transactions  CreditTransaction[]
+  readings      Reading[]
+  dailyDraws    DailyDraw[]
+}
+
+model CreditLedger {
+  id                String    @id @default(cuid())
+  userId            String    @unique
+  freeCredits       Int       @default(1)
+  purchasedCredits  Int       @default(0)
+  dailyStreak       Int       @default(0)
+  lastDailyClaimAt  DateTime?
+  updatedAt         DateTime  @updatedAt
+
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum TransactionType {
+  DAILY_CLAIM
+  PURCHASE
+  READING_DEDUCT
+  FOLLOWUP_DEDUCT
+  GUIDANCE_DEDUCT
+}
+
+model CreditTransaction {
+  id             String          @id @default(cuid())
+  userId         String
+  amount         Int
+  type           TransactionType
+  referenceId    String?
+  idempotencyKey String?         @unique
+  createdAt      DateTime        @default(now())
+
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum ReadingStatus {
+  DRAWN
+  STREAMING
+  COMPLETED
+  FAILED
+}
+
+model Reading {
+  id               String         @id @default(cuid())
+  userId           String?
+  guestToken       String?
+  locale           String         @default("en")
+  spreadId         String
+  question         String?
+  optionA          String?
+  optionB          String?
+  personaId        String         @default("sage")
+  status           ReadingStatus  @default(COMPLETED)
+  synthesisSummary Json?
+  createdAt        DateTime       @default(now())
+
+  user             User?          @relation(fields: [userId], references: [id], onDelete: SetNull)
+  drawnCards       DrawnCard[]
+  messages         ReadingMessage[]
+}
+
+model DrawnCard {
+  id            String    @id @default(cuid())
+  readingId     String
+  cardId        String
+  positionIndex Int
+  positionName  String
+  isReversed    Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+
+  reading       Reading   @relation(fields: [readingId], references: [id], onDelete: Cascade)
+}
+
+model ReadingMessage {
+  id        String   @id @default(cuid())
+  readingId String
+  role      String
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  reading   Reading  @relation(fields: [readingId], references: [id], onDelete: Cascade)
+}
+
+model DailyDraw {
+  id              String   @id @default(cuid())
+  userId          String
+  cardId          String
+  isReversed      Boolean  @default(false)
+  date            DateTime @default(now())
+  reflectionNotes String?  @db.Text
+  createdAt       DateTime @default(now())
+
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
