@@ -15,6 +15,7 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
+import { FollowupChat } from "@/components/ui/FollowupChat";
 import {
   Sparkles,
   ArrowRight,
@@ -529,6 +530,11 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                 }
               }}
             />
+          )}
+
+          {/* Interactive Follow-up Chat & Extra Guidance Card */}
+          {step === "complete" && !crisisData && (
+            <FollowupChat locale={locale} />
           )}
         </div>
       )}

@@ -1,0 +1,245 @@
+"use client";
+
+import React, { useState } from "react";
+import { useReadingStore, FollowupMessage } from "@/stores/useReadingStore";
+import { getPersonaById } from "@/lib/tarot/data";
+import { Locale } from "@/types/tarot";
+import { Send, Sparkles, MessageCircle, AlertCircle, PlusCircle, CheckCircle2 } from "lucide-react";
+
+interface FollowupChatProps {
+  locale: Locale;
+}
+
+export function FollowupChat({ locale }: FollowupChatProps) {
+  const {
+    readingId,
+    question,
+    personaId,
+    drawnCards,
+    readingResponse,
+    followups,
+    addFollowupMessage,
+  } = useReadingStore();
+
+  const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [guidanceCard, setGuidanceCard] = useState<any>(null);
+  const [isDrawingGuidance, setIsDrawingGuidance] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const persona = getPersonaById(personaId);
+  const personaName = persona ? persona.name[locale] || persona.name.en : "The Reader";
+
+  const handleSendMessage = async (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!input.trim() || isLoading) return;
+
+    const userText = input.trim();
+    setInput("");
+    setErrorMessage(null);
+
+    const userMsg: FollowupMessage = {
+      id: `usr_${Date.now()}`,
+      role: "user",
+      content: userText,
+      createdAt: new Date().toISOString(),
+    };
+    addFollowupMessage(userMsg);
+
+    try {
+      setIsLoading(true);
+      const res = await fetch("/api/reading/followup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          readingId,
+          personaId,
+          originalQuestion: question,
+          drawnCardsSummary: drawnCards.map((c) => `${c.positionName}: ${c.cardId} (${c.isReversed ? "rev" : "up"})`).join(", "),
+          synthesisSummary: readingResponse?.spreadSynthesis || "",
+          conversationHistory: followups,
+          userQuestion: userText,
+          locale,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to get reader response");
+      }
+
+      if (data.isCrisis) {
+        setErrorMessage("If you are in distress, please connect with a 24/7 crisis counselor at 988 or your local emergency line.");
+        return;
+      }
+
+      const assistantMsg: FollowupMessage = {
+        id: `ast_${Date.now()}`,
+        role: "assistant",
+        content: data.content,
+        createdAt: data.createdAt,
+      };
+      addFollowupMessage(assistantMsg);
+    } catch (err: any) {
+      setErrorMessage(err.message || "Failed to reach reader");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleDrawGuidance = async () => {
+    if (isDrawingGuidance) return;
+    try {
+      setIsDrawingGuidance(true);
+      setErrorMessage(null);
+      const existingIds = drawnCards.map((c) => c.cardId);
+      if (guidanceCard) existingIds.push(guidanceCard.cardId);
+
+      const res = await fetch("/api/reading/guidance", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          existingCardIds: existingIds,
+          locale,
+          personaId,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to draw guidance card");
+      }
+
+      setGuidanceCard(data);
+    } catch (err: any) {
+      setErrorMessage(err.message || "Could not draw guidance card");
+    } finally {
+      setIsDrawingGuidance(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-4xl mx-auto mystic-panel rounded-2xl p-6 sm:p-8 border border-amber-500/30 shadow-2xl mt-8">
+      {/* Header */}
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-amber-900/30">
+        <div className="flex items-center gap-3">
+          <div className="text-2xl p-2 rounded-xl bg-amber-500/10 border border-amber-500/30">
+            {persona?.avatar || "🔮"}
+          </div>
+          <div>
+            <h4 className="font-serif-sacred text-lg font-bold text-amber-200">
+              Dialogue with {personaName}
+            </h4>
+            <p className="font-mono-sacred text-[11px] text-amber-400/70">
+              Direct inquiry anchored in your spread ({Math.floor(followups.length / 2)}/5 questions asked)
+            </p>
+          </div>
+        </div>
+
+        {/* Guidance Card Draw Trigger */}
+        <button
+          type="button"
+          disabled={isDrawingGuidance || Boolean(guidanceCard)}
+          onClick={handleDrawGuidance}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono-sacred transition-all ${
+            guidanceCard
+              ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+              : "bg-gradient-to-r from-amber-600 to-amber-500 text-neutral-950 font-bold hover:scale-105 active:scale-95 shadow-md shadow-amber-500/20"
+          }`}
+        >
+          <PlusCircle className="w-4 h-4" />
+          <span>{guidanceCard ? "Guidance Drawn" : "Draw Guidance Card (1 Credit)"}</span>
+        </button>
+      </div>
+
+      {/* Extra Guidance Card Callout */}
+      {guidanceCard && (
+        <div className="my-6 p-5 rounded-xl bg-[#140e2b] border border-amber-400/50 shadow-lg animate-fade-in flex flex-col sm:flex-row items-center sm:items-start gap-5">
+          <div className="w-24 aspect-[1/1.7] rounded-lg bg-black/60 border border-amber-400/60 p-2 flex flex-col items-center justify-center text-center shrink-0">
+            <span className="text-xl mb-1">🎴</span>
+            <span className="font-serif-sacred text-[11px] font-bold text-amber-200 leading-tight">
+              {guidanceCard.card.cardName}
+            </span>
+            <span className="font-mono-sacred text-[9px] text-purple-300 mt-1 uppercase">
+              {guidanceCard.card.isReversed ? "Reversed ↺" : "Upright ↑"}
+            </span>
+          </div>
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <Sparkles className="w-4 h-4 text-amber-400" />
+              <h5 className="font-serif-sacred font-bold text-sm text-amber-100">
+                Additional Oracle Guidance
+              </h5>
+            </div>
+            <p className="text-xs text-slate-300 leading-relaxed">
+              {guidanceCard.interpretation}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Messages Stream */}
+      <div className="space-y-4 my-6 max-h-[420px] overflow-y-auto pr-2">
+        {followups.length === 0 && (
+          <div className="text-center py-8 text-slate-500 text-xs font-mono-sacred">
+            ✦ Ask a question to delve deeper into your spread, or draw a clarifying card above ✦
+          </div>
+        )}
+
+        {followups.map((msg) => (
+          <div
+            key={msg.id}
+            className={`flex flex-col ${
+              msg.role === "user" ? "items-end" : "items-start"
+            }`}
+          >
+            <div
+              className={`max-w-[85%] rounded-2xl p-4 text-xs sm:text-sm leading-relaxed ${
+                msg.role === "user"
+                  ? "bg-amber-500/20 border border-amber-400/40 text-amber-100 rounded-br-none"
+                  : "mystic-panel border border-white/10 text-slate-200 rounded-bl-none shadow-md"
+              }`}
+            >
+              {msg.content}
+            </div>
+          </div>
+        ))}
+
+        {isLoading && (
+          <div className="flex items-center gap-2 text-xs font-mono-sacred text-amber-400 animate-pulse">
+            <Sparkles className="w-3.5 h-3.5 animate-spin" />
+            <span>{personaName} is meditating upon your words...</span>
+          </div>
+        )}
+      </div>
+
+      {errorMessage && (
+        <div className="mb-4 p-3 rounded-lg bg-rose-950/60 border border-rose-500/40 text-rose-300 text-xs flex items-center gap-2">
+          <AlertCircle className="w-4 h-4 shrink-0" />
+          <span>{errorMessage}</span>
+        </div>
+      )}
+
+      {/* Input Box */}
+      <form onSubmit={handleSendMessage} className="relative flex items-center gap-2">
+        <input
+          id="followup-input"
+          type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          maxLength={300}
+          placeholder="Ask a clarifying question to the reader..."
+          className="w-full bg-[#090714] border border-amber-500/30 rounded-xl px-4 py-3 pr-24 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+        />
+        <button
+          type="submit"
+          disabled={!input.trim() || isLoading}
+          className="absolute right-2 px-3 py-1.5 rounded-lg bg-amber-500 text-neutral-950 font-bold text-xs font-mono-sacred hover:bg-amber-400 disabled:opacity-40 transition-all flex items-center gap-1"
+        >
+          <span>Ask</span>
+          <Send className="w-3 h-3" />
+        </button>
+      </form>
+    </div>
+  );
+}
