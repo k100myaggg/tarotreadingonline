@@ -3,10 +3,18 @@
 import React, { useState, use } from "react";
 import dynamic from "next/dynamic";
 import { useReadingStore } from "@/stores/useReadingStore";
-import { allSpreads, allPersonas, getSpreadById, getPersonaById } from "@/lib/tarot/data";
+import {
+  allSpreads,
+  allPersonas,
+  getSpreadById,
+  getPersonaById,
+  getSpreadDisplayName,
+  getPersonaDisplayName,
+} from "@/lib/tarot/data";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
+import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import {
   Sparkles,
   ArrowRight,
@@ -58,11 +66,121 @@ export default function ReadingPage({ params }: ReadingPageProps) {
   const [use2DFallback, setUse2DFallback] = useState(false);
   const [showOptions, setShowOptions] = useState(Boolean(optionA || optionB));
   const [isSubmittingDraw, setIsSubmittingDraw] = useState(false);
+  const [crisisData, setCrisisData] = useState<any>(null);
+
+  const {
+    isStreaming,
+    streamedText,
+    readingResponse,
+    setStreaming,
+    setStreamedText,
+    setReadingResponse,
+  } = useReadingStore();
 
   const currentSpread = getSpreadById(spreadId) || allSpreads[1];
   const currentPersona = getPersonaById(personaId) || allPersonas[0];
   const requiredPicks = currentSpread.cardCount;
   const picksRemaining = requiredPicks - userPickIndices.length;
+
+  // Stream reader interpretation when transitioning into 'streaming' step
+  React.useEffect(() => {
+    if (step !== "streaming" || isStreaming || readingResponse) return;
+
+    let isMounted = true;
+    setStreaming(true);
+    setStreamedText("");
+
+    async function streamReading() {
+      try {
+        const response = await fetch("/api/reading/stream", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            spreadId,
+            question,
+            optionA,
+            optionB,
+            personaId,
+            drawnCards,
+            locale,
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to initialize stream");
+        }
+
+        const contentType = response.headers.get("content-type");
+        if (contentType && contentType.includes("application/json")) {
+          const json = await response.json();
+          if (json.isCrisis) {
+            setCrisisData(json.crisisPayload);
+            setStreaming(false);
+            setStep("complete");
+            return;
+          }
+        }
+
+        const reader = response.body?.getReader();
+        if (!reader) return;
+
+        const decoder = new TextDecoder();
+        let accumulated = "";
+
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+
+          const textChunk = decoder.decode(value, { stream: true });
+          const lines = textChunk.split("\n\n");
+
+          for (const line of lines) {
+            if (line.startsWith("data: ")) {
+              try {
+                const eventData = JSON.parse(line.slice(6));
+                if (eventData.type === "delta") {
+                  accumulated += eventData.text;
+                  if (isMounted) setStreamedText(accumulated);
+                } else if (eventData.type === "complete") {
+                  if (eventData.parsed) {
+                    if (isMounted) {
+                      setReadingResponse(eventData.parsed);
+                      setStep("complete");
+                    }
+                  }
+                }
+              } catch {
+                // Ignore SSE framing json parse partials
+              }
+            }
+          }
+        }
+
+        // Final attempt to parse complete accumulated JSON if complete event was missed
+        if (accumulated && !readingResponse) {
+          try {
+            const parsed = JSON.parse(accumulated);
+            if (isMounted) {
+              setReadingResponse(parsed);
+              setStep("complete");
+            }
+          } catch {
+            // Raw text fallback
+          }
+        }
+      } catch (err: any) {
+        console.error("Stream reader error:", err);
+      } finally {
+        if (isMounted) setStreaming(false);
+      }
+    }
+
+    streamReading();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [step, isStreaming, readingResponse]);
 
   // Handle starting shuffle flow
   const handleStartShuffle = () => {
@@ -246,14 +364,14 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                     >
                       <div className="flex justify-between items-center mb-1">
                         <span className="font-serif-sacred font-bold text-amber-100 text-sm">
-                          {spread.name[locale] || spread.name.en}
+                          {getSpreadDisplayName(spread, locale)}
                         </span>
                         <span className="font-mono-sacred text-[10px] px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-500/20">
                           {spread.cardCount} CARDS
                         </span>
                       </div>
                       <p className="text-[11px] text-slate-400 line-clamp-2">
-                        {spread.description[locale] || spread.description.en}
+                        {spread.description[locale as "en" | "hi" | "ja"] || spread.description.en}
                       </p>
                     </div>
                   );
@@ -281,13 +399,13 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                     >
                       <div className="text-2xl mb-1">{persona.avatar}</div>
                       <div className="font-serif-sacred font-bold text-amber-100 text-sm">
-                        {persona.name[locale] || persona.name.en}
+                        {getPersonaDisplayName(persona, locale)}
                       </div>
                       <p className="text-[10px] font-mono-sacred text-amber-400/70 mb-1">
-                        {persona.title[locale] || persona.title.en}
+                        {persona.title[locale as "en" | "hi" | "ja"] || persona.title.en}
                       </p>
                       <p className="text-[11px] text-slate-400 line-clamp-2">
-                        {persona.description[locale] || persona.description.en}
+                        {persona.description[locale as "en" | "hi" | "ja"] || persona.description.en}
                       </p>
                     </div>
                   );
@@ -394,6 +512,24 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               <TarotCanvas locale={locale} onShuffleFinished={handleShuffleFinished} />
             )}
           </div>
+
+          {/* Streamed Reader Interpretation */}
+          {(step === "streaming" || step === "complete") && (
+            <ReadingStreamViewer
+              reading={readingResponse}
+              rawStreamText={streamedText}
+              isStreaming={isStreaming}
+              crisisData={crisisData}
+              locale={locale}
+              onSelectFollowup={(q) => {
+                const chatInput = document.getElementById("followup-input") as HTMLInputElement;
+                if (chatInput) {
+                  chatInput.value = q;
+                  chatInput.focus();
+                }
+              }}
+            />
+          )}
         </div>
       )}
     </div>
