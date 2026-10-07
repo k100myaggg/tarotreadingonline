@@ -146,6 +146,7 @@ function FloatingCardItem({
     <group>
       <mesh
         ref={meshRef}
+        material={materials}
         position={[basePosition.x, basePosition.y, basePosition.z]}
         rotation={[baseRotation.x, baseRotation.y, baseRotation.z]}
         scale={[scale, scale, scale]}
@@ -156,9 +157,6 @@ function FloatingCardItem({
         receiveShadow
       >
         <boxGeometry args={[0.55, 0.94, 0.01]} />
-        {materials.map((mat, i) => (
-          <primitive key={i} object={mat} attach={`material-${i}`} />
-        ))}
 
         {/* Selection confirmation badge attached directly to upper face of the card */}
         {isSelected && selectionOrder && (

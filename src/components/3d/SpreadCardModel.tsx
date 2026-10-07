@@ -156,11 +156,8 @@ export function SpreadCardModel({
     >
       {/* Inner Rotatable Card Mesh Group */}
       <group ref={cardGroupRef} rotation={[0, Math.PI, 0]}>
-        <mesh castShadow receiveShadow>
+        <mesh material={materials} castShadow receiveShadow>
           <boxGeometry args={[1.15, 1.95, 0.02]} />
-          {materials.map((mat, i) => (
-            <primitive key={i} object={mat} attach={`material-${i}`} />
-          ))}
         </mesh>
 
         {/* Luminous Gold Halo Aura when revealed */}

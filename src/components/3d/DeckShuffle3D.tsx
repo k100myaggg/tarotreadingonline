@@ -234,11 +234,8 @@ function VortexCardMesh({
   });
 
   return (
-    <mesh ref={meshRef} castShadow receiveShadow>
+    <mesh ref={meshRef} material={materials} castShadow receiveShadow>
       <boxGeometry args={[0.55, 0.94, 0.01]} />
-      {materials.map((mat, i) => (
-        <primitive key={i} object={mat} attach={`material-${i}`} />
-      ))}
     </mesh>
   );
 }

@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useRef, useState, useMemo, useEffect } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { getCardBackTexture } from "./cardTextures";
 import { mysticAudio } from "@/lib/audio/soundscape";
 import { Html } from "@react-three/drei";
-import { Sparkles, Scissors, ArrowRight } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 interface DeckCut3DProps {
   onCutComplete: () => void;
@@ -16,9 +16,12 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
   const groupRef = useRef<THREE.Group>(null);
   const cardBackTexture = useMemo(() => getCardBackTexture(), []);
 
-  // Split state: 'united' | 'splitting' | 'split' | 'rejoining' | 'completed'
+  // Split state: 'united' | 'splitting' | 'split' | 'completed'
   const [cutState, setCutState] = useState<"united" | "splitting" | "split" | "completed">("united");
   const [hovered, setHovered] = useState(false);
+
+  // High-performance shared geometry (1 single geometry instance for entire component)
+  const deckGeometry = useMemo(() => new THREE.BoxGeometry(1.2, 2.0, 0.22), []);
 
   // Materials with enhanced gold foil metallic sheen
   const goldEdgeMat = useMemo(
@@ -27,7 +30,7 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
         color: "#d4af37",
         metalness: 0.92,
         roughness: 0.15,
-        emissive: new THREE.Color("#855e0c"),
+        emissive: new THREE.Color("#755208"),
         emissiveIntensity: 0.35,
       }),
     []
@@ -43,28 +46,29 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
     [cardBackTexture]
   );
 
+  // Box faces: [right, left, top, bottom, front, back]
   const cardMaterials = useMemo(
     () => [goldEdgeMat, goldEdgeMat, goldEdgeMat, goldEdgeMat, backMat, backMat],
     [goldEdgeMat, backMat]
   );
 
-  // Positions of Left (Top cut) and Right (Bottom cut) stacks
+  // Smooth position vectors
   const leftStackPos = useRef(new THREE.Vector3(0, 0, 0));
   const rightStackPos = useRef(new THREE.Vector3(0, 0, 0));
   const leftStackRot = useRef(new THREE.Euler(0, 0, 0));
   const rightStackRot = useRef(new THREE.Euler(0, 0, 0));
 
   // Stardust explosion particles on cut
-  const particleCount = 70;
   const particleGeo = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    const positions = new Float32Array(particleCount * 3);
-    for (let i = 0; i < particleCount * 3; i += 3) {
-      positions[i] = (Math.random() - 0.5) * 3.5;
-      positions[i + 1] = (Math.random() - 0.5) * 2.5;
-      positions[i + 2] = (Math.random() - 0.5) * 2.0;
+    const count = 60;
+    const positions = new Float32Array(count * 3);
+    for (let i = 0; i < count * 3; i += 3) {
+      positions[i] = (Math.random() - 0.5) * 3.0;
+      positions[i + 1] = (Math.random() - 0.5) * 2.2;
+      positions[i + 2] = (Math.random() - 0.5) * 1.8;
     }
-    geo.setAttribute("position", new THREE.BufferAttribute(positions, 0));
+    geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     return geo;
   }, []);
 
@@ -73,15 +77,15 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
       setCutState("splitting");
       if (typeof window !== "undefined") {
         mysticAudio.playCardShuffle?.();
-        setTimeout(() => mysticAudio.playCardFlip?.(), 300);
+        setTimeout(() => mysticAudio.playCardFlip?.(), 250);
       }
-      setTimeout(() => setCutState("split"), 500);
+      setTimeout(() => setCutState("split"), 450);
     } else if (cutState === "split") {
       setCutState("completed");
       if (typeof window !== "undefined") {
         mysticAudio.playCardShuffle?.();
       }
-      setTimeout(() => onCutComplete(), 750);
+      setTimeout(() => onCutComplete(), 600);
     }
   };
 
@@ -90,7 +94,7 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
 
     // Target positions based on cut state
     let targetLeftX = 0;
-    let targetLeftY = hovered && cutState === "united" ? 0.15 : 0;
+    let targetLeftY = hovered && cutState === "united" ? 0.12 : 0;
     let targetLeftZ = 0;
     let targetLeftRotZ = 0;
 
@@ -101,11 +105,11 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
 
     if (cutState === "splitting" || cutState === "split") {
       targetLeftX = -1.35;
-      targetLeftY = 0.05 + Math.sin(time * 2) * 0.03;
+      targetLeftY = 0.05 + Math.sin(time * 2) * 0.025;
       targetLeftRotZ = -0.06;
 
       targetRightX = 1.35;
-      targetRightY = Math.cos(time * 2) * 0.03;
+      targetRightY = Math.cos(time * 2) * 0.025;
       targetRightRotZ = 0.06;
     } else if (cutState === "completed") {
       targetLeftX = 0;
@@ -114,7 +118,7 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
       targetRightY = 0;
     }
 
-    // Spring damping for smooth card glide
+    // Spring damping
     leftStackPos.current.x = THREE.MathUtils.damp(leftStackPos.current.x, targetLeftX, 6, delta);
     leftStackPos.current.y = THREE.MathUtils.damp(leftStackPos.current.y, targetLeftY, 6, delta);
     leftStackPos.current.z = THREE.MathUtils.damp(leftStackPos.current.z, targetLeftZ, 6, delta);
@@ -125,20 +129,18 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
     rightStackPos.current.z = THREE.MathUtils.damp(rightStackPos.current.z, targetRightZ, 6, delta);
     rightStackRot.current.z = THREE.MathUtils.damp(rightStackRot.current.z, targetRightRotZ, 6, delta);
 
-    // Subtle breathing rotation of entire group
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.08;
-      groupRef.current.rotation.x = Math.cos(time * 0.4) * 0.04 - 0.2; // Slight tilt towards camera
+      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.06;
+      groupRef.current.rotation.x = Math.cos(time * 0.4) * 0.03 - 0.2;
     }
 
-    // Dynamic metallic foil shimmer reacting to camera angle
+    // Dynamic metallic foil shimmer
     const shimmer = Math.sin(time * 2.5) * 0.5 + 0.5;
-    goldEdgeMat.emissiveIntensity = 0.2 + shimmer * 0.35;
+    goldEdgeMat.emissiveIntensity = 0.25 + shimmer * 0.35;
   });
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      {/* Central warm sacred altar light */}
       <pointLight position={[0, 1.5, 2]} intensity={2.2} color="#ffe58f" distance={8} />
       <pointLight position={[0, -1, 1]} intensity={0.8} color="#c084fc" distance={6} />
 
@@ -156,63 +158,37 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
       )}
 
       {/* Left Stack (Top cut of the deck) */}
-      <group
-        position={[leftStackPos.current.x, leftStackPos.current.y, leftStackPos.current.z]}
-        rotation={[leftStackRot.current.x, leftStackRot.current.y, leftStackRot.current.z]}
+      <mesh
+        geometry={deckGeometry}
+        material={cardMaterials}
+        position={[leftStackPos.current.x, leftStackPos.current.y, leftStackPos.current.z + (cutState === "united" ? 0.01 : 0)]}
+        rotation={[leftStackRot.current.x, Math.PI, leftStackRot.current.z]}
         onClick={handleDeckClick}
         onPointerOver={() => {
           setHovered(true);
           document.body.style.cursor = "pointer";
+          if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
         }}
         onPointerOut={() => {
           setHovered(false);
           document.body.style.cursor = "auto";
         }}
-      >
-        {/* Render 14 stacked cards for visual thickness */}
-        {Array.from({ length: 14 }).map((_, i) => (
-          <mesh
-            key={`left_${i}`}
-            position={[0, 0, (i - 7) * 0.022]}
-            rotation={[0, Math.PI, 0]}
-            castShadow
-            receiveShadow
-          >
-            <boxGeometry args={[1.2, 2.0, 0.018]} />
-            {cardMaterials.map((mat, mi) => (
-              <primitive key={mi} object={mat} attach={`material-${mi}`} />
-            ))}
-          </mesh>
-        ))}
+        castShadow
+        receiveShadow
+      />
 
-        {/* Glow halo on hover or cut */}
-        {hovered && cutState === "united" && (
-          <pointLight position={[0, 0, 0.4]} intensity={1.2} color="#ffd700" distance={3} />
-        )}
-      </group>
-
-      {/* Right Stack (Bottom cut of the deck) */}
-      <group
-        position={[rightStackPos.current.x, rightStackPos.current.y, rightStackPos.current.z]}
-        rotation={[rightStackRot.current.x, rightStackRot.current.y, rightStackRot.current.z]}
-        onClick={handleDeckClick}
-      >
-        {/* Render 14 stacked cards for visual thickness */}
-        {Array.from({ length: 14 }).map((_, i) => (
-          <mesh
-            key={`right_${i}`}
-            position={[0, 0, (i - 7) * 0.022]}
-            rotation={[0, Math.PI, 0]}
-            castShadow
-            receiveShadow
-          >
-            <boxGeometry args={[1.2, 2.0, 0.018]} />
-            {cardMaterials.map((mat, mi) => (
-              <primitive key={mi} object={mat} attach={`material-${mi}`} />
-            ))}
-          </mesh>
-        ))}
-      </group>
+      {/* Right Stack (Bottom cut of the deck) - only renders separately when split/splitting */}
+      {cutState !== "united" && (
+        <mesh
+          geometry={deckGeometry}
+          material={cardMaterials}
+          position={[rightStackPos.current.x, rightStackPos.current.y, rightStackPos.current.z]}
+          rotation={[rightStackRot.current.x, Math.PI, rightStackRot.current.z]}
+          onClick={handleDeckClick}
+          castShadow
+          receiveShadow
+        />
+      )}
 
       {/* 3D Floating Interactive Badge */}
       <Html position={[0, -1.55, 0]} center pointerEvents="none">
