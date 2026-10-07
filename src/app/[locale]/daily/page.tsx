@@ -5,6 +5,7 @@ import confetti from "canvas-confetti";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale, TarotCard } from "@/types/tarot";
 import { allCards, getCardDisplayName } from "@/lib/tarot/data";
+import { getCardImagePath } from "@/lib/tarot/cardImages";
 import { secureRandomInt } from "@/lib/rng/draw";
 import { Sparkles, Moon, Flame, CheckCircle2, Bookmark, Calendar } from "lucide-react";
 
@@ -154,26 +155,33 @@ export default function DailyPage({ params }: DailyPageProps) {
 
       {/* Daily Card Display Card */}
       <div className="w-full mystic-panel rounded-2xl p-6 sm:p-10 border border-amber-500/30 shadow-2xl flex flex-col md:flex-row items-center gap-8 mb-8">
-        {/* Card Graphic */}
-        <div className="w-48 aspect-[1/1.7] rounded-2xl bg-[#120d26] border-2 border-amber-400/80 p-4 flex flex-col items-center justify-between text-center shadow-xl shadow-amber-500/20 shrink-0 relative overflow-hidden">
-          <span className="font-mono-sacred text-[11px] text-amber-400/80 uppercase">
-            {dailyCard.arcana} arcana
-          </span>
-
-          <div className="my-auto">
-            <span className="text-4xl block mb-2">
-              {dailyCard.arcana === "major" ? "🔮" : "✨"}
-            </span>
-            <h3 className="font-serif-sacred text-lg font-bold text-amber-100">
-              {cardName}
-            </h3>
-            <span className="inline-block mt-2 text-[10px] font-mono-sacred px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 uppercase">
-              {isReversed ? "Reversed ↺" : "Upright ↑"}
-            </span>
+        {/* Card Graphic with Real Artwork */}
+        <div className="flex flex-col items-center gap-3 shrink-0">
+          <div className="w-48 sm:w-56 aspect-[1/1.7] rounded-2xl bg-[#090714] border-2 border-amber-400/80 shadow-2xl shadow-amber-500/25 relative overflow-hidden group">
+            <img
+              src={getCardImagePath(dailyCard.id)}
+              alt={cardName}
+              className={`w-full h-full object-cover transition-transform duration-500 ${
+                isReversed ? "rotate-180" : ""
+              }`}
+            />
+            {/* Golden foil metallic shimmer overlay */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-amber-500/10 via-transparent to-purple-500/10 pointer-events-none" />
           </div>
 
-          <div className="text-[10px] font-mono-sacred text-purple-300">
-            {keywords.slice(0, 2).join(" • ")}
+          <div className="flex flex-col items-center text-center">
+            <h3 className="font-serif-sacred text-base sm:text-lg font-bold text-amber-100">
+              {cardName}
+            </h3>
+            <span
+              className={`mt-1 text-[10px] font-mono-sacred px-2.5 py-0.5 rounded-full border uppercase tracking-wider ${
+                isReversed
+                  ? "bg-purple-950/80 border-purple-400/60 text-purple-200"
+                  : "bg-amber-950/80 border-amber-400/60 text-amber-200"
+              }`}
+            >
+              {isReversed ? "Reversed ↺" : "Upright ↑"}
+            </span>
           </div>
         </div>
 

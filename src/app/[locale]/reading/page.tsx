@@ -19,14 +19,13 @@ import { Locale, StructuredReadingResponse } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import { FollowupChat } from "@/components/ui/FollowupChat";
-import { MysticAudioPlayer } from "@/components/ui/MysticAudioPlayer";
+import { SanctuarySettingsModal } from "@/components/ui/SanctuarySettingsModal";
 import {
   Sparkles,
   ArrowRight,
   SlidersHorizontal,
-  Volume2,
-  VolumeX,
   RotateCcw,
+  X,
 } from "lucide-react";
 
 // Dynamically import full-screen 3D Canvas with SSR disabled
@@ -374,48 +373,52 @@ export default function ReadingPage({ params }: ReadingPageProps) {
         </div>
       )}
 
-      {/* ─── 2. TOP HUD NAVIGATION BAR (Pinned, Minimalist) ─── */}
-      <div className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between pointer-events-auto backdrop-blur-md bg-black/40 border-b border-white/5">
-        <div className="flex items-center gap-3">
+      {/* ─── 2. TOP HUD NAVIGATION BAR (Pinned, Minimalist, Mobile-Optimized) ─── */}
+      <div className="fixed top-0 left-0 right-0 z-40 px-3.5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between pointer-events-auto backdrop-blur-xl bg-black/60 border-b border-amber-500/20 shadow-lg shadow-black/40">
+        <div className="flex items-center gap-2.5 sm:gap-3">
           <Link
             href={`/${locale}`}
-            className="font-serif-sacred text-base font-bold tracking-widest text-amber-100 hover:text-amber-300 transition-colors flex items-center gap-2"
+            className="font-serif-sacred text-sm sm:text-base font-bold tracking-widest text-amber-100 hover:text-amber-300 transition-colors flex items-center gap-2"
           >
             <span>ARCANA 3D</span>
-            <span className="w-2 h-2 rounded-full bg-amber-400 shadow-md shadow-amber-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-md shadow-amber-400" />
           </Link>
 
           <span className="hidden md:inline-block text-[10px] font-mono-sacred text-amber-400/80 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 uppercase tracking-wider">
-            DECK · RWS 1909 CANON · 78 CARDS · UPRIGHT + REVERSED
+            DECK · RWS 1909 CANON · 78 CARDS
           </span>
         </div>
 
-        {/* Action Controls */}
+        {/* Action Controls: Compact, consolidated in Settings Modal */}
         <div className="flex items-center gap-2 text-xs font-mono-sacred">
-          <button
-            type="button"
-            onClick={() => setUse2DFallback(!use2DFallback)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/70 border border-amber-500/30 text-slate-300 hover:text-amber-300 hover:border-amber-400 transition-all"
-            title="Toggle between 3D cosmos and accessible 2D mode"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">
-              {use2DFallback ? "3D Cosmos" : "2D Accessible"}
-            </span>
-          </button>
-
-          <MysticAudioPlayer />
-
           {step !== "question" && (
             <button
               type="button"
               onClick={resetReading}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-900/70 transition-all"
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-900/70 transition-all text-xs"
+              title="Reset Reading"
             >
               <RotateCcw className="w-3.5 h-3.5" />
-              <span>Reset</span>
+              <span className="hidden sm:inline">Reset</span>
             </button>
           )}
+
+          {/* Consolidated Settings Gear (Audio, Volume, 2D/3D mode, Language) */}
+          <SanctuarySettingsModal
+            locale={locale}
+            compact
+            onToggle2D={() => setUse2DFallback(!use2DFallback)}
+            is2DActive={use2DFallback}
+          />
+
+          <Link
+            href={`/${locale}`}
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-white/5 border border-white/10 text-slate-400 hover:text-amber-200 hover:bg-white/10 transition-colors"
+            title="Exit to Sanctuary"
+            aria-label="Exit to Sanctuary"
+          >
+            <X className="w-4 h-4" />
+          </Link>
         </div>
       </div>
 
