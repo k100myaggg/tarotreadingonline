@@ -7,6 +7,7 @@ import { OrbitControls } from "@react-three/drei";
 import { StarfieldNebula } from "./StarfieldNebula";
 import { DriftingBackgroundCards } from "./DriftingBackgroundCards";
 import { DeckShuffle3D } from "./DeckShuffle3D";
+import { DeckCut3D } from "./DeckCut3D";
 import { FloatingCardField } from "./FloatingCardField";
 import { SpreadCardModel } from "./SpreadCardModel";
 import { useReadingStore } from "@/stores/useReadingStore";
@@ -35,6 +36,9 @@ function CameraController({ step }: { step: string }) {
     } else if (step === "shuffling") {
       targetZ = 4.8;
       targetY = 0.15;
+    } else if (step === "cutting") {
+      targetZ = 4.5;
+      targetY = 0.22;
     } else if (step === "picking") {
       // Wider centered view calibrated for the compact 3-row amphitheater
       targetZ = 7.2;
@@ -78,6 +82,11 @@ function SceneContent({
           onShuffleComplete={onShuffleFinished}
           isCollapsing={isCollapsing}
         />
+      )}
+
+      {/* Step 2.5: Interactive 3D Deck Cutting Ritual */}
+      {step === "cutting" && (
+        <DeckCut3D onCutComplete={() => useReadingStore.getState().setStep("picking")} />
       )}
 
       {/* Step 3: Intuitive Picking — Full-screen Panoramic Floating Card Cosmos */}

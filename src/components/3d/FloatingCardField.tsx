@@ -6,6 +6,7 @@ import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { useReadingStore } from "@/stores/useReadingStore";
 import { getCardBackTexture } from "./cardTextures";
+import { mysticAudio } from "@/lib/audio/soundscape";
 
 // ─── Seeded pseudo-random for stable deterministic layout ───
 function seededRandom(seed: number) {
@@ -79,15 +80,15 @@ function FloatingCardItem({
       targetRotX = 0;
       targetRotY = 0;
       targetRotZ = 0;
-      targetGlow = hovered ? 1.2 : 0.95;
+      targetGlow = hovered ? 1.3 : 0.95;
       targetScale = scale * (hovered ? 1.22 : 1.18);
     } else if (hovered) {
-      // Hover: gentle lift and forward step
+      // Hover: gentle lift, forward step, and interactive cursor tilt
       targetY += 0.08;
       targetZ += 0.55;
-      targetRotX = baseRotation.x * 0.3;
-      targetRotY = baseRotation.y * 0.4;
-      targetGlow = 0.55;
+      targetRotX = baseRotation.x * 0.3 - state.pointer.y * 0.18;
+      targetRotY = baseRotation.y * 0.4 + state.pointer.x * 0.18;
+      targetGlow = 0.65;
       targetScale = scale * 1.08;
     }
 
@@ -105,14 +106,18 @@ function FloatingCardItem({
     const curScale = meshRef.current.scale.x;
     meshRef.current.scale.setScalar(THREE.MathUtils.damp(curScale, targetScale, 8, delta));
 
-    // Emissive gold aura glow
+    // Dynamic metallic gold foil shimmer reacting to light and time
+    cardEdgeMat.metalness = 0.94;
+    cardEdgeMat.roughness = 0.14;
     glowIntensity.current = THREE.MathUtils.damp(glowIntensity.current, targetGlow, 6, delta);
     const g = glowIntensity.current;
+    const shimmer = Math.sin(time * 2.8 + floatPhase) * 0.35 + 0.65;
+
     if (isSelected && hovered) {
       // Warm rose-gold cue for unselect
-      cardEdgeMat.emissive.setRGB(0.95 * g, 0.4 * g, 0.3 * g);
+      cardEdgeMat.emissive.setRGB(0.95 * g * shimmer, 0.4 * g * shimmer, 0.3 * g * shimmer);
     } else {
-      cardEdgeMat.emissive.setRGB(0.85 * g, 0.6 * g, 0.15 * g);
+      cardEdgeMat.emissive.setRGB(0.92 * g * shimmer, 0.72 * g * shimmer, 0.22 * g * shimmer);
     }
   });
 
@@ -120,6 +125,7 @@ function FloatingCardItem({
     e.stopPropagation();
     setHovered(true);
     document.body.style.cursor = "pointer";
+    if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
   }, []);
 
   const handlePointerOut = useCallback((e: ThreeEvent<PointerEvent>) => {

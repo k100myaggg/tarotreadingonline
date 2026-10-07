@@ -6,6 +6,7 @@ import { mysticAudio } from "@/lib/audio/soundscape";
 export type ReadingStep =
   | "question"     // Step 1: Inquire & pick spread/persona
   | "shuffling"    // Step 2: 3D Deck shuffling animation
+  | "cutting"      // Step 2.5: Interactive 3D deck cutting ritual
   | "picking"      // Step 3: Floating 3D field card selection
   | "revealing"    // Step 4: Staggered flip reveals on velvet board
   | "streaming"    // Step 5: Streaming AI reading

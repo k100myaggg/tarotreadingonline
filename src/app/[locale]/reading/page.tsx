@@ -233,13 +233,13 @@ export default function ReadingPage({ params }: ReadingPageProps) {
     setStep("shuffling");
   };
 
-  // Step 2 -> Step 3: Finish Shuffling and Transition into Card Picking
+  // Step 2 -> Step 2.5: Finish Shuffling and Transition into Cutting Ritual
   const handleFinishShuffling = () => {
     if (isCollapsingShuffle) return;
     setIsCollapsingShuffle(true);
-    // Allow the magnetic deck collapse animation to fully resolve before fanning out
+    // Allow the magnetic deck collapse animation to fully resolve before cutting ritual
     setTimeout(() => {
-      setStep("picking");
+      setStep("cutting");
       setIsCollapsingShuffle(false);
     }, 1000);
   };
@@ -583,6 +583,35 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               className="px-9 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
             >
               <span>{isCollapsingShuffle ? "COALESCING DECK..." : "FINISH SHUFFLING"}</span>
+              <ArrowRight className="w-4 h-4 text-amber-800" />
+            </button>
+          </div>
+        </>
+      )}
+
+      {/* ─── STEP 2.5: SACRED DECK CUTTING RITUAL ─── */}
+      {step === "cutting" && (
+        <>
+          <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4 animate-in fade-in duration-500">
+            <span className="font-mono-sacred text-[11px] text-amber-400 tracking-widest uppercase flex items-center justify-center gap-1.5 mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
+              <span>SACRED RITUAL · PERSONAL ENERGETIC IMPRINT</span>
+            </span>
+            <h2 className="font-serif-sacred text-2xl sm:text-3xl font-bold text-amber-100 drop-shadow">
+              Cut the Sacred Deck
+            </h2>
+            <p className="font-sans text-xs sm:text-sm text-amber-200/80 max-w-md mx-auto mt-1">
+              Tap the deck above to divide the cards and imprint your intention into the reading.
+            </p>
+          </div>
+
+          <div className="fixed bottom-6 sm:bottom-7 left-0 right-0 z-30 flex justify-center pointer-events-auto px-4">
+            <button
+              type="button"
+              onClick={() => setStep("picking")}
+              className="px-8 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+            >
+              <span>Fan Out Cards</span>
               <ArrowRight className="w-4 h-4 text-amber-800" />
             </button>
           </div>

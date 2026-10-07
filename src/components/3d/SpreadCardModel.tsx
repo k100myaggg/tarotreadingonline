@@ -7,6 +7,7 @@ import * as THREE from "three";
 import { DrawnCardData, Locale } from "@/types/tarot";
 import { getCardById, getCardDisplayName } from "@/lib/tarot/data";
 import { getCardBackTexture, getCardFrontTexture } from "./cardTextures";
+import { mysticAudio } from "@/lib/audio/soundscape";
 
 interface SpreadCardModelProps {
   cardData: DrawnCardData;
@@ -110,16 +111,28 @@ export function SpreadCardModel({
     const targetY = positionCoordinates.y + (isRevealed ? 0.05 : 0) + floatOffset + (hovered ? 0.12 : 0);
     outerGroupRef.current.position.y = THREE.MathUtils.damp(outerGroupRef.current.position.y, targetY, 4, delta);
 
+    // Interactive cursor parallax tilt
+    if (hovered) {
+      outerGroupRef.current.rotation.x = THREE.MathUtils.damp(outerGroupRef.current.rotation.x, -state.pointer.y * 0.22, 6, delta);
+      outerGroupRef.current.rotation.y = THREE.MathUtils.damp(outerGroupRef.current.rotation.y, state.pointer.x * 0.22, 6, delta);
+    } else {
+      outerGroupRef.current.rotation.x = THREE.MathUtils.damp(outerGroupRef.current.rotation.x, 0, 5, delta);
+      outerGroupRef.current.rotation.y = THREE.MathUtils.damp(outerGroupRef.current.rotation.y, 0, 5, delta);
+    }
+
     // Subtle scale spring on hover
     const targetScale = hovered ? 1.05 : 1.0;
     cardGroupRef.current.scale.setScalar(
       THREE.MathUtils.damp(cardGroupRef.current.scale.x, targetScale, 6, delta)
     );
 
-    // Edge glow illumination
+    // Edge metallic foil shimmer
     const goldEdge = materials[0] as THREE.MeshStandardMaterial;
-    const glowIntensity = isRevealed ? 0.5 : hovered ? 0.3 : 0.05;
-    goldEdge.emissive.setRGB(0.7 * glowIntensity, 0.55 * glowIntensity, 0.15 * glowIntensity);
+    goldEdge.metalness = 0.94;
+    goldEdge.roughness = 0.14;
+    const glowIntensity = isRevealed ? 0.65 : hovered ? 0.4 : 0.08;
+    const shimmer = Math.sin(time * 3 + cardData.positionIndex) * 0.3 + 0.7;
+    goldEdge.emissive.setRGB(0.85 * glowIntensity * shimmer, 0.65 * glowIntensity * shimmer, 0.2 * glowIntensity * shimmer);
   });
 
   return (
@@ -134,6 +147,7 @@ export function SpreadCardModel({
         e.stopPropagation();
         setHovered(true);
         document.body.style.cursor = "pointer";
+        if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
       }}
       onPointerOut={() => {
         setHovered(false);
