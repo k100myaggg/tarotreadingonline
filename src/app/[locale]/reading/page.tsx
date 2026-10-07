@@ -158,10 +158,14 @@ export default function ReadingPage({ params }: ReadingPageProps) {
     setStreamedText("");
 
     async function streamReading() {
+      const abortCtrl = new AbortController();
+      const timeoutId = setTimeout(() => abortCtrl.abort(), 6000);
+
       try {
         const response = await fetch("/api/reading/stream", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: abortCtrl.signal,
           body: JSON.stringify({
             spreadId,
             question,
@@ -265,6 +269,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
       } catch (err: any) {
         console.error("Stream reader error:", err);
       } finally {
+        clearTimeout(timeoutId);
         setStreaming(false);
         // Guaranteed fallback: If reading response not yet set, synthesize immediately from canonical card registry
         if (!useReadingStore.getState().readingResponse) {
@@ -351,20 +356,22 @@ export default function ReadingPage({ params }: ReadingPageProps) {
           : "min-h-screen overflow-y-auto"
       }`}
     >
-      {/* ─── 1. FULL-SCREEN 3D COSMOS VIEWPORT (FIXED BACKGROUND) ─── */}
-      <div className="fixed inset-0 w-full h-full z-0 pointer-events-auto">
-        {use2DFallback ? (
-          <div className="w-full h-full p-4 flex items-center justify-center bg-[#070512]">
-            <Fallback2DCardField locale={locale} />
-          </div>
-        ) : (
-          <TarotCanvas
-            locale={locale}
-            isCollapsing={isCollapsingShuffle}
-            className="w-full h-full"
-          />
-        )}
-      </div>
+      {/* ─── 1. FULL-SCREEN 3D COSMOS VIEWPORT (For Ritual Stages: Question, Shuffling, Cutting, Picking, Revealing, Weaving) ─── */}
+      {isRitualStage && (
+        <div className="fixed inset-0 w-full h-full z-0 pointer-events-auto">
+          {use2DFallback ? (
+            <div className="w-full h-full p-4 flex items-center justify-center bg-[#070512]">
+              <Fallback2DCardField locale={locale} />
+            </div>
+          ) : (
+            <TarotCanvas
+              locale={locale}
+              isCollapsing={isCollapsingShuffle}
+              className="w-full h-full"
+            />
+          )}
+        </div>
+      )}
 
       {/* ─── 2. TOP HUD NAVIGATION BAR (Pinned, Minimalist) ─── */}
       <div className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between pointer-events-auto backdrop-blur-md bg-black/40 border-b border-white/5">
@@ -816,26 +823,48 @@ export default function ReadingPage({ params }: ReadingPageProps) {
         </>
       )}
 
-      {/* ─── STEP 6: COMPLETE READING SANCTUARY (Scrolls cleanly below 3D Altar) ─── */}
-      {(step === "complete" || (step === "streaming" && readingResponse)) && (
-        <div className="relative z-20 w-full max-w-4xl mx-auto pt-[40vh] sm:pt-[44vh] pb-24 px-4 pointer-events-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
-          <ReadingStreamViewer
-            reading={readingResponse}
-            rawStreamText={streamedText}
-            isStreaming={isStreaming}
-            crisisData={crisisData}
-            locale={locale}
-            onSelectFollowup={(suggestedQ) => {
-              const el = document.getElementById("followup-input");
-              if (el) {
-                (el as HTMLInputElement).value = suggestedQ;
-                el.focus();
-              }
-            }}
-          />
+      {/* ─── STEP 6: COMPLETE READING VIEW (HERO CARDS ALTAR ON TOP + RESULTS NEATLY BELOW, ZERO OVERLAP!) ─── */}
+      {!isRitualStage && (
+        <div className="relative w-full min-h-screen pt-16 flex flex-col items-center">
+          {/* Top Hero Section: 3D Cards Altar displayed prominently at the top */}
+          <div className="w-full h-[360px] sm:h-[420px] relative z-10">
+            {use2DFallback ? (
+              <div className="w-full h-full flex items-center justify-center bg-[#070512]">
+                <Fallback2DCardField locale={locale} />
+              </div>
+            ) : (
+              <TarotCanvas
+                locale={locale}
+                className="w-full h-full"
+              />
+            )}
+            <div className="absolute bottom-2 left-0 right-0 text-center pointer-events-none">
+              <span className="font-mono-sacred text-[10px] text-amber-300/90 px-3.5 py-1 rounded-full bg-black/80 backdrop-blur-md border border-amber-400/40 uppercase tracking-widest shadow-xl">
+                ✦ Sacred Revealed Altar ✦
+              </span>
+            </div>
+          </div>
 
-          <div className="mt-8">
-            <FollowupChat locale={locale} />
+          {/* Reading Results Section: Flows naturally below the hero cards altar */}
+          <div className="w-full max-w-4xl mx-auto px-4 pb-24 relative z-20 mt-4 animate-in fade-in slide-in-from-bottom-8 duration-700">
+            <ReadingStreamViewer
+              reading={readingResponse}
+              rawStreamText={streamedText}
+              isStreaming={isStreaming}
+              crisisData={crisisData}
+              locale={locale}
+              onSelectFollowup={(suggestedQ) => {
+                const el = document.getElementById("followup-input");
+                if (el) {
+                  (el as HTMLInputElement).value = suggestedQ;
+                  el.focus();
+                }
+              }}
+            />
+
+            <div className="mt-8">
+              <FollowupChat locale={locale} />
+            </div>
           </div>
         </div>
       )}

@@ -48,9 +48,9 @@ function CameraController({ step }: { step: string }) {
       targetZ = 5.6;
       targetY = 0.0;
     } else {
-      // step === "complete": camera pulls back and down so cards sit majestically at top of viewport
-      targetZ = 6.4;
-      targetY = -0.75;
+      // step === "complete": cards centered in the hero altar banner at top
+      targetZ = 5.4;
+      targetY = -0.05;
     }
 
     camera.position.z = THREE.MathUtils.damp(camera.position.z, targetZ, 2.5, delta);

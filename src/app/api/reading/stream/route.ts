@@ -6,6 +6,8 @@ import { buildTarotReadingPrompt } from "@/lib/ai/promptBuilder";
 import { getSpreadById, getPersonaById, getCardById, getCardDisplayName } from "@/lib/tarot/data";
 import { DrawnCardData, Locale, StructuredReadingResponse } from "@/types/tarot";
 
+export const maxDuration = 30;
+
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
@@ -90,7 +92,13 @@ export async function POST(req: NextRequest) {
               },
             });
 
-            const resultStream = await model.generateContentStream(userPrompt);
+            // 7-second race timeout so Gemini never hangs Vercel serverless function
+            const streamPromise = model.generateContentStream(userPrompt);
+            const timeoutPromise = new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error("Gemini stream generation timeout")), 7000)
+            );
+
+            const resultStream = await Promise.race([streamPromise, timeoutPromise]);
             let fullAccumulated = "";
 
             for await (const chunk of resultStream.stream) {
@@ -112,7 +120,7 @@ export async function POST(req: NextRequest) {
             controller.close();
             return;
           } catch (geminiErr: any) {
-            console.error("Gemini API Error, falling back:", geminiErr?.message || geminiErr);
+            console.error("Gemini API Error, falling back to instant simulation:", geminiErr?.message || geminiErr);
           }
         }
 

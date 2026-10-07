@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useReadingStore, FollowupMessage } from "@/stores/useReadingStore";
 import { getPersonaById } from "@/lib/tarot/data";
+import { getCardImagePath } from "@/lib/tarot/cardImages";
 import { Locale } from "@/types/tarot";
 import { Send, Sparkles, MessageCircle, AlertCircle, PlusCircle, CheckCircle2 } from "lucide-react";
 
@@ -153,30 +154,46 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       </div>
 
       {/* Extra Guidance Card Callout */}
-      {guidanceCard && (
-        <div className="my-6 p-5 rounded-xl bg-[#140e2b] border border-amber-400/50 shadow-lg animate-fade-in flex flex-col sm:flex-row items-center sm:items-start gap-5">
-          <div className="w-24 aspect-[1/1.7] rounded-lg bg-black/60 border border-amber-400/60 p-2 flex flex-col items-center justify-center text-center shrink-0">
-            <span className="text-xl mb-1">🎴</span>
-            <span className="font-serif-sacred text-[11px] font-bold text-amber-200 leading-tight">
-              {guidanceCard.card.cardName}
-            </span>
-            <span className="font-mono-sacred text-[9px] text-purple-300 mt-1 uppercase">
-              {guidanceCard.card.isReversed ? "Reversed ↺" : "Upright ↑"}
-            </span>
-          </div>
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <Sparkles className="w-4 h-4 text-amber-400" />
-              <h5 className="font-serif-sacred font-bold text-sm text-amber-100">
-                Additional Oracle Guidance
-              </h5>
+      {guidanceCard && (() => {
+        const cardData = guidanceCard.card || guidanceCard;
+        return (
+          <div className="my-6 p-5 sm:p-6 rounded-2xl bg-gradient-to-r from-[#140e2b] via-[#1a1236] to-[#140e2b] border border-amber-400/50 shadow-2xl animate-fade-in flex flex-col sm:flex-row items-center sm:items-start gap-5">
+            {/* Real Tarot Card Image Artwork */}
+            <div className="relative w-24 sm:w-28 aspect-[1/1.65] rounded-xl overflow-hidden border-2 border-amber-400/70 shadow-xl shadow-amber-500/25 shrink-0 bg-[#0e0a1f] group">
+              <img
+                src={getCardImagePath(cardData.cardId)}
+                alt={cardData.cardName}
+                className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-105 ${
+                  cardData.isReversed ? "rotate-180" : ""
+                }`}
+              />
+              <div className="absolute bottom-0 inset-x-0 p-1 bg-black/90 backdrop-blur-sm text-center border-t border-amber-500/30">
+                <span className="font-serif-sacred text-[10px] font-bold text-amber-200 leading-tight block truncate">
+                  {cardData.cardName}
+                </span>
+                <span className={`font-mono-sacred text-[8.5px] uppercase block font-semibold ${cardData.isReversed ? "text-purple-300" : "text-amber-300"}`}>
+                  {cardData.isReversed ? "Reversed ↺" : "Upright ↑"}
+                </span>
+              </div>
             </div>
-            <p className="text-xs text-slate-300 leading-relaxed">
-              {guidanceCard.interpretation}
-            </p>
+
+            <div className="flex-1 w-full text-center sm:text-left">
+              <div className="flex items-center justify-center sm:justify-start gap-2 mb-2">
+                <Sparkles className="w-4 h-4 text-amber-400 animate-pulse" />
+                <h5 className="font-serif-sacred font-bold text-base text-amber-100">
+                  Additional Oracle Guidance
+                </h5>
+                <span className="text-[9px] font-mono-sacred px-2 py-0.5 rounded-full bg-amber-400/15 border border-amber-400/30 text-amber-300 uppercase">
+                  Clarifying Beacon
+                </span>
+              </div>
+              <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-light">
+                {guidanceCard.interpretation}
+              </p>
+            </div>
           </div>
-        </div>
-      )}
+        );
+      })()}
 
       {/* Messages Stream */}
       <div className="space-y-4 my-6 max-h-[420px] overflow-y-auto pr-2">
