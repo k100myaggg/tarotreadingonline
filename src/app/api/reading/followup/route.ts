@@ -5,6 +5,8 @@ import { checkCrisisIntent } from "@/lib/ai/safetyGuardrails";
 import { getPersonaById } from "@/lib/tarot/data";
 import { Locale } from "@/types/tarot";
 
+export const maxDuration = 30;
+
 const MAX_FOLLOWUPS = 5;
 
 export async function POST(req: NextRequest) {
@@ -72,7 +74,7 @@ GUIDELINES:
 - Maintain your exact persona voice and ethical guardrails (no deterministic health/legal/death predictions).
 - Respond in ${activeLocale === "hi" ? "Hindi (हिन्दी)" : activeLocale === "ja" ? "Japanese (日本語)" : "English"}.`;
 
-    // 1. Google Gemini Followup (Free tier)
+    // 1. Google Gemini Followup (Free tier with 7s timeout race)
     if (geminiApiKey) {
       try {
         const genAI = new GoogleGenerativeAI(geminiApiKey);
@@ -93,8 +95,16 @@ GUIDELINES:
           ? `${historyContext}\n\nSeeker's Follow-up Question: ${userQuestion}`
           : `Seeker's Question: ${userQuestion}`;
 
-        const result = await model.generateContent(promptWithContext);
-        const text = result.response.text();
+        const timeoutPromise = new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Gemini followup timeout")), 7000)
+        );
+
+        const result = (await Promise.race([
+          model.generateContent(promptWithContext),
+          timeoutPromise,
+        ])) as any;
+
+        const text = result?.response?.text();
         if (text) {
           reply = text;
         }
@@ -136,7 +146,13 @@ GUIDELINES:
 
     // Fallback simulation response if API key is not present or offline
     if (!reply) {
-      reply = `In reflecting upon your question in the presence of these cards, notice how the current energy asks you to step back rather than force an immediate conclusion. When you inquire about this further, the cards remind us that true clarity is an internal harvest. Trust what has already been revealed in your spread and let this truth settle in your breathing.`;
+      if (activeLocale === "hi") {
+        reply = `आपके प्रश्न पर ध्यान देते हुए, ये कार्ड याद दिलाते हैं कि तात्कालिक निष्कर्ष पर पहुंचने के बजाय स्थिति को गहराई से समझना आवश्यक है। आपकी वर्तमान ऊर्जा में जो ज्ञान प्रकट हुआ है, उस पर विश्वास रखें। स्पष्टता समय के साथ स्वाभाविक रूप से आपके भीतर ही उजागर होगी।`;
+      } else if (activeLocale === "ja") {
+        reply = `あなたの問いかけに深く耳を傾けると、カードは性急な結論を急ぐのではなく、内なる調和を信じるよう伝えています。スプレッドに示された知恵を静かに受け入れ、呼吸を整えて進んでください。`;
+      } else {
+        reply = `In reflecting upon your question in the presence of these cards, notice how the current energy asks you to step back rather than force an immediate conclusion. When you inquire about this further, the cards remind us that true clarity is an internal harvest. Trust what has already been revealed in your spread and let this truth settle in your breathing.`;
+      }
     }
 
     return NextResponse.json({

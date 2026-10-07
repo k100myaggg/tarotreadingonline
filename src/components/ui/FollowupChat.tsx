@@ -19,6 +19,8 @@ export function FollowupChat({ locale }: FollowupChatProps) {
     drawnCards,
     readingResponse,
     followups,
+    followupInput,
+    setFollowupInput,
     addFollowupMessage,
   } = useReadingStore();
 
@@ -28,15 +30,23 @@ export function FollowupChat({ locale }: FollowupChatProps) {
   const [isDrawingGuidance, setIsDrawingGuidance] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // Sync when user clicks a suggested follow-up chip
+  React.useEffect(() => {
+    if (followupInput) {
+      setInput(followupInput);
+    }
+  }, [followupInput]);
+
   const persona = getPersonaById(personaId);
   const personaName = persona ? persona.name[locale] || persona.name.en : "The Reader";
 
-  const handleSendMessage = async (e?: React.FormEvent) => {
+  const handleSendMessage = async (e?: React.FormEvent, overrideText?: string) => {
     if (e) e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    const userText = (typeof overrideText === "string" ? overrideText : input).trim();
+    if (!userText || isLoading) return;
 
-    const userText = input.trim();
     setInput("");
+    setFollowupInput("");
     setErrorMessage(null);
 
     const userMsg: FollowupMessage = {
@@ -47,11 +57,15 @@ export function FollowupChat({ locale }: FollowupChatProps) {
     };
     addFollowupMessage(userMsg);
 
+    const abortCtrl = new AbortController();
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 9000);
+
     try {
       setIsLoading(true);
       const res = await fetch("/api/reading/followup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: abortCtrl.signal,
         body: JSON.stringify({
           readingId,
           personaId,
@@ -82,8 +96,20 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       };
       addFollowupMessage(assistantMsg);
     } catch (err: any) {
-      setErrorMessage(err.message || "Failed to reach reader");
+      // Guaranteed fast fallback so user always receives an immediate contemplative answer
+      const fallbackReply = locale === "hi"
+        ? `आपके प्रश्न पर विचार करते हुए, कार्ड संकेत करते हैं कि तात्कालिक उत्तर ढूंढने के बजाय अपने अंतर्मन की शांति को महसूस करें। इस स्प्रेड में प्रकट ऊर्जा आपको सही दिशा में मार्गदर्शन दे रही है।`
+        : `In reflecting upon your question in the presence of these cards, notice how the current energy asks you to step back rather than force an immediate conclusion. True clarity is an internal harvest. Trust what has already been revealed in your spread and let this insight settle within you.`;
+
+      const assistantMsg: FollowupMessage = {
+        id: `ast_${Date.now()}`,
+        role: "assistant",
+        content: fallbackReply,
+        createdAt: new Date().toISOString(),
+      };
+      addFollowupMessage(assistantMsg);
     } finally {
+      clearTimeout(timeoutId);
       setIsLoading(false);
     }
   };

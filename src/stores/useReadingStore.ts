@@ -35,6 +35,7 @@ interface ReadingState {
   readingResponse: StructuredReadingResponse | null;
   streamError: string | null;
   followups: FollowupMessage[];
+  followupInput: string;
   isAudioMuted: boolean;
   allowReversals: boolean;
 
@@ -55,6 +56,7 @@ interface ReadingState {
   setReadingResponse: (res: StructuredReadingResponse | null) => void;
   setStreamError: (err: string | null) => void;
   addFollowupMessage: (msg: FollowupMessage) => void;
+  setFollowupInput: (val: string) => void;
   toggleAudio: () => void;
   resetReading: () => void;
 }
@@ -75,6 +77,7 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
   readingResponse: null,
   streamError: null,
   followups: [],
+  followupInput: "",
   isAudioMuted: false,
   allowReversals: true,
 
@@ -150,6 +153,8 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
       followups: [...state.followups, msg],
     })),
 
+  setFollowupInput: (followupInput) => set({ followupInput }),
+
   toggleAudio: () => {
     if (typeof window !== "undefined" && mysticAudio.toggleMute) {
       const isUnmuted = mysticAudio.toggleMute();
@@ -174,5 +179,6 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
       readingResponse: null,
       streamError: null,
       followups: [],
+      followupInput: "",
     }),
 }));

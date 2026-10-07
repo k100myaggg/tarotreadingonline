@@ -169,15 +169,25 @@ export function SpreadCardModel({
         />
       </group>
 
-      {/* Floating Sacred Position & Orientation Badge (ALWAYS stable below card, never flipped) */}
-      <Html position={[0, -1.22, 0]} center pointerEvents="none">
-        <div className="flex flex-col items-center pointer-events-none whitespace-nowrap select-none drop-shadow-lg">
+      {/* Floating Sacred Position, Card Name & Orientation Badge */}
+      <Html position={[0, -1.25, 0]} center pointerEvents="none">
+        <div className="flex flex-col items-center pointer-events-none whitespace-nowrap select-none drop-shadow-lg gap-1">
+          {/* Position Name */}
           <span className="font-mono-sacred text-[10px] px-2.5 py-0.5 rounded-full bg-black/90 backdrop-blur-md border border-amber-400/50 text-amber-300 uppercase tracking-wider shadow-lg">
             {cardData.positionName || `Position ${cardData.positionIndex + 1}`}
           </span>
+
+          {/* Official Card Name (Always clearly shown when revealed, e.g. "Four of Cups", "Temperance") */}
+          {isRevealed && cardInfo && (
+            <span className="font-serif-sacred text-[11px] font-bold px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-950/90 via-black/90 to-amber-950/90 border border-amber-400/70 text-amber-100 uppercase tracking-wide shadow-xl drop-shadow">
+              ✦ {getCardDisplayName(cardInfo, locale)} ✦
+            </span>
+          )}
+
+          {/* Orientation Badge */}
           {isRevealed && (
             <span
-              className={`font-mono-sacred text-[9px] mt-1 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-widest ${
+              className={`font-mono-sacred text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest ${
                 cardData.isReversed
                   ? "bg-purple-950/90 border border-purple-400/60 text-purple-200"
                   : "bg-amber-950/90 border border-amber-400/60 text-amber-200"
@@ -187,7 +197,7 @@ export function SpreadCardModel({
             </span>
           )}
           {!isRevealed && (
-            <span className="text-[9px] font-mono-sacred text-amber-400 mt-1 animate-pulse flex items-center gap-1">
+            <span className="text-[9px] font-mono-sacred text-amber-400 mt-0.5 animate-pulse flex items-center gap-1">
               <span>✦</span> Click to flip
             </span>
           )}

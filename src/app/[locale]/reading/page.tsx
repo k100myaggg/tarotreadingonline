@@ -119,6 +119,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
     clearPicks,
     setDrawnCards,
     revealAllCards,
+    setFollowupInput,
     toggleAudio,
     resetReading,
   } = useReadingStore();
@@ -854,10 +855,11 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               crisisData={crisisData}
               locale={locale}
               onSelectFollowup={(suggestedQ) => {
+                setFollowupInput(suggestedQ);
                 const el = document.getElementById("followup-input");
                 if (el) {
-                  (el as HTMLInputElement).value = suggestedQ;
                   el.focus();
+                  el.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
               }}
             />

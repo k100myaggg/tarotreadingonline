@@ -190,12 +190,12 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
         />
       )}
 
-      {/* 3D Floating Interactive Badge */}
-      <Html position={[0, -1.55, 0]} center pointerEvents="none">
-        <div className="flex flex-col items-center select-none pointer-events-none drop-shadow-2xl">
-          <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/90 backdrop-blur-md border border-amber-400/60 shadow-xl shadow-amber-500/20 text-xs font-mono-sacred text-amber-200 uppercase tracking-widest animate-pulse">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>
+      {/* 3D Floating Interactive Badge (Centered cleanly right below the deck, guaranteed single line, never overlapping bottom buttons) */}
+      <Html position={[0, -1.12, 0]} center pointerEvents="none">
+        <div className="flex flex-col items-center select-none pointer-events-none drop-shadow-2xl whitespace-nowrap">
+          <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/95 backdrop-blur-md border border-amber-400/70 shadow-2xl shadow-amber-500/30 text-xs font-mono-sacred text-amber-200 uppercase tracking-widest whitespace-nowrap animate-pulse">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+            <span className="whitespace-nowrap">
               {cutState === "united"
                 ? "Tap Deck to Cut the Cards"
                 : cutState === "split"
