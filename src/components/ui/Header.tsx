@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 import { Sparkles, Moon, Menu, X, Coins, Compass, BookOpen, Layers } from "lucide-react";
 import { Locale } from "@/types/tarot";
 import { getDictionary } from "@/lib/i18n/dictionaries";
+import { MysticAudioPlayer } from "@/components/ui/MysticAudioPlayer";
 
 interface HeaderProps {
   locale: Locale;
@@ -82,6 +83,9 @@ export function Header({ locale }: HeaderProps) {
 
         {/* Actions & Locale Selector */}
         <div className="flex items-center gap-3">
+          {/* Ambient Soundscape Player */}
+          <MysticAudioPlayer />
+
           {/* Guest / Free Credit Badge */}
           <Link
             href={`/${locale}/dashboard`}

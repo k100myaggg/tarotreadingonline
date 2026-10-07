@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { DrawnCardData, StructuredReadingResponse, TarotSpread, Persona } from "@/types/tarot";
 import { getSpreadById, getPersonaById } from "@/lib/tarot/data";
+import { mysticAudio } from "@/lib/audio/soundscape";
 
 export type ReadingStep =
   | "question"     // Step 1: Inquire & pick spread/persona
@@ -76,7 +77,12 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
   isAudioMuted: false,
   allowReversals: true,
 
-  setStep: (step) => set({ step }),
+  setStep: (step) => {
+    if (step === "shuffling" && typeof window !== "undefined") {
+      mysticAudio.playCardShuffle?.();
+    }
+    set({ step });
+  },
   setQuestion: (question) => set({ question: question.slice(0, 200) }),
   setOptions: (optionA, optionB) => set({ optionA, optionB }),
   setSpreadId: (spreadId) => set({ spreadId, userPickIndices: [] }),
@@ -89,10 +95,12 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
     const maxCards = spread ? spread.cardCount : 3;
 
     if (userPickIndices.includes(index)) {
+      if (typeof window !== "undefined") mysticAudio.playCardSelect?.();
       set({ userPickIndices: userPickIndices.filter((i) => i !== index) });
       return false;
     } else {
       if (userPickIndices.length < maxCards) {
+        if (typeof window !== "undefined") mysticAudio.playCardSelect?.();
         set({ userPickIndices: [...userPickIndices, index] });
         return true;
       }
@@ -113,12 +121,14 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
   revealCard: (index: number) => {
     const { revealedIndices } = get();
     if (!revealedIndices.includes(index)) {
+      if (typeof window !== "undefined") mysticAudio.playCardFlip?.();
       set({ revealedIndices: [...revealedIndices, index] });
     }
   },
 
   revealAllCards: () => {
     const { drawnCards } = get();
+    if (typeof window !== "undefined") mysticAudio.playCardFlip?.();
     set({
       revealedIndices: drawnCards.map((_, i) => i),
     });
@@ -126,7 +136,12 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
 
   setStreaming: (isStreaming) => set({ isStreaming }),
   setStreamedText: (streamedText) => set({ streamedText }),
-  setReadingResponse: (readingResponse) => set({ readingResponse }),
+  setReadingResponse: (readingResponse) => {
+    if (readingResponse && typeof window !== "undefined") {
+      mysticAudio.playOracleChime?.();
+    }
+    set({ readingResponse });
+  },
   setStreamError: (streamError) => set({ streamError }),
 
   addFollowupMessage: (msg) =>
@@ -134,7 +149,14 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
       followups: [...state.followups, msg],
     })),
 
-  toggleAudio: () => set((state) => ({ isAudioMuted: !state.isAudioMuted })),
+  toggleAudio: () => {
+    if (typeof window !== "undefined" && mysticAudio.toggleMute) {
+      const isUnmuted = mysticAudio.toggleMute();
+      set({ isAudioMuted: !isUnmuted });
+    } else {
+      set((state) => ({ isAudioMuted: !state.isAudioMuted }));
+    }
+  },
 
   resetReading: () =>
     set({

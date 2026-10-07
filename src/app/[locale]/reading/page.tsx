@@ -17,6 +17,7 @@ import { Locale } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import { FollowupChat } from "@/components/ui/FollowupChat";
+import { MysticAudioPlayer } from "@/components/ui/MysticAudioPlayer";
 import {
   Sparkles,
   ArrowRight,
@@ -335,18 +336,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
             </span>
           </button>
 
-          <button
-            type="button"
-            onClick={toggleAudio}
-            className="p-1.5 rounded-lg bg-black/70 border border-amber-500/30 text-slate-300 hover:text-amber-300 hover:border-amber-400 transition-all"
-            title={isAudioMuted ? "Unmute Ambiance" : "Mute Ambiance"}
-          >
-            {isAudioMuted ? (
-              <VolumeX className="w-4 h-4" />
-            ) : (
-              <Volume2 className="w-4 h-4 text-amber-400" />
-            )}
-          </button>
+          <MysticAudioPlayer />
 
           {step !== "question" && (
             <button
