@@ -63,7 +63,7 @@ export async function POST(req: NextRequest) {
     });
 
     const geminiApiKey = process.env.GEMINI_API_KEY;
-    const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    const geminiModel = process.env.GEMINI_MODEL || "gemini-3.8-flash";
 
     const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
     const anthropicModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
