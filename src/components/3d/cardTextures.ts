@@ -9,29 +9,12 @@ const loader = new THREE.TextureLoader();
  * Returns the real card back texture loaded from the generated image.
  */
 export function getCardBackTexture(): THREE.Texture {
-  const cacheKey = "card_back_real";
+  const cacheKey = "card_back_radiant_gold";
   if (textureCache.has(cacheKey)) {
     return textureCache.get(cacheKey)!;
   }
 
-  // Try loading real image first
-  const texture = loader.load(
-    "/cards/card_back.jpg",
-    (tex) => {
-      tex.anisotropy = 8;
-      tex.colorSpace = THREE.SRGBColorSpace;
-      tex.needsUpdate = true;
-    },
-    undefined,
-    () => {
-      // If real image fails, create procedural fallback
-      const fallback = createProceduralCardBack();
-      textureCache.set(cacheKey, fallback);
-    }
-  );
-
-  texture.anisotropy = 8;
-  texture.colorSpace = THREE.SRGBColorSpace;
+  const texture = createProceduralCardBack();
   textureCache.set(cacheKey, texture);
   return texture;
 }
@@ -82,82 +65,197 @@ export function getCardFrontTexture(
   return tex;
 }
 
-// ─── Procedural Fallback: Sacred Card Back ───
+// ─── Procedural Luxury Sacred Gold-Foil Card Back ───
 function createProceduralCardBack(): THREE.CanvasTexture {
   if (typeof document === "undefined") {
     return new THREE.CanvasTexture(new OffscreenCanvas(2, 2) as unknown as HTMLCanvasElement);
   }
 
-  const W = 512;
-  const H = 870;
+  const W = 768;
+  const H = 1300;
   const canvas = document.createElement("canvas");
   canvas.width = W;
   canvas.height = H;
   const ctx = canvas.getContext("2d")!;
 
-  // Deep velvet base
-  const bg = ctx.createRadialGradient(W / 2, H / 2, 50, W / 2, H / 2, 450);
-  bg.addColorStop(0, "#1a1230");
-  bg.addColorStop(0.6, "#0e0a1f");
-  bg.addColorStop(1, "#060410");
+  // 1. Rich Royal Velvet Background (Luminous Amethyst & Deep Indigo, NOT black!)
+  const bg = ctx.createRadialGradient(W / 2, H / 2, 60, W / 2, H / 2, 650);
+  bg.addColorStop(0, "#431e78");    // Vibrant royal purple center
+  bg.addColorStop(0.4, "#2d1257");  // Rich imperial violet
+  bg.addColorStop(0.8, "#1e0b3c");  // Deep mystic indigo
+  bg.addColorStop(1, "#15062c");    // Twilight amethyst perimeter
   ctx.fillStyle = bg;
   ctx.fillRect(0, 0, W, H);
 
-  // Gold border
-  ctx.strokeStyle = "#d4af37";
-  ctx.lineWidth = 10;
-  ctx.strokeRect(18, 18, W - 36, H - 36);
-  ctx.strokeStyle = "rgba(243,226,149,0.3)";
+  // 2. Subtle sacred geometric star grid pattern in background
+  ctx.strokeStyle = "rgba(255, 215, 0, 0.08)";
+  ctx.lineWidth = 1;
+  const step = 48;
+  for (let x = 0; x <= W; x += step) {
+    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
+  }
+  for (let y = 0; y <= H; y += step) {
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  // 3. Cosmic stardust golden particles
+  ctx.fillStyle = "rgba(255, 235, 150, 0.6)";
+  for (let i = 0; i < 220; i++) {
+    const sx = Math.random() * W;
+    const sy = Math.random() * H;
+    const sr = Math.random() < 0.25 ? 2.2 : 1.2;
+    ctx.beginPath();
+    ctx.arc(sx, sy, sr, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // 4. HEAVY RADIANT SOLID GOLD FOIL OUTER BORDER (Makes cards instantly pop out!)
+  // Outermost solid gold bevel band
+  const goldGrad = ctx.createLinearGradient(0, 0, W, H);
+  goldGrad.addColorStop(0, "#ffeaa7");
+  goldGrad.addColorStop(0.25, "#ffd700");
+  goldGrad.addColorStop(0.5, "#fff3b0");
+  goldGrad.addColorStop(0.75, "#d4af37");
+  goldGrad.addColorStop(1, "#ffeaa7");
+
+  ctx.strokeStyle = goldGrad;
+  ctx.lineWidth = 22;
+  ctx.strokeRect(11, 11, W - 22, H - 22);
+
+  // High-contrast bright pinstripes
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 2.5;
+  ctx.strokeRect(24, 24, W - 48, H - 48);
+
+  ctx.strokeStyle = "#ffd700";
+  ctx.lineWidth = 5;
+  ctx.strokeRect(32, 32, W - 64, H - 64);
+
+  ctx.strokeStyle = "rgba(255, 235, 170, 0.9)";
   ctx.lineWidth = 2;
-  ctx.strokeRect(28, 28, W - 56, H - 56);
+  ctx.strokeRect(44, 44, W - 88, H - 88);
 
-  // Corner flourishes
-  const cx = W / 2, cy = H / 2;
-  ctx.fillStyle = "#d4af37";
-  for (const [x, y] of [[32, 32], [W - 32, 32], [32, H - 32], [W - 32, H - 32]]) {
-    ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
-  }
+  const cx = W / 2;
+  const cy = H / 2;
 
-  // Concentric circles
-  ctx.strokeStyle = "rgba(212,175,55,0.5)";
-  ctx.lineWidth = 1.5;
-  for (let r = 40; r <= 180; r += 28) {
-    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.stroke();
-  }
+  // 5. Ornate Golden Corner Cartouches & Stars
+  const drawCornerFlourish = (x: number, y: number, flipX: number, flipY: number) => {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.scale(flipX, flipY);
 
-  // Radiating rays
-  ctx.strokeStyle = "rgba(243,226,149,0.4)";
-  ctx.lineWidth = 1.2;
+    // Corner diamond crest
+    ctx.fillStyle = "#ffeaa7";
+    ctx.beginPath();
+    ctx.moveTo(0, 16);
+    ctx.lineTo(16, 0);
+    ctx.lineTo(0, -16);
+    ctx.lineTo(-16, 0);
+    ctx.closePath();
+    ctx.fill();
+
+    ctx.strokeStyle = "#ffd700";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.arc(0, 0, 24, 0, Math.PI * 2);
+    ctx.stroke();
+
+    // Corner scroll brackets
+    ctx.beginPath();
+    ctx.moveTo(0, 36);
+    ctx.quadraticCurveTo(24, 24, 36, 0);
+    ctx.stroke();
+
+    ctx.restore();
+  };
+
+  drawCornerFlourish(64, 64, 1, 1);
+  drawCornerFlourish(W - 64, 64, -1, 1);
+  drawCornerFlourish(64, H - 64, 1, -1);
+  drawCornerFlourish(W - 64, H - 64, -1, -1);
+
+  // 6. Central Luminous Solar & Lunar Mandala
+  // Bright outer golden halo glow
+  const halo = ctx.createRadialGradient(cx, cy, 60, cx, cy, 320);
+  halo.addColorStop(0, "rgba(255, 220, 100, 0.45)");
+  halo.addColorStop(0.6, "rgba(255, 215, 0, 0.2)");
+  halo.addColorStop(1, "rgba(255, 215, 0, 0)");
+  ctx.fillStyle = halo;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 320, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Multi-layered concentric sacred golden rings
+  const rings = [70, 120, 170, 220, 270, 290];
+  rings.forEach((r, idx) => {
+    ctx.strokeStyle = idx % 2 === 0 ? "#ffd700" : "#fff2a8";
+    ctx.lineWidth = idx === rings.length - 2 ? 5 : 2.5;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    ctx.stroke();
+  });
+
+  // 24 Radiant Golden Sun Rays
+  ctx.strokeStyle = "#ffe57f";
+  ctx.lineWidth = 3;
   for (let i = 0; i < 24; i++) {
     const a = (i * Math.PI) / 12;
+    const rStart = i % 2 === 0 ? 80 : 130;
+    const rEnd = i % 2 === 0 ? 268 : 235;
     ctx.beginPath();
-    ctx.moveTo(cx + Math.cos(a) * 50, cy + Math.sin(a) * 50);
-    ctx.lineTo(cx + Math.cos(a) * 190, cy + Math.sin(a) * 190);
+    ctx.moveTo(cx + Math.cos(a) * rStart, cy + Math.sin(a) * rStart);
+    ctx.lineTo(cx + Math.cos(a) * rEnd, cy + Math.sin(a) * rEnd);
     ctx.stroke();
   }
 
-  // Octagram
-  ctx.strokeStyle = "#f3e5ab";
-  ctx.lineWidth = 2.5;
-  ctx.beginPath();
-  for (let i = 0; i < 8; i++) {
-    const a = (i * Math.PI) / 4;
-    const x1 = cx + Math.cos(a) * 75, y1 = cy + Math.sin(a) * 75;
-    const x2 = cx + Math.cos(a + Math.PI / 8) * 35, y2 = cy + Math.sin(a + Math.PI / 8) * 35;
-    if (i === 0) ctx.moveTo(x1, y1); else ctx.lineTo(x1, y1);
-    ctx.lineTo(x2, y2);
+  // 12 Outer Zodiac / Star Orbs with bright white centers
+  for (let i = 0; i < 12; i++) {
+    const a = (i * Math.PI) / 6;
+    const ox = cx + Math.cos(a) * 220;
+    const oy = cy + Math.sin(a) * 220;
+    ctx.fillStyle = "#ffd700";
+    ctx.beginPath();
+    ctx.arc(ox, oy, 7, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#ffffff";
+    ctx.beginPath();
+    ctx.arc(ox, oy, 2.5, 0, Math.PI * 2);
+    ctx.fill();
   }
-  ctx.closePath(); ctx.stroke();
 
-  // Center jewel
-  const jewel = ctx.createRadialGradient(cx, cy, 0, cx, cy, 16);
-  jewel.addColorStop(0, "#f9e295");
-  jewel.addColorStop(1, "#d4af37");
+  // 16-Point Double Octagram Star
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  for (let i = 0; i < 16; i++) {
+    const a = (i * Math.PI) / 8;
+    const r = i % 2 === 0 ? 120 : 55;
+    const px = cx + Math.cos(a) * r;
+    const py = cy + Math.sin(a) * r;
+    if (i === 0) ctx.moveTo(px, py); else ctx.lineTo(px, py);
+  }
+  ctx.closePath();
+  ctx.stroke();
+
+  // Central Sun / Eye Jewel (Brilliant White-Gold)
+  const jewel = ctx.createRadialGradient(cx, cy, 0, cx, cy, 32);
+  jewel.addColorStop(0, "#ffffff");
+  jewel.addColorStop(0.3, "#fff8b0");
+  jewel.addColorStop(0.7, "#ffd700");
+  jewel.addColorStop(1, "#c68e17");
   ctx.fillStyle = jewel;
-  ctx.beginPath(); ctx.arc(cx, cy, 12, 0, Math.PI * 2); ctx.fill();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 28, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.strokeStyle = "#ffffff";
+  ctx.lineWidth = 3;
+  ctx.stroke();
 
   const tex = new THREE.CanvasTexture(canvas);
   tex.anisotropy = 8;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.needsUpdate = true;
   return tex;
 }
 

@@ -37,6 +37,7 @@ export function useSoundscape() {
     setAmbientMode,
     toggleSfx,
     playCardShuffle: () => mysticAudio.playCardShuffle(),
+    playCardDealCascade: () => mysticAudio.playCardDealCascade(),
     playCardSelect: () => mysticAudio.playCardSelect(),
     playCardFlip: () => mysticAudio.playCardFlip(),
     playOracleChime: () => mysticAudio.playOracleChime(),

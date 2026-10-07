@@ -59,22 +59,22 @@ export function SpreadCardModel({
   // Materials: front, back, gold edges
   const materials = useMemo(() => {
     const goldEdgeMat = new THREE.MeshStandardMaterial({
-      color: "#d4af37",
-      emissive: "#000000",
-      metalness: 0.85,
-      roughness: 0.25,
+      color: "#f5c542",
+      emissive: "#d4af37",
+      metalness: 0.92,
+      roughness: 0.16,
     });
 
     const frontMat = new THREE.MeshStandardMaterial({
       map: cardFrontTexture,
-      roughness: 0.3,
-      metalness: 0.05,
+      roughness: 0.25,
+      metalness: 0.08,
     });
 
     const backMat = new THREE.MeshStandardMaterial({
       map: cardBackTexture,
-      roughness: 0.3,
-      metalness: 0.1,
+      roughness: 0.25,
+      metalness: 0.12,
     });
 
     // Box order: right, left, top, bottom, front (+Z), back (-Z)
@@ -126,13 +126,13 @@ export function SpreadCardModel({
       THREE.MathUtils.damp(cardGroupRef.current.scale.x, targetScale, 6, delta)
     );
 
-    // Edge metallic foil shimmer
+    // Edge metallic foil shimmer: high contrast baseline glow so cards pop out against black space
     const goldEdge = materials[0] as THREE.MeshStandardMaterial;
     goldEdge.metalness = 0.94;
     goldEdge.roughness = 0.14;
-    const glowIntensity = isRevealed ? 0.65 : hovered ? 0.4 : 0.08;
-    const shimmer = Math.sin(time * 3 + cardData.positionIndex) * 0.3 + 0.7;
-    goldEdge.emissive.setRGB(0.85 * glowIntensity * shimmer, 0.65 * glowIntensity * shimmer, 0.2 * glowIntensity * shimmer);
+    const glowIntensity = isRevealed ? 0.85 : hovered ? 0.7 : 0.35;
+    const shimmer = Math.sin(time * 3 + cardData.positionIndex) * 0.25 + 0.75;
+    goldEdge.emissive.setRGB(0.95 * glowIntensity * shimmer, 0.76 * glowIntensity * shimmer, 0.24 * glowIntensity * shimmer);
   });
 
   return (
@@ -160,10 +160,13 @@ export function SpreadCardModel({
           <boxGeometry args={[1.15, 1.95, 0.02]} />
         </mesh>
 
-        {/* Luminous Gold Halo Aura when revealed */}
-        {isRevealed && (
-          <pointLight position={[0, 0, 0.35]} intensity={0.8} color="#ffd875" distance={3.5} />
-        )}
+        {/* Dedicated Golden Aura Illuminating both face-down and face-up states */}
+        <pointLight
+          position={[0, 0, 0.45]}
+          intensity={isRevealed ? 1.2 : 0.85}
+          color={isRevealed ? "#ffe885" : "#fef08a"}
+          distance={3.8}
+        />
       </group>
 
       {/* Floating Sacred Position & Orientation Badge (ALWAYS stable below card, never flipped) */}

@@ -390,6 +390,61 @@ class MysticAudioEngine {
   }
 
   /**
+   * Authentic rapid card dealing & fanning sound ("khad-khad-khad-khad" paper riffle cascade)
+   */
+  public playCardDealCascade() {
+    if (this.state.isMuted || !this.state.isSfxEnabled) return;
+    const ctx = this.getContext();
+    if (!ctx) return;
+
+    const now = ctx.currentTime;
+    const totalCards = 18;
+    const interval = 0.046; // ~46ms between cards
+
+    for (let i = 0; i < totalCards; i++) {
+      const cardTime = now + i * interval + (Math.random() - 0.5) * 0.005;
+
+      // 1. Crisp paper friction noise burst
+      const bufferSize = Math.floor(ctx.sampleRate * 0.04);
+      const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let j = 0; j < bufferSize; j++) {
+        data[j] = (Math.random() * 2 - 1) * Math.exp(-j / (bufferSize * 0.35));
+      }
+
+      const noise = ctx.createBufferSource();
+      noise.buffer = buffer;
+
+      const filter = ctx.createBiquadFilter();
+      filter.type = "bandpass";
+      filter.frequency.setValueAtTime(1600 + Math.random() * 400, cardTime);
+      filter.Q.setValueAtTime(2.8, cardTime);
+
+      const gain = ctx.createGain();
+      const volume = 0.32 * (1 - (i / totalCards) * 0.3); // Gentle decay
+      gain.gain.setValueAtTime(volume, cardTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, cardTime + 0.04);
+
+      noise.connect(filter).connect(gain).connect(this.sfxGain!);
+      noise.start(cardTime);
+
+      // 2. Subtle soft tactile snap (thump)
+      const osc = ctx.createOscillator();
+      const oscGain = ctx.createGain();
+      osc.type = "triangle";
+      osc.frequency.setValueAtTime(260 + i * 8, cardTime);
+      osc.frequency.exponentialRampToValueAtTime(110, cardTime + 0.035);
+
+      oscGain.gain.setValueAtTime(0.14, cardTime);
+      oscGain.gain.exponentialRampToValueAtTime(0.001, cardTime + 0.035);
+
+      osc.connect(oscGain).connect(this.sfxGain!);
+      osc.start(cardTime);
+      osc.stop(cardTime + 0.04);
+    }
+  }
+
+  /**
    * Gentle, luminous crystalline bell when hovering or picking a card
    */
   public playCardSelect() {
