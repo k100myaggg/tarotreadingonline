@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useReadingStore, FollowupMessage } from "@/stores/useReadingStore";
 import { getPersonaById, getCardById, getCardDisplayName } from "@/lib/tarot/data";
 import { getCardImagePath } from "@/lib/tarot/cardImages";
@@ -29,6 +29,14 @@ export function FollowupChat({ locale }: FollowupChatProps) {
   const [guidanceCard, setGuidanceCard] = useState<any>(null);
   const [isDrawingGuidance, setIsDrawingGuidance] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll when new messages or loading starts
+  useEffect(() => {
+    if (isLoading || followups.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
+  }, [isLoading, followups.length]);
 
   // Sync when user clicks a suggested follow-up chip
   React.useEffect(() => {
@@ -224,7 +232,7 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       })()}
 
       {/* Messages Stream */}
-      <div className="space-y-4 my-6 max-h-[420px] overflow-y-auto pr-2">
+      <div className="space-y-4 my-6 max-h-[420px] overflow-y-auto pr-2 [scrollbar-gutter:stable]">
         {followups.length === 0 && (
           <div className="text-center py-8 text-slate-500 text-xs font-mono-sacred">
             ✦ Ask a question to delve deeper into your spread, or draw a clarifying card above ✦
@@ -251,11 +259,20 @@ export function FollowupChat({ locale }: FollowupChatProps) {
         ))}
 
         {isLoading && (
-          <div className="flex items-center gap-2 text-xs font-mono-sacred text-amber-400 animate-pulse">
-            <Sparkles className="w-3.5 h-3.5 animate-spin" />
-            <span>{personaName} is meditating upon your words...</span>
+          <div className="h-9 flex items-center gap-2.5 px-3.5 py-1.5 rounded-xl bg-amber-500/10 border border-amber-400/30 w-fit text-amber-200 text-xs font-mono-sacred select-none shadow-sm">
+            <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+              <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-spin will-change-transform" />
+            </div>
+            <span className="text-slate-200">{personaName} is meditating upon your words</span>
+            <span className="inline-flex items-center gap-1 ml-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:-0.3s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce [animation-delay:-0.15s]" />
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-bounce" />
+            </span>
           </div>
         )}
+
+        <div ref={messagesEndRef} />
       </div>
 
       {errorMessage && (
@@ -266,7 +283,7 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       )}
 
       {/* Input Box */}
-      <form onSubmit={handleSendMessage} className="relative flex items-center gap-2">
+      <form onSubmit={handleSendMessage} className="relative flex items-center gap-2 shrink-0 w-full">
         <input
           id="followup-input"
           type="text"
@@ -274,12 +291,12 @@ export function FollowupChat({ locale }: FollowupChatProps) {
           onChange={(e) => setInput(e.target.value)}
           maxLength={300}
           placeholder="Ask a clarifying question to the reader..."
-          className="w-full bg-[#090714] border border-amber-500/30 rounded-xl px-4 py-3 pr-24 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-400"
+          className="w-full bg-[#090714] border border-amber-500/30 rounded-xl px-4 py-3 pr-24 text-xs sm:text-sm text-slate-100 placeholder:text-slate-500 focus:outline-none focus:border-amber-400 transition-colors shadow-inner"
         />
         <button
           type="submit"
           disabled={!input.trim() || isLoading}
-          className="absolute right-2 px-3 py-1.5 rounded-lg bg-amber-500 text-neutral-950 font-bold text-xs font-mono-sacred hover:bg-amber-400 disabled:opacity-40 transition-all flex items-center gap-1"
+          className="absolute right-2 px-3 py-1.5 rounded-lg bg-amber-500 text-neutral-950 font-bold text-xs font-mono-sacred hover:bg-amber-400 disabled:opacity-40 transition-all flex items-center gap-1 shadow-sm shrink-0"
         >
           <span>Ask</span>
           <Send className="w-3 h-3" />
