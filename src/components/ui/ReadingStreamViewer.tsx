@@ -1,9 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { StructuredReadingResponse, Locale } from "@/types/tarot";
 import { getCardImagePath } from "@/lib/tarot/cardImages";
-import { Sparkles, ArrowRight, Compass, ShieldAlert, Heart, CheckCircle2 } from "lucide-react";
+import { useReadingStore } from "@/stores/useReadingStore";
+import { ReadingPosterModal } from "./ReadingPosterModal";
+import { Sparkles, ArrowRight, Compass, ShieldAlert, Heart, CheckCircle2, Share2, Image as ImageIcon } from "lucide-react";
 
 interface ReadingStreamViewerProps {
   reading: StructuredReadingResponse | null;
@@ -22,6 +24,8 @@ export function ReadingStreamViewer({
   locale,
   onSelectFollowup,
 }: ReadingStreamViewerProps) {
+  const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
+  const { drawnCards, question } = useReadingStore();
   // If crisis detected, show supportive redirect
   if (crisisData) {
     const msg = crisisData.message?.[locale] || crisisData.message?.en;
@@ -71,12 +75,21 @@ export function ReadingStreamViewer({
           </div>
         </div>
 
-        {isStreaming && (
+        {isStreaming ? (
           <div className="flex items-center gap-2 text-xs font-mono-sacred text-amber-300">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
             <span>Streaming</span>
           </div>
-        )}
+        ) : reading ? (
+          <button
+            type="button"
+            onClick={() => setIsPosterModalOpen(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-amber-400/20 to-amber-500/20 hover:from-amber-500/30 hover:to-amber-400/30 border border-amber-400/50 hover:border-amber-300 text-amber-200 text-xs font-serif-sacred font-semibold uppercase tracking-wider shadow-lg shadow-amber-500/10 transition-all hover:scale-105 active:scale-95"
+          >
+            <Share2 className="w-3.5 h-3.5 text-amber-400" />
+            <span>Share Poster</span>
+          </button>
+        ) : null}
       </div>
 
       {/* Reader Intro */}
@@ -182,6 +195,37 @@ export function ReadingStreamViewer({
         </div>
       )}
 
+      {/* Social Poster Generator Banner */}
+      {reading && !isStreaming && (
+        <div className="mystic-panel rounded-2xl p-6 sm:p-7 border border-amber-400/40 bg-gradient-to-r from-amber-950/40 via-purple-950/30 to-black/60 shadow-xl flex flex-col sm:flex-row items-center justify-between gap-5">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 flex items-center justify-center text-amber-300 shrink-0">
+              <ImageIcon className="w-6 h-6" />
+            </div>
+            <div>
+              <h5 className="font-serif-sacred font-bold text-base text-amber-100 flex items-center gap-2">
+                <span>Save & Share Your Sacred Reading</span>
+                <span className="text-[10px] font-mono-sacred px-2 py-0.5 rounded-full bg-amber-400 text-neutral-950 font-bold uppercase">
+                  Story Ready
+                </span>
+              </h5>
+              <p className="text-xs text-slate-300 mt-1 leading-relaxed">
+                Generate an elegant Instagram Story or WhatsApp status poster with your cards and oracle insight.
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setIsPosterModalOpen(true)}
+            className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-neutral-950 font-serif-sacred font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 shrink-0"
+          >
+            <Share2 className="w-4 h-4" />
+            <span>Create Story Poster</span>
+          </button>
+        </div>
+      )}
+
       {/* 3 Clickable Follow-up Questions */}
       {reading?.followUpSuggestions && reading.followUpSuggestions.length > 0 && (
         <div className="space-y-3">
@@ -231,6 +275,18 @@ export function ReadingStreamViewer({
             <div className="h-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 animate-[shimmer_1.5s_infinite]" style={{ width: "100%" }} />
           </div>
         </div>
+      )}
+
+      {/* Poster Generation Modal */}
+      {reading && (
+        <ReadingPosterModal
+          isOpen={isPosterModalOpen}
+          onClose={() => setIsPosterModalOpen(false)}
+          reading={reading}
+          drawnCards={drawnCards}
+          question={question}
+          locale={locale}
+        />
       )}
     </div>
   );
