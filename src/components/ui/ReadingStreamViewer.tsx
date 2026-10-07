@@ -2,6 +2,7 @@
 
 import React from "react";
 import { StructuredReadingResponse, Locale } from "@/types/tarot";
+import { getCardImagePath } from "@/lib/tarot/cardImages";
 import { Sparkles, ArrowRight, Compass, ShieldAlert, Heart, CheckCircle2 } from "lucide-react";
 
 interface ReadingStreamViewerProps {
@@ -96,42 +97,55 @@ export function ReadingStreamViewer({
             {reading.cards.map((c, i) => (
               <div
                 key={i}
-                className="mystic-panel rounded-xl p-6 border border-amber-500/20 hover:border-amber-400/40 transition-all shadow-md"
+                className="mystic-panel rounded-xl p-5 sm:p-6 border border-amber-500/20 hover:border-amber-400/40 transition-all shadow-md flex flex-col sm:flex-row gap-5 items-start"
               >
-                <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono-sacred text-xs px-2.5 py-1 rounded bg-amber-500/15 text-amber-300 border border-amber-500/20">
-                      {c.positionName}
-                    </span>
-                    <h5 className="font-serif-sacred font-bold text-lg text-amber-100">
-                      {c.cardName}
-                    </h5>
-                  </div>
-                  <span
-                    className={`font-mono-sacred text-xs px-2 py-0.5 rounded uppercase ${
-                      c.orientation === "reversed"
-                        ? "bg-purple-950/60 text-purple-300 border border-purple-500/30"
-                        : "bg-amber-950/60 text-amber-300 border border-amber-500/30"
-                    }`}
-                  >
-                    {c.orientation === "reversed" ? "Reversed ↺" : "Upright ↑"}
-                  </span>
-                </div>
-
-                <p className="text-xs font-mono-sacred text-amber-300/90 mb-3 italic">
-                  Essence: {c.coreEssence}
-                </p>
-
-                <p className="text-sm text-slate-300 leading-relaxed mb-4">
-                  {c.contextualMeaning}
-                </p>
-
-                {c.advice && (
-                  <div className="pt-3 border-t border-white/5 text-xs text-slate-400 font-serif-sacred flex items-start gap-2">
-                    <span className="text-amber-400">✦ Contemplation:</span>
-                    <span>{c.advice}</span>
+                {c.cardId && (
+                  <div className="relative w-24 sm:w-28 aspect-[1/1.65] rounded-lg overflow-hidden border border-amber-400/60 shadow-lg shadow-amber-500/20 shrink-0 bg-[#0e0a1f] self-center sm:self-start">
+                    <img
+                      src={getCardImagePath(c.cardId)}
+                      alt={c.cardName}
+                      className={`w-full h-full object-cover transition-transform ${
+                        c.orientation === "reversed" ? "rotate-180" : ""
+                      }`}
+                    />
                   </div>
                 )}
+                <div className="flex-1 w-full">
+                  <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="font-mono-sacred text-xs px-2.5 py-1 rounded bg-amber-500/15 text-amber-300 border border-amber-500/20">
+                        {c.positionName}
+                      </span>
+                      <h5 className="font-serif-sacred font-bold text-lg text-amber-100">
+                        {c.cardName}
+                      </h5>
+                    </div>
+                    <span
+                      className={`font-mono-sacred text-xs px-2 py-0.5 rounded uppercase ${
+                        c.orientation === "reversed"
+                          ? "bg-purple-950/60 text-purple-300 border border-purple-500/30"
+                          : "bg-amber-950/60 text-amber-300 border border-amber-500/30"
+                      }`}
+                    >
+                      {c.orientation === "reversed" ? "Reversed ↺" : "Upright ↑"}
+                    </span>
+                  </div>
+
+                  <p className="text-xs font-mono-sacred text-amber-300/90 mb-3 italic">
+                    Essence: {c.coreEssence}
+                  </p>
+
+                  <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                    {c.contextualMeaning}
+                  </p>
+
+                  {c.advice && (
+                    <div className="pt-3 border-t border-white/5 text-xs text-slate-400 font-serif-sacred flex items-start gap-2">
+                      <span className="text-amber-400">✦ Contemplation:</span>
+                      <span>{c.advice}</span>
+                    </div>
+                  )}
+                </div>
               </div>
             ))}
           </div>
@@ -193,10 +207,29 @@ export function ReadingStreamViewer({
         </div>
       )}
 
-      {/* Fallback raw stream display if JSON is still assembling */}
-      {!reading && rawStreamText && (
-        <div className="mystic-panel rounded-2xl p-6 border border-amber-500/20 font-mono text-xs text-amber-200/80 whitespace-pre-wrap leading-relaxed animate-pulse">
-          {rawStreamText}
+      {/* Shimmering Sacred Weaving State while reading is being synthesized */}
+      {!reading && (
+        <div className="mystic-panel rounded-2xl p-8 border border-amber-500/30 text-center space-y-4 shadow-2xl relative overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-purple-500/10 to-amber-500/5 animate-pulse pointer-events-none" />
+          
+          <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-500/10 border border-amber-400/40 text-2xl shadow-lg shadow-amber-500/20">
+            <span className="animate-spin text-amber-300">✦</span>
+          </div>
+
+          <div className="space-y-1.5 relative">
+            <h4 className="font-serif-sacred text-xl font-bold text-amber-100">
+              {locale === "hi" ? "ओरेकल आपके कार्ड्स का विश्लेषण कर रहा है..." : "The Oracle is Weaving Your Reading..."}
+            </h4>
+            <p className="font-mono-sacred text-xs text-amber-300/80 tracking-wider">
+              {locale === "hi" 
+                ? "प्राचीन प्रतीकों और आपकी ऊर्जा का संश्लेषण जारी है" 
+                : "COMMUNING WITH ARCHETYPAL FORCES · SYNTHESIZING WISDOM"}
+            </p>
+          </div>
+
+          <div className="w-48 h-1 mx-auto bg-neutral-900 rounded-full overflow-hidden border border-amber-500/20">
+            <div className="h-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 animate-[shimmer_1.5s_infinite]" style={{ width: "100%" }} />
+          </div>
         </div>
       )}
     </div>

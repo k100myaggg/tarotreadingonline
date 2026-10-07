@@ -1,8 +1,11 @@
 "use client";
 
 import React, { Suspense, useEffect, useState } from "react";
-import { Canvas } from "@react-three/fiber";
+import { Canvas, useThree, useFrame } from "@react-three/fiber";
+import * as THREE from "three";
+import { OrbitControls } from "@react-three/drei";
 import { StarfieldNebula } from "./StarfieldNebula";
+import { DriftingBackgroundCards } from "./DriftingBackgroundCards";
 import { DeckShuffle3D } from "./DeckShuffle3D";
 import { FloatingCardField } from "./FloatingCardField";
 import { SpreadCardModel } from "./SpreadCardModel";
@@ -13,9 +16,51 @@ import { Locale } from "@/types/tarot";
 interface TarotCanvasProps {
   locale: Locale;
   onShuffleFinished?: () => void;
+  isCollapsing?: boolean;
+  className?: string;
 }
 
-function SceneContent({ locale, onShuffleFinished }: TarotCanvasProps) {
+function CameraController({ step }: { step: string }) {
+  const { camera } = useThree();
+
+  useFrame((_, delta) => {
+    // Cinematic camera positions calibrated for full-screen immersion
+    let targetZ = 6.0;
+    let targetY = 0;
+    let targetFov = 50;
+
+    if (step === "question") {
+      targetZ = 6.4;
+      targetY = 0.1;
+    } else if (step === "shuffling") {
+      targetZ = 4.8;
+      targetY = 0.15;
+    } else if (step === "picking") {
+      // Wider centered view calibrated for the compact 3-row amphitheater
+      targetZ = 7.2;
+      targetY = 0.0;
+    } else {
+      // revealing / streaming / complete
+      targetZ = 5.6;
+      targetY = 0.0;
+    }
+
+    camera.position.z = THREE.MathUtils.damp(camera.position.z, targetZ, 2.5, delta);
+    camera.position.y = THREE.MathUtils.damp(camera.position.y, targetY, 2.5, delta);
+  });
+
+  return null;
+}
+
+function SceneContent({
+  locale,
+  onShuffleFinished,
+  isCollapsing,
+}: {
+  locale: Locale;
+  onShuffleFinished?: () => void;
+  isCollapsing?: boolean;
+}) {
   const { step, spreadId, drawnCards, revealedIndices, revealCard } = useReadingStore();
   const currentSpread = getSpreadById(spreadId);
 
@@ -23,17 +68,24 @@ function SceneContent({ locale, onShuffleFinished }: TarotCanvasProps) {
     <>
       <StarfieldNebula />
 
-      {/* Shuffling Step */}
+      {/* Step 1: Question Form — Drifting Cosmic Cards in deep space behind UI */}
+      {step === "question" && <DriftingBackgroundCards />}
+
+      {/* Step 2: Shuffling — 3D Spherical Card Vortex */}
       {step === "shuffling" && (
-        <DeckShuffle3D isShuffling={true} onShuffleComplete={onShuffleFinished} />
+        <DeckShuffle3D
+          isShuffling={true}
+          onShuffleComplete={onShuffleFinished}
+          isCollapsing={isCollapsing}
+        />
       )}
 
-      {/* Card Picking Step */}
+      {/* Step 3: Intuitive Picking — Full-screen Panoramic Floating Card Cosmos */}
       {step === "picking" && <FloatingCardField />}
 
-      {/* Revealing / Reading / Complete Spread Layout */}
+      {/* Step 4 & 5: Spread Altar Layout */}
       {(step === "revealing" || step === "streaming" || step === "complete") && currentSpread && (
-        <group position={[0, 0, 0]}>
+        <group position={[0, -0.35, 0]}>
           {drawnCards.map((drawnCard, idx) => {
             const posConfig = currentSpread.positions[idx] || {
               coordinates: { x: (idx - 1) * 2.5, y: 0, z: 0 },
@@ -57,12 +109,16 @@ function SceneContent({ locale, onShuffleFinished }: TarotCanvasProps) {
   );
 }
 
-export function TarotCanvas({ locale, onShuffleFinished }: TarotCanvasProps) {
+export function TarotCanvas({
+  locale,
+  onShuffleFinished,
+  isCollapsing = false,
+  className = "w-full h-full",
+}: TarotCanvasProps) {
   const [hasWebGL, setHasWebGL] = useState<boolean | null>(null);
   const { step } = useReadingStore();
 
   useEffect(() => {
-    // Check WebGL availability
     try {
       const canvas = document.createElement("canvas");
       const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl");
@@ -73,16 +129,13 @@ export function TarotCanvas({ locale, onShuffleFinished }: TarotCanvasProps) {
   }, []);
 
   if (hasWebGL === false) {
-    return null; // Fallback will be rendered by parent
+    return null;
   }
 
-  // Determine optimal camera distance based on step
-  const cameraZ = step === "picking" ? 4.2 : step === "shuffling" ? 3.5 : 5.8;
-
   return (
-    <div className="w-full h-full min-h-[480px] md:min-h-[580px] relative rounded-2xl overflow-hidden border border-amber-500/20 shadow-2xl shadow-purple-950/40">
+    <div className={`relative ${className}`}>
       <Canvas
-        camera={{ position: [0, 0, cameraZ], fov: 50 }}
+        camera={{ position: [0, 0, 6.2], fov: 50 }}
         gl={{
           antialias: true,
           powerPreference: "high-performance",
@@ -90,9 +143,25 @@ export function TarotCanvas({ locale, onShuffleFinished }: TarotCanvasProps) {
         }}
         dpr={[1, 2]}
       >
+        <CameraController step={step} />
         <Suspense fallback={null}>
-          <SceneContent locale={locale} onShuffleFinished={onShuffleFinished} />
+          <SceneContent
+            locale={locale}
+            onShuffleFinished={onShuffleFinished}
+            isCollapsing={isCollapsing}
+          />
         </Suspense>
+
+        {/* Subtle camera control during free viewing */}
+        <OrbitControls
+          enableZoom={false}
+          enablePan={false}
+          maxPolarAngle={Math.PI / 2 + 0.25}
+          minPolarAngle={Math.PI / 2 - 0.25}
+          maxAzimuthAngle={0.3}
+          minAzimuthAngle={-0.3}
+          rotateSpeed={0.25}
+        />
       </Canvas>
     </div>
   );

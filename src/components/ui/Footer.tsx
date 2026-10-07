@@ -1,5 +1,8 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Sparkles, Shield, HeartHandshake, Eye } from "lucide-react";
 import { Locale } from "@/types/tarot";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -10,6 +13,12 @@ interface FooterProps {
 
 export function Footer({ locale }: FooterProps) {
   const dict = getDictionary(locale);
+  const pathname = usePathname();
+
+  // The 3D reading room is a dedicated full-screen experience and should not have the global 4-column footer
+  if (pathname?.includes("/reading")) {
+    return null;
+  }
 
   return (
     <footer className="w-full mystic-panel border-t border-amber-900/30 mt-20 text-slate-400 text-sm">

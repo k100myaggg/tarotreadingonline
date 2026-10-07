@@ -3,6 +3,7 @@
 import React from "react";
 import { useReadingStore } from "@/stores/useReadingStore";
 import { getCardById, getCardDisplayName, getSpreadById } from "@/lib/tarot/data";
+import { getCardImagePath, CARD_BACK_IMAGE_PATH } from "@/lib/tarot/cardImages";
 import { Locale } from "@/types/tarot";
 import { Sparkles, CheckCircle2 } from "lucide-react";
 
@@ -89,33 +90,44 @@ export function Fallback2DCardField({ locale }: Fallback2DCardFieldProps) {
                 </div>
 
                 <div
-                  className={`w-40 aspect-[1/1.7] rounded-xl border p-3 flex flex-col justify-between items-center text-center transition-all duration-500 shadow-xl ${
+                  className={`relative w-44 sm:w-48 aspect-[1/1.65] rounded-xl overflow-hidden border-2 transition-all duration-500 shadow-xl ${
                     isRevealed
-                      ? "bg-gradient-to-b from-[#1b1535] to-[#0d091e] border-amber-400/80 shadow-amber-500/20"
-                      : "bg-[#0f0c1e] border-amber-900/50 group-hover:border-amber-400/50"
+                      ? "border-amber-400/90 shadow-amber-500/25"
+                      : "border-amber-700/60 group-hover:border-amber-400 group-hover:scale-105"
                   }`}
                 >
                   {isRevealed && cardInfo ? (
-                    <>
-                      <span className="text-[10px] font-mono-sacred text-amber-400/70 uppercase">
-                        {drawnCard.isReversed ? "Reversed ↺" : "Upright ↑"}
-                      </span>
-                      <div className="my-auto">
-                        <h4 className="font-serif-sacred font-bold text-amber-200 text-sm">
+                    <div className="relative w-full h-full bg-[#120e24]">
+                      <img
+                        src={getCardImagePath(cardInfo.id)}
+                        alt={getCardDisplayName(cardInfo, locale)}
+                        className={`w-full h-full object-cover ${
+                          drawnCard.isReversed ? "rotate-180" : ""
+                        }`}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent pointer-events-none" />
+                      <div className="absolute top-2 right-2 px-1.5 py-0.5 rounded bg-black/80 backdrop-blur-sm border border-amber-400/50 text-[9px] font-mono-sacred text-amber-300 uppercase">
+                        {drawnCard.isReversed ? "Rev ↺" : "Up ↑"}
+                      </div>
+                      <div className="absolute bottom-2 left-2 right-2 text-center">
+                        <h4 className="font-serif-sacred font-bold text-amber-200 text-xs sm:text-sm drop-shadow">
                           {getCardDisplayName(cardInfo, locale)}
                         </h4>
-                        <p className="text-[11px] text-purple-300 mt-1 font-mono-sacred">
-                          {drawnCard.isReversed
-                            ? cardInfo.keywords.reversed.slice(0, 2).join(", ")
-                            : cardInfo.keywords.upright.slice(0, 2).join(", ")}
-                        </p>
                       </div>
-                      <span className="text-xl">🔮</span>
-                    </>
+                    </div>
                   ) : (
-                    <div className="h-full flex flex-col items-center justify-center">
-                      <Sparkles className="w-6 h-6 text-amber-400/60 mb-2 animate-spin" />
-                      <span className="text-xs font-mono-sacred text-amber-300">Click to Flip</span>
+                    <div className="relative w-full h-full bg-[#0d091e] flex flex-col items-center justify-center">
+                      <img
+                        src={CARD_BACK_IMAGE_PATH}
+                        alt="Card Back"
+                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                      />
+                      <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors flex flex-col items-center justify-center p-3 text-center">
+                        <Sparkles className="w-5 h-5 text-amber-300 mb-1.5 animate-pulse" />
+                        <span className="text-[11px] font-mono-sacred text-amber-200 font-semibold tracking-wider">
+                          CLICK TO REVEAL
+                        </span>
+                      </div>
                     </div>
                   )}
                 </div>

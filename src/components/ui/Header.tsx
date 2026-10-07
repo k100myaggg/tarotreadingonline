@@ -16,6 +16,11 @@ export function Header({ locale }: HeaderProps) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // The 3D reading room is a dedicated full-screen experience and has its own minimal HUD bar
+  if (pathname?.includes("/reading")) {
+    return null;
+  }
+
   // Switch locale while preserving path
   const getLocaleUrl = (newLocale: Locale) => {
     if (!pathname) return `/${newLocale}`;

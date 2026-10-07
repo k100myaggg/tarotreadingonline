@@ -3,6 +3,7 @@
 import React, { useState, use } from "react";
 import Link from "next/link";
 import { allCards, getCardDisplayName } from "@/lib/tarot/data";
+import { getCardImagePath } from "@/lib/tarot/cardImages";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale, TarotCard } from "@/types/tarot";
 import { Search, Sparkles, BookOpen, Filter } from "lucide-react";
@@ -101,16 +102,16 @@ export default function CardsIndexPage({ params }: CardsIndexProps) {
               className="mystic-panel rounded-xl p-3.5 border border-amber-900/30 hover:border-amber-400/60 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between group shadow-md"
             >
               {/* Card Thumbnail Graphic */}
-              <div className="aspect-[1/1.6] rounded-lg bg-[#0e0a1f] border border-amber-500/20 p-2 flex flex-col items-center justify-between text-center mb-2.5 group-hover:border-amber-400/60 transition-colors">
-                <span className="text-[10px] font-mono-sacred text-amber-400/70 uppercase">
-                  {card.arcana === "major" ? "Major" : card.suit}
-                </span>
-                <span className="text-3xl my-auto">
-                  {card.arcana === "major" ? "🔮" : card.suit === "wands" ? "🔥" : card.suit === "cups" ? "🌊" : card.suit === "swords" ? "🗡️" : "⭐"}
-                </span>
-                <span className="text-[9px] font-mono-sacred text-purple-300">
-                  #{card.number}
-                </span>
+              <div className="relative aspect-[1/1.6] rounded-lg overflow-hidden border border-amber-500/30 bg-[#0e0a1f] mb-2.5 group-hover:border-amber-400 group-hover:shadow-lg group-hover:shadow-amber-500/20 transition-all">
+                <img
+                  src={getCardImagePath(card.id)}
+                  alt={cardName}
+                  loading="lazy"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
+                <div className="absolute top-1 left-1 px-1.5 py-0.5 rounded bg-black/75 backdrop-blur-sm border border-amber-500/30 text-[9px] font-mono-sacred text-amber-300">
+                  {card.arcana === "major" ? "MAJOR" : (card.suit?.toUpperCase() || "")}
+                </div>
               </div>
 
               <div>

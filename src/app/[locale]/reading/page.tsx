@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, use } from "react";
+import React, { useState, use, useEffect, useRef } from "react";
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useReadingStore } from "@/stores/useReadingStore";
 import {
   allSpreads,
@@ -19,15 +20,13 @@ import { FollowupChat } from "@/components/ui/FollowupChat";
 import {
   Sparkles,
   ArrowRight,
-  RefreshCw,
-  Eye,
   SlidersHorizontal,
   Volume2,
   VolumeX,
-  HelpCircle,
+  RotateCcw,
 } from "lucide-react";
 
-// Dynamically import 3D Canvas with SSR disabled
+// Dynamically import full-screen 3D Canvas with SSR disabled
 const TarotCanvas = dynamic(
   () => import("@/components/3d/TarotCanvas").then((mod) => mod.TarotCanvas),
   { ssr: false }
@@ -36,6 +35,13 @@ const TarotCanvas = dynamic(
 interface ReadingPageProps {
   params: Promise<{ locale: string }>;
 }
+
+const INSPIRATION_CHIPS = [
+  "What is the deeper lesson in my current transition?",
+  "How can I align with greater emotional harmony?",
+  "What spiritual forces are guiding my creative work?",
+  "Which path serves my highest expansion right now?",
+];
 
 export default function ReadingPage({ params }: ReadingPageProps) {
   const resolvedParams = use(params);
@@ -53,11 +59,15 @@ export default function ReadingPage({ params }: ReadingPageProps) {
     drawnCards,
     revealedIndices,
     isAudioMuted,
+    allowReversals,
     setStep,
     setQuestion,
     setOptions,
     setSpreadId,
     setPersonaId,
+    setAllowReversals,
+    togglePickIndex,
+    clearPicks,
     setDrawnCards,
     revealAllCards,
     toggleAudio,
@@ -67,7 +77,9 @@ export default function ReadingPage({ params }: ReadingPageProps) {
   const [use2DFallback, setUse2DFallback] = useState(false);
   const [showOptions, setShowOptions] = useState(Boolean(optionA || optionB));
   const [isSubmittingDraw, setIsSubmittingDraw] = useState(false);
+  const [isCollapsingShuffle, setIsCollapsingShuffle] = useState(false);
   const [crisisData, setCrisisData] = useState<any>(null);
+  const isStreamingStartedRef = useRef(false);
 
   const {
     isStreaming,
@@ -84,10 +96,15 @@ export default function ReadingPage({ params }: ReadingPageProps) {
   const picksRemaining = requiredPicks - userPickIndices.length;
 
   // Stream reader interpretation when transitioning into 'streaming' step
-  React.useEffect(() => {
-    if (step !== "streaming" || isStreaming || readingResponse) return;
+  useEffect(() => {
+    if (step !== "streaming") {
+      isStreamingStartedRef.current = false;
+      return;
+    }
 
-    let isMounted = true;
+    if (isStreamingStartedRef.current || readingResponse) return;
+
+    isStreamingStartedRef.current = true;
     setStreaming(true);
     setStreamedText("");
 
@@ -127,98 +144,134 @@ export default function ReadingPage({ params }: ReadingPageProps) {
 
         const decoder = new TextDecoder();
         let accumulated = "";
+        let buffer = "";
 
         while (true) {
           const { done, value } = await reader.read();
           if (done) break;
 
-          const textChunk = decoder.decode(value, { stream: true });
-          const lines = textChunk.split("\n\n");
+          buffer += decoder.decode(value, { stream: true });
+          const messages = buffer.split("\n\n");
+          buffer = messages.pop() || "";
 
-          for (const line of lines) {
-            if (line.startsWith("data: ")) {
-              try {
-                const eventData = JSON.parse(line.slice(6));
-                if (eventData.type === "delta") {
-                  accumulated += eventData.text;
-                  if (isMounted) setStreamedText(accumulated);
-                } else if (eventData.type === "complete") {
-                  if (eventData.parsed) {
-                    if (isMounted) {
-                      setReadingResponse(eventData.parsed);
+          for (const msg of messages) {
+            const lines = msg.split("\n");
+            for (const line of lines) {
+              const trimmed = line.trim();
+              if (trimmed.startsWith("data: ")) {
+                try {
+                  const eventData = JSON.parse(trimmed.slice(6));
+                  if (eventData.type === "delta") {
+                    accumulated += eventData.text;
+                    setStreamedText(accumulated);
+                  } else if (eventData.type === "complete") {
+                    let parsedData = eventData.parsed;
+                    if (!parsedData && eventData.rawText) {
+                      const clean = eventData.rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
+                      try { parsedData = JSON.parse(clean); } catch {}
+                    }
+                    if (parsedData) {
+                      setReadingResponse(parsedData);
+                      setStreaming(false);
                       setStep("complete");
                     }
                   }
+                } catch {
+                  // Partial chunk
                 }
-              } catch {
-                // Ignore SSE framing json parse partials
               }
             }
           }
         }
 
-        // Final attempt to parse complete accumulated JSON if complete event was missed
-        if (accumulated && !readingResponse) {
+        // Flush remaining buffer
+        if (buffer.trim().startsWith("data: ")) {
           try {
-            const parsed = JSON.parse(accumulated);
-            if (isMounted) {
-              setReadingResponse(parsed);
-              setStep("complete");
+            const eventData = JSON.parse(buffer.trim().slice(6));
+            if (eventData.type === "complete") {
+              let parsedData = eventData.parsed;
+              if (!parsedData && eventData.rawText) {
+                const clean = eventData.rawText.replace(/```json/gi, "").replace(/```/g, "").trim();
+                try { parsedData = JSON.parse(clean); } catch {}
+              }
+              if (parsedData) {
+                setReadingResponse(parsedData);
+                setStreaming(false);
+                setStep("complete");
+              }
             }
-          } catch {
-            // Raw text fallback
-          }
+          } catch {}
+        }
+
+        // Fallback: parse accumulated JSON if not already marked complete
+        if (accumulated && !useReadingStore.getState().readingResponse) {
+          try {
+            const clean = accumulated.replace(/```json/gi, "").replace(/```/g, "").trim();
+            const parsed = JSON.parse(clean);
+            setReadingResponse(parsed);
+            setStreaming(false);
+            setStep("complete");
+          } catch {}
         }
       } catch (err: any) {
         console.error("Stream reader error:", err);
       } finally {
-        if (isMounted) setStreaming(false);
+        setStreaming(false);
       }
     }
 
     streamReading();
+  }, [step, spreadId, question, optionA, optionB, personaId, drawnCards, locale]);
 
-    return () => {
-      isMounted = false;
-    };
-  }, [step, isStreaming, readingResponse]);
-
-  // Handle starting shuffle flow
-  const handleStartShuffle = () => {
+  // Step 1 -> Step 2: Start Shuffling Vortex
+  const handleStartDivination = () => {
+    if (!question.trim()) {
+      alert("Please enter a question or intention for the cards.");
+      return;
+    }
     setStep("shuffling");
   };
 
-  // When 3D shuffle finishes, go to picking
-  const handleShuffleFinished = () => {
-    setStep("picking");
+  // Step 2 -> Step 3: Finish Shuffling and Transition into Card Picking
+  const handleFinishShuffling = () => {
+    if (isCollapsingShuffle) return;
+    setIsCollapsingShuffle(true);
+    // Allow the magnetic deck collapse animation to fully resolve before fanning out
+    setTimeout(() => {
+      setStep("picking");
+      setIsCollapsingShuffle(false);
+    }, 1000);
   };
 
-  // Submit picks and execute cryptographic draw
+  // Step 3 -> Step 4: Confirm user pick selection and draw from CSPRNG engine
   const handleConfirmDraw = async () => {
     if (userPickIndices.length !== requiredPicks) return;
 
     try {
       setIsSubmittingDraw(true);
+
       const res = await fetch("/api/reading/draw", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          spreadId,
           question,
-          optionA,
-          optionB,
+          spreadId,
           personaId,
           userPickIndices,
-          locale,
+          optionA,
+          optionB,
+          allowReversals,
         }),
       });
 
-      const data = await res.json();
       if (!res.ok) {
-        throw new Error(data.error || "Failed to draw cards");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Failed to draw cards");
       }
 
+      const data = await res.json();
       setDrawnCards(data.cards, data.readingId);
+      setStep("revealing");
     } catch (err: any) {
       alert(err.message || "An error occurred while drawing cards");
     } finally {
@@ -226,315 +279,448 @@ export default function ReadingPage({ params }: ReadingPageProps) {
     }
   };
 
+  // Is current view a full-screen fixed ritual stage (question, shuffling, picking, revealing)?
+  const isRitualStage = step !== "streaming" && step !== "complete";
+
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12 flex flex-col items-center">
-      {/* Top Controls & Status Bar */}
-      <div className="w-full flex items-center justify-between mb-6 pb-4 border-b border-amber-900/30 text-xs font-mono-sacred text-slate-400">
-        <div className="flex items-center gap-2">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-          <span className="text-amber-200 uppercase">
-            Stage: {step.toUpperCase()}
+    <div
+      className={`relative w-full bg-[#040208] text-slate-100 selection:bg-amber-400 selection:text-neutral-950 ${
+        isRitualStage
+          ? "fixed inset-0 w-screen h-screen overflow-hidden"
+          : "min-h-screen overflow-y-auto"
+      }`}
+    >
+      {/* ─── 1. FULL-SCREEN 3D COSMOS VIEWPORT (FIXED BACKGROUND) ─── */}
+      <div className="fixed inset-0 w-full h-full z-0 pointer-events-auto">
+        {use2DFallback ? (
+          <div className="w-full h-full p-4 flex items-center justify-center bg-[#070512]">
+            <Fallback2DCardField locale={locale} />
+          </div>
+        ) : (
+          <TarotCanvas
+            locale={locale}
+            isCollapsing={isCollapsingShuffle}
+            className="w-full h-full"
+          />
+        )}
+      </div>
+
+      {/* ─── 2. TOP HUD NAVIGATION BAR (Pinned, Minimalist) ─── */}
+      <div className="fixed top-0 left-0 right-0 z-40 px-4 sm:px-8 py-3.5 flex items-center justify-between pointer-events-auto backdrop-blur-md bg-black/40 border-b border-white/5">
+        <div className="flex items-center gap-3">
+          <Link
+            href={`/${locale}`}
+            className="font-serif-sacred text-base font-bold tracking-widest text-amber-100 hover:text-amber-300 transition-colors flex items-center gap-2"
+          >
+            <span>ARCANA 3D</span>
+            <span className="w-2 h-2 rounded-full bg-amber-400 shadow-md shadow-amber-400" />
+          </Link>
+
+          <span className="hidden md:inline-block text-[10px] font-mono-sacred text-amber-400/80 px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 uppercase tracking-wider">
+            DECK · RWS 1909 CANON · 78 CARDS · UPRIGHT + REVERSED
           </span>
         </div>
 
-        <div className="flex items-center gap-3">
+        {/* Action Controls */}
+        <div className="flex items-center gap-2 text-xs font-mono-sacred">
           <button
             type="button"
             onClick={() => setUse2DFallback(!use2DFallback)}
-            className="flex items-center gap-1.5 px-3 py-1 rounded bg-black/40 border border-amber-900/40 text-slate-300 hover:text-amber-300 transition-colors"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-black/70 border border-amber-500/30 text-slate-300 hover:text-amber-300 hover:border-amber-400 transition-all"
+            title="Toggle between 3D cosmos and accessible 2D mode"
           >
             <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span>{use2DFallback ? "Switch to 3D" : "2D Accessible Mode"}</span>
+            <span className="hidden sm:inline">
+              {use2DFallback ? "3D Cosmos" : "2D Accessible"}
+            </span>
           </button>
 
           <button
             type="button"
             onClick={toggleAudio}
-            className="p-1.5 rounded bg-black/40 border border-amber-900/40 text-slate-300 hover:text-amber-300 transition-colors"
+            className="p-1.5 rounded-lg bg-black/70 border border-amber-500/30 text-slate-300 hover:text-amber-300 hover:border-amber-400 transition-all"
             title={isAudioMuted ? "Unmute Ambiance" : "Mute Ambiance"}
           >
-            {isAudioMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4 text-amber-400" />}
+            {isAudioMuted ? (
+              <VolumeX className="w-4 h-4" />
+            ) : (
+              <Volume2 className="w-4 h-4 text-amber-400" />
+            )}
           </button>
 
           {step !== "question" && (
             <button
               type="button"
               onClick={resetReading}
-              className="flex items-center gap-1.5 px-3 py-1 rounded bg-amber-950/40 border border-amber-500/30 text-amber-300 hover:bg-amber-900/40 transition-colors"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/70 border border-amber-500/40 text-amber-300 hover:bg-amber-900/70 transition-all"
             >
-              <RefreshCw className="w-3.5 h-3.5" />
+              <RotateCcw className="w-3.5 h-3.5" />
               <span>Reset</span>
             </button>
           )}
         </div>
       </div>
 
-      {/* Step 1: Question Form & Spread/Persona Selection */}
-      {step === "question" && (
-        <div className="w-full max-w-3xl mystic-panel rounded-2xl p-6 sm:p-10 border border-amber-500/30 shadow-2xl">
-          <div className="text-center mb-8">
-            <span className="font-mono-sacred text-xs text-amber-400/90 tracking-widest">
-              STEP 1 • SACRED INTENTION
-            </span>
-            <h1 className="font-serif-sacred text-2xl sm:text-4xl font-bold text-amber-100 mt-1">
-              Frame Your Inquiry
-            </h1>
-          </div>
+      {/* ─── 3. STEP-SPECIFIC OVERLAYS (PINNED WITH ZERO CARD COLLISION) ─── */}
 
-          <div className="space-y-6">
-            {/* Question Input */}
-            <div>
-              <div className="flex justify-between items-center mb-2">
-                <label className="font-serif-sacred text-sm font-semibold text-amber-200">
-                  {dict.readingForm.questionLabel}
-                </label>
-                <span className="text-xs font-mono-sacred text-slate-400">
+      {/* ─── STEP 1: FLOATING GLASS QUESTION INQUIRY (COMPACT & VIEWPORT SAFE) ─── */}
+      {step === "question" && (
+        <div className="fixed inset-0 z-20 flex items-center justify-center p-3 sm:p-4 pt-14 pointer-events-none">
+          <div className="w-full max-w-lg pointer-events-auto transition-all animate-in fade-in zoom-in-95 duration-400 max-h-[calc(100vh-4.2rem)] flex flex-col">
+            <div className="rounded-2xl p-4 sm:p-5 bg-[#0b0816]/95 backdrop-blur-2xl border border-amber-500/30 shadow-2xl shadow-purple-950/60 space-y-3 overflow-y-auto">
+              {/* Header Badge */}
+              <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                <span className="font-mono-sacred text-[10px] text-amber-400 tracking-widest uppercase flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                  SACRED ORACLE
+                </span>
+                <span className="font-mono-sacred text-[10px] text-slate-400">
                   {question.length}/200
                 </span>
               </div>
-              <textarea
-                value={question}
-                onChange={(e) => setQuestion(e.target.value)}
-                maxLength={200}
-                placeholder={dict.readingForm.questionPlaceholder}
-                rows={3}
-                className="w-full bg-[#0a0815] border border-amber-500/30 rounded-xl px-4 py-3 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-amber-400/60 focus:border-amber-400 text-sm leading-relaxed"
-              />
-              <p className="text-[11px] font-mono-sacred text-slate-400 mt-1.5">
-                ✦ {dict.readingForm.questionHint}
-              </p>
-            </div>
 
-            {/* Option A / Option B Toggle */}
-            <div>
-              <button
-                type="button"
-                onClick={() => setShowOptions(!showOptions)}
-                className="text-xs font-mono-sacred text-amber-400 hover:text-amber-300 flex items-center gap-1.5 transition-colors"
-              >
-                <span>{showOptions ? "- Hide Choice Comparison" : "+ Comparing Two Specific Paths? (Option A / Option B)"}</span>
-              </button>
+              {/* Title */}
+              <div>
+                <h1 className="font-serif-sacred text-lg sm:text-xl font-bold text-amber-100">
+                  Ask Your Question for Sacred AI Tarot Reading
+                </h1>
+                <p className="text-[11px] text-slate-300 font-light mt-0.5">
+                  Hold your intention firmly in mind before awakening the archetypes.
+                </p>
+              </div>
 
-              {showOptions && (
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-3 p-4 rounded-xl bg-black/30 border border-amber-900/30">
-                  <div>
-                    <label className="text-xs font-serif-sacred text-amber-300 block mb-1">
-                      {dict.readingForm.optionALabel}
-                    </label>
-                    <input
-                      type="text"
-                      value={optionA}
-                      onChange={(e) => setOptions(e.target.value, optionB)}
-                      placeholder={dict.readingForm.optionAPlaceholder}
-                      className="w-full bg-[#090712] border border-amber-500/20 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="text-xs font-serif-sacred text-amber-300 block mb-1">
-                      {dict.readingForm.optionBLabel}
-                    </label>
-                    <input
-                      type="text"
-                      value={optionB}
-                      onChange={(e) => setOptions(optionA, e.target.value)}
-                      placeholder={dict.readingForm.optionBPlaceholder}
-                      className="w-full bg-[#090712] border border-amber-500/20 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-400"
-                    />
-                  </div>
+              {/* Question Textarea */}
+              <div className="relative">
+                <textarea
+                  value={question}
+                  onChange={(e) => setQuestion(e.target.value)}
+                  maxLength={200}
+                  placeholder="e.g.: What guidance does the universe offer regarding my current crossroads?"
+                  rows={2}
+                  className="w-full bg-[#06040d]/90 border border-amber-500/30 rounded-xl px-3.5 py-2 text-slate-100 placeholder:text-slate-500 focus:outline-none focus:ring-1 focus:ring-amber-400 focus:border-amber-400 text-xs sm:text-sm leading-relaxed transition-all shadow-inner resize-none"
+                />
+
+                {/* Quick Inspiration Chips */}
+                <div className="flex flex-wrap gap-1 mt-1.5">
+                  {INSPIRATION_CHIPS.slice(0, 3).map((chip, i) => (
+                    <button
+                      key={i}
+                      type="button"
+                      onClick={() => setQuestion(chip)}
+                      className="text-[9.5px] font-mono-sacred px-2 py-0.5 rounded-full bg-white/5 hover:bg-amber-500/15 border border-white/5 hover:border-amber-500/30 text-slate-300 hover:text-amber-200 transition-all text-left truncate max-w-[200px]"
+                    >
+                      ✦ {chip}
+                    </button>
+                  ))}
                 </div>
-              )}
-            </div>
+              </div>
 
-            {/* Spread Selector */}
-            <div>
-              <label className="font-serif-sacred text-sm font-semibold text-amber-200 block mb-2">
-                {dict.readingForm.chooseSpread}
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {allSpreads.map((spread) => {
-                  const isSelected = spreadId === spread.id;
-                  return (
-                    <div
-                      key={spread.id}
-                      onClick={() => setSpreadId(spread.id)}
-                      className={`cursor-pointer p-4 rounded-xl border transition-all ${
-                        isSelected
-                          ? "bg-amber-500/15 border-amber-400 ring-1 ring-amber-400/50 shadow-md shadow-amber-500/10"
-                          : "bg-[#0c0919] border-amber-900/30 hover:border-amber-500/40"
-                      }`}
-                    >
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="font-serif-sacred font-bold text-amber-100 text-sm">
+              {/* Spread & Options Selection */}
+              <div className="space-y-1.5 pt-1.5 border-t border-white/5">
+                <div className="flex justify-between items-center">
+                  <label className="font-serif-sacred text-[11px] font-semibold text-amber-200 uppercase tracking-wider">
+                    Select Spread
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowOptions(!showOptions)}
+                    className="text-[9.5px] font-mono-sacred text-amber-400 hover:text-amber-300 transition-colors"
+                  >
+                    {showOptions ? "✕ Cancel Path A/B" : "+ Compare 2 Paths (Option A / B)"}
+                  </button>
+                </div>
+
+                <div className="grid grid-cols-3 gap-1.5">
+                  {allSpreads.slice(0, 3).map((spread) => {
+                    const isSelected = spreadId === spread.id;
+                    return (
+                      <button
+                        key={spread.id}
+                        type="button"
+                        onClick={() => {
+                          setSpreadId(spread.id);
+                          if (spread.id === "decision_ab") setShowOptions(true);
+                        }}
+                        className={`p-2 rounded-xl border text-left transition-all ${
+                          isSelected
+                            ? "bg-amber-500/20 border-amber-400 shadow-md shadow-amber-500/20 text-amber-100 ring-1 ring-amber-400"
+                            : "bg-black/40 border-white/5 text-slate-400 hover:border-amber-500/40 hover:text-slate-200"
+                        }`}
+                      >
+                        <div className="font-serif-sacred font-bold text-[11px] truncate">
                           {getSpreadDisplayName(spread, locale)}
-                        </span>
-                        <span className="font-mono-sacred text-[10px] px-2 py-0.5 rounded bg-amber-950/60 text-amber-300 border border-amber-500/20">
-                          {spread.cardCount} CARDS
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-400 line-clamp-2">
-                        {spread.description[locale as "en" | "hi" | "ja"] || spread.description.en}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
+                        </div>
+                        <div className="font-mono-sacred text-[8.5px] text-amber-400/80 mt-0.5">
+                          {spread.cardCount} Cards
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
 
-            {/* Persona Selector */}
-            <div>
-              <label className="font-serif-sacred text-sm font-semibold text-amber-200 block mb-2">
-                {dict.readingForm.choosePersona}
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                {allPersonas.map((persona) => {
-                  const isSelected = personaId === persona.id;
-                  return (
-                    <div
-                      key={persona.id}
-                      onClick={() => setPersonaId(persona.id)}
-                      className={`cursor-pointer p-4 rounded-xl border transition-all ${
-                        isSelected
-                          ? "bg-amber-500/15 border-amber-400 ring-1 ring-amber-400/50 shadow-md shadow-amber-500/10"
-                          : "bg-[#0c0919] border-amber-900/30 hover:border-amber-500/40"
+                {/* Option A & Option B Inputs */}
+                {showOptions && (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 p-2.5 rounded-xl bg-black/40 border border-amber-500/20">
+                    <div>
+                      <span className="text-[9px] font-mono-sacred text-amber-300 uppercase block mb-0.5">
+                        OPTION A
+                      </span>
+                      <input
+                        type="text"
+                        value={optionA}
+                        onChange={(e) => setOptions(e.target.value, optionB)}
+                        placeholder="e.g.: Stay at current firm"
+                        className="w-full bg-[#080512] border border-amber-500/30 rounded-lg px-2 py-1 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+                    <div>
+                      <span className="text-[9px] font-mono-sacred text-amber-300 uppercase block mb-0.5">
+                        OPTION B
+                      </span>
+                      <input
+                        type="text"
+                        value={optionB}
+                        onChange={(e) => setOptions(optionA, e.target.value)}
+                        placeholder="e.g.: Launch independent studio"
+                        className="w-full bg-[#080512] border border-amber-500/30 rounded-lg px-2 py-1 text-xs text-slate-100 focus:outline-none focus:border-amber-400"
+                      />
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Persona Selector */}
+              <div className="pt-1.5 border-t border-white/5">
+                <label className="font-serif-sacred text-[11px] font-semibold text-amber-200 uppercase tracking-wider block mb-1.5">
+                  Reader Persona
+                </label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {allPersonas.map((persona) => {
+                    const isSelected = personaId === persona.id;
+                    return (
+                      <button
+                        key={persona.id}
+                        type="button"
+                        onClick={() => setPersonaId(persona.id)}
+                        className={`p-1.5 rounded-xl border text-center transition-all flex flex-col items-center ${
+                          isSelected
+                            ? "bg-amber-500/20 border-amber-400 text-amber-100 ring-1 ring-amber-400"
+                            : "bg-black/40 border-white/5 text-slate-400 hover:border-amber-500/30"
+                        }`}
+                      >
+                        <span className="text-base mb-0.5">{persona.avatar}</span>
+                        <span className="font-serif-sacred font-bold text-[10px] truncate w-full">
+                          {getPersonaDisplayName(persona, locale)}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Tarot Reversals Orientation Toggle */}
+              <div className="pt-1.5 border-t border-white/5">
+                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-black/50 border border-white/5">
+                  <div className="flex flex-col">
+                    <span className="text-[11px] font-serif-sacred text-amber-200 flex items-center gap-1.5">
+                      <span>✦</span>
+                      <span>{locale === "hi" ? "उलटे कार्ड्स (Reversed Cards)" : "Allow Reversed Cards"}</span>
+                    </span>
+                    <span className="text-[9px] font-mono-sacred text-slate-400">
+                      {allowReversals
+                        ? (locale === "hi" ? "पारंपरिक 50/50 आंतरिक छाया अध्ययन" : "Traditional 50/50 RWS shadow & internal flow")
+                        : (locale === "hi" ? "केवल सीधे कार्ड्स (100% Upright)" : "Upright only (100% face-up)")}
+                    </span>
+                  </div>
+
+                  <button
+                    type="button"
+                    onClick={() => setAllowReversals(!allowReversals)}
+                    className={`relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border border-amber-500/40 transition-colors duration-200 ease-in-out focus:outline-none ${
+                      allowReversals ? "bg-amber-500" : "bg-neutral-800"
+                    }`}
+                    title={allowReversals ? "Click to disable reversed cards" : "Click to allow reversed cards"}
+                  >
+                    <span
+                      className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-black/90 shadow ring-0 transition duration-200 ease-in-out ${
+                        allowReversals ? "translate-x-5 bg-amber-950" : "translate-x-0 bg-neutral-400"
                       }`}
-                    >
-                      <div className="text-2xl mb-1">{persona.avatar}</div>
-                      <div className="font-serif-sacred font-bold text-amber-100 text-sm">
-                        {getPersonaDisplayName(persona, locale)}
-                      </div>
-                      <p className="text-[10px] font-mono-sacred text-amber-400/70 mb-1">
-                        {persona.title[locale as "en" | "hi" | "ja"] || persona.title.en}
-                      </p>
-                      <p className="text-[11px] text-slate-400 line-clamp-2">
-                        {persona.description[locale as "en" | "hi" | "ja"] || persona.description.en}
-                      </p>
-                    </div>
-                  );
-                })}
+                    />
+                  </button>
+                </div>
               </div>
-            </div>
 
-            {/* Launch Button */}
-            <div className="pt-4 border-t border-white/5">
-              <button
-                type="button"
-                onClick={handleStartShuffle}
-                className="w-full py-4 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-neutral-950 font-serif-sacred font-bold text-lg shadow-xl shadow-amber-500/20 hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-3"
-              >
-                <Sparkles className="w-5 h-5 text-neutral-950" />
-                <span>{dict.readingForm.shufflePrompt}</span>
-                <ArrowRight className="w-5 h-5 text-neutral-950" />
-              </button>
+              {/* Start Divination Button (Luxury Cream) */}
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={handleStartDivination}
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#f4ebd0] via-[#fff7e6] to-[#f4ebd0] hover:brightness-105 text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
+                >
+                  <Sparkles className="w-3.5 h-3.5 text-amber-800 group-hover:rotate-12 transition-transform" />
+                  <span>START DIVINATION</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-amber-800 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Steps 2..5: 3D Viewport or 2D Accessible Mode */}
-      {step !== "question" && (
-        <div className="w-full flex flex-col items-center">
-          {/* Active Guidance Header */}
-          <div className="text-center mb-6 max-w-xl">
-            {step === "shuffling" && (
-              <div className="space-y-1">
-                <span className="font-mono-sacred text-xs text-amber-400">
-                  ✦ ALIGNING THE ARCHETYPAL FREQUENCIES ✦
-                </span>
-                <h2 className="font-serif-sacred text-2xl text-amber-100 font-bold">
-                  {dict.reader.shufflingDeck}
-                </h2>
-              </div>
-            )}
+      {/* ─── STEP 2: SHUFFLING VORTEX MEDITATION STAGE ─── */}
+      {step === "shuffling" && (
+        <>
+          {/* Top Pinned Meditation Text (Zero collision with vortex) */}
+          <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4 animate-in fade-in duration-500">
+            <span className="font-mono-sacred text-[11px] text-amber-400 tracking-widest uppercase flex items-center justify-center gap-1.5 mb-1">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" />
+              <span>ALIGNING ARCHETYPAL FREQUENCIES</span>
+            </span>
+            <h2 className="font-serif-sacred text-2xl sm:text-3xl font-bold text-amber-100 drop-shadow">
+              Shuffling... Please meditate on your question
+            </h2>
+            <p className="font-serif-sacred text-xs sm:text-sm text-amber-200/80 italic max-w-md mx-auto mt-1 line-clamp-1">
+              "{question}"
+            </p>
+          </div>
 
-            {step === "picking" && (
-              <div className="space-y-2">
-                <span className="font-mono-sacred text-xs text-amber-400">
-                  ✦ INTUITIVE SELECTION ✦
-                </span>
-                <h2 className="font-serif-sacred text-2xl text-amber-100 font-bold">
-                  {dict.reader.fieldInstruction
-                    .replace("{required}", String(requiredPicks))
-                    .replace("{selected}", String(userPickIndices.length))}
-                </h2>
-                {picksRemaining > 0 ? (
-                  <p className="text-xs text-slate-400 font-mono-sacred">
-                    Hover and click {picksRemaining} more card{picksRemaining > 1 ? "s" : ""} from the floating ribbon.
-                  </p>
-                ) : (
-                  <div className="pt-2">
-                    <button
-                      type="button"
-                      disabled={isSubmittingDraw}
-                      onClick={handleConfirmDraw}
-                      className="px-8 py-3 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-600 text-neutral-950 font-serif-sacred font-bold text-base shadow-xl shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all"
-                    >
-                      {isSubmittingDraw ? "Invoking Spread..." : "Cast Spread & Draw Cards"}
-                    </button>
-                  </div>
-                )}
-              </div>
-            )}
+          {/* Bottom Pinned Finish Shuffling Action */}
+          <div className="fixed bottom-6 sm:bottom-7 left-0 right-0 z-30 flex justify-center pointer-events-auto px-4">
+            <button
+              type="button"
+              onClick={handleFinishShuffling}
+              disabled={isCollapsingShuffle}
+              className="px-9 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
+            >
+              <span>{isCollapsingShuffle ? "COALESCING DECK..." : "FINISH SHUFFLING"}</span>
+              <ArrowRight className="w-4 h-4 text-amber-800" />
+            </button>
+          </div>
+        </>
+      )}
 
-            {step === "revealing" && (
-              <div className="space-y-2">
-                <span className="font-mono-sacred text-xs text-amber-400">
-                  ✦ SACRED GEOMETRY ✦
-                </span>
-                <h2 className="font-serif-sacred text-2xl text-amber-100 font-bold">
-                  Flip the cards to reveal their orientation
-                </h2>
-                <div className="flex justify-center gap-3 pt-2">
+      {/* ─── STEP 3: 3D CELESTIAL STADIUM FIELD SELECTION ─── */}
+      {step === "picking" && (
+        <>
+          {/* Top Pinned Instructions */}
+          <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4">
+            <h2 className="font-serif-sacred text-2xl sm:text-3xl text-amber-100 font-bold drop-shadow">
+              Please select {requiredPicks} {requiredPicks === 1 ? "card" : "cards"} ({userPickIndices.length} {userPickIndices.length === 1 ? "card" : "cards"} selected)
+            </h2>
+            <p className="text-xs font-mono-sacred text-amber-400/80 mt-1">
+              {picksRemaining > 0
+                ? `Click cards in the cosmos to choose · Click again or use pills below to deselect`
+                : "All sacred cards chosen. Cast the spread below."}
+            </p>
+
+            {/* Selected Card Pills for Instant 1-Click Deselection */}
+            {userPickIndices.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5 pointer-events-auto animate-in fade-in zoom-in-95 duration-200">
+                {userPickIndices.map((idx, order) => (
                   <button
+                    key={idx}
                     type="button"
-                    onClick={revealAllCards}
-                    className="px-6 py-2.5 rounded-lg bg-amber-500/20 border border-amber-400 text-amber-200 text-xs font-mono-sacred hover:bg-amber-500/30 transition-colors"
+                    onClick={() => togglePickIndex(idx)}
+                    className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 border border-amber-400/60 text-amber-200 font-mono-sacred text-[11px] hover:bg-rose-950/80 hover:border-rose-400 hover:text-rose-200 transition-all shadow-lg shadow-black/80 group"
+                    title="Click to deselect this card"
                   >
-                    Reveal All ({revealedIndices.length}/{drawnCards.length})
+                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:bg-rose-400" />
+                    <span className="font-bold">CARD {order + 1}</span>
+                    <span className="text-[9px] text-slate-400 group-hover:text-rose-300">#{(idx % 78) + 1}</span>
+                    <span className="text-xs ml-0.5 text-amber-400 group-hover:text-rose-300 font-bold">✕</span>
                   </button>
-                  {revealedIndices.length === drawnCards.length && (
-                    <button
-                      type="button"
-                      onClick={() => setStep("streaming")}
-                      className="px-6 py-2.5 rounded-lg bg-amber-400 text-neutral-950 font-bold text-xs font-mono-sacred hover:bg-amber-300 transition-colors shadow-lg shadow-amber-500/20"
-                    >
-                      Hear Reader Synthesis →
-                    </button>
-                  )}
-                </div>
+                ))}
+                <button
+                  type="button"
+                  onClick={clearPicks}
+                  className="px-2.5 py-1 rounded-full bg-black/60 border border-white/20 text-slate-400 font-mono-sacred text-[10px] hover:text-rose-300 hover:border-rose-500/40 transition-all"
+                  title="Clear all selections"
+                >
+                  Clear All
+                </button>
               </div>
             )}
           </div>
 
-          {/* Canvas or 2D Fallback */}
-          <div className="w-full max-w-5xl">
-            {use2DFallback ? (
-              <Fallback2DCardField locale={locale} />
-            ) : (
-              <TarotCanvas locale={locale} onShuffleFinished={handleShuffleFinished} />
-            )}
+          {/* Bottom Pinned Reveal Spread Action Button */}
+          {picksRemaining === 0 && (
+            <div className="fixed bottom-6 sm:bottom-7 left-0 right-0 z-30 flex justify-center pointer-events-auto px-4">
+              <button
+                type="button"
+                disabled={isSubmittingDraw}
+                onClick={handleConfirmDraw}
+                className="px-10 py-3.5 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-sm uppercase tracking-widest shadow-2xl shadow-amber-400/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 animate-bounce"
+              >
+                <Sparkles className="w-4 h-4 text-amber-800" />
+                <span>{isSubmittingDraw ? "CASTING SPREAD..." : "REVEAL SPREAD →"}</span>
+              </button>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* ─── STEP 4: SACRED ALTAR REVEAL STAGE (ZERO COLLISION WITH CARDS) ─── */}
+      {step === "revealing" && (
+        <>
+          {/* Top Pinned Title (Far above the cards) */}
+          <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4">
+            <span className="font-mono-sacred text-[11px] text-amber-400 tracking-widest uppercase block mb-1">
+              ✦ SACRED SACRAMENT ✦
+            </span>
+            <h2 className="font-serif-sacred text-2xl sm:text-3xl text-amber-100 font-bold">
+              Flip the cards to reveal their orientation
+            </h2>
+            <p className="text-xs font-mono-sacred text-slate-300 mt-1">
+              Click each card to flip and commune with its divine arcana
+            </p>
           </div>
 
-          {/* Streamed Reader Interpretation */}
-          {(step === "streaming" || step === "complete") && (
-            <ReadingStreamViewer
-              reading={readingResponse}
-              rawStreamText={streamedText}
-              isStreaming={isStreaming}
-              crisisData={crisisData}
-              locale={locale}
-              onSelectFollowup={(q) => {
-                const chatInput = document.getElementById("followup-input") as HTMLInputElement;
-                if (chatInput) {
-                  chatInput.value = q;
-                  chatInput.focus();
-                }
-              }}
-            />
-          )}
+          {/* Bottom Pinned Action Buttons */}
+          <div className="fixed bottom-6 sm:bottom-7 left-0 right-0 z-30 flex justify-center items-center gap-3 pointer-events-auto px-4">
+            <button
+              type="button"
+              onClick={revealAllCards}
+              className="px-6 py-2.5 rounded-full bg-black/85 backdrop-blur-md border border-amber-400/60 text-amber-200 text-xs font-mono-sacred hover:bg-amber-500/20 transition-all shadow-xl shadow-black/90"
+            >
+              Reveal All ({revealedIndices.length}/{drawnCards.length})
+            </button>
 
-          {/* Interactive Follow-up Chat & Extra Guidance Card */}
-          {step === "complete" && !crisisData && (
-            <FollowupChat locale={locale} />
+            {revealedIndices.length === drawnCards.length && (
+              <button
+                type="button"
+                onClick={() => setStep("streaming")}
+                className="px-8 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-neutral-950 font-serif-sacred font-bold text-xs uppercase tracking-wider transition-all shadow-2xl shadow-amber-400/40 hover:scale-105 active:scale-95 flex items-center gap-2"
+              >
+                <span>Synthesize Oracle Reading</span>
+                <ArrowRight className="w-3.5 h-3.5 text-amber-800" />
+              </button>
+            )}
+          </div>
+        </>
+      )}
+
+      {/* ─── STEP 5 & 6: STREAMED READING ILLUMINATION (Scrollable Reading Sanctuary) ─── */}
+      {(step === "streaming" || step === "complete") && (
+        <div className="relative z-20 w-full max-w-4xl mx-auto pt-24 pb-20 px-4 pointer-events-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
+          <ReadingStreamViewer
+            reading={readingResponse}
+            rawStreamText={streamedText}
+            isStreaming={isStreaming}
+            crisisData={crisisData}
+            locale={locale}
+            onSelectFollowup={(suggestedQ) => {
+              const el = document.getElementById("followup-input");
+              if (el) {
+                (el as HTMLInputElement).value = suggestedQ;
+                el.focus();
+              }
+            }}
+          />
+
+          {step === "complete" && (
+            <div className="mt-8">
+              <FollowupChat locale={locale} />
+            </div>
           )}
         </div>
       )}

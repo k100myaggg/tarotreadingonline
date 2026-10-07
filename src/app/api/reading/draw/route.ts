@@ -5,7 +5,16 @@ import { getSpreadById, getPersonaById } from "@/lib/tarot/data";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { spreadId, question, optionA, optionB, personaId, userPickIndices, locale = "en" } = body;
+    const {
+      spreadId,
+      question,
+      optionA,
+      optionB,
+      personaId,
+      userPickIndices,
+      allowReversals = true,
+      locale = "en",
+    } = body;
 
     if (!spreadId) {
       return NextResponse.json({ error: "Missing spreadId" }, { status: 400 });
@@ -35,7 +44,7 @@ export async function POST(req: NextRequest) {
     const drawResult = executeSecureDraw({
       spreadId,
       userPickIndices: Array.isArray(userPickIndices) ? userPickIndices : undefined,
-      allowReversals: true,
+      allowReversals: typeof allowReversals === "boolean" ? allowReversals : true,
     });
 
     return NextResponse.json({

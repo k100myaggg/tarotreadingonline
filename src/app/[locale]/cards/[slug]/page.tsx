@@ -2,6 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { allCards, getCardById, getCardDisplayName } from "@/lib/tarot/data";
+import { getCardImagePath, hasCustomAiArtwork } from "@/lib/tarot/cardImages";
 import { Locale } from "@/types/tarot";
 import { Sparkles, ArrowLeft, ArrowRight, Shield, Compass, BookOpen } from "lucide-react";
 
@@ -90,25 +91,20 @@ export default async function CardDetailPage({ params }: CardPageProps) {
       {/* Main Card Hero Header */}
       <div className="mystic-panel rounded-2xl p-6 sm:p-10 border border-amber-500/30 shadow-2xl flex flex-col md:flex-row items-center gap-8">
         {/* Card Artwork Hologram */}
-        <div className="w-52 aspect-[1/1.7] rounded-2xl bg-[#100b24] border-2 border-amber-400 p-4 flex flex-col items-center justify-between text-center shadow-2xl shadow-amber-500/20 shrink-0">
-          <span className="font-mono-sacred text-[11px] text-amber-400/80 uppercase">
-            {card.arcana} arcana
-          </span>
-
-          <div className="my-auto">
-            <span className="text-5xl block mb-2">
-              {card.arcana === "major" ? "🔮" : card.suit === "wands" ? "🔥" : card.suit === "cups" ? "🌊" : card.suit === "swords" ? "🗡️" : "⭐"}
-            </span>
-            <h2 className="font-serif-sacred text-xl font-bold text-amber-100">
-              {cardName}
-            </h2>
-            <span className="text-xs font-mono-sacred text-purple-300 block mt-1">
-              Number: {card.number}
-            </span>
+        <div className="relative w-56 sm:w-64 aspect-[1/1.7] rounded-2xl overflow-hidden border-2 border-amber-400/80 shadow-2xl shadow-amber-500/25 shrink-0 bg-[#100b24] group">
+          <img
+            src={getCardImagePath(card.id)}
+            alt={cardName}
+            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none" />
+          <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-black/80 backdrop-blur-md border border-amber-400/40 text-[10px] font-mono-sacred text-amber-300">
+            {hasCustomAiArtwork(card.id) ? "✦ BESPOKE SACRED ART" : "✦ RWS 1909 CANON"}
           </div>
-
-          <div className="text-[10px] font-mono-sacred text-amber-300 uppercase">
-            RWS 1909 CANON
+          <div className="absolute bottom-2.5 left-2.5 right-2.5 text-center">
+            <span className="text-[11px] font-mono-sacred text-amber-200/90 uppercase tracking-widest">
+              {card.arcana === "major" ? `MAJOR ARCANA #${card.number}` : `${card.suit?.toUpperCase()} #${card.number}`}
+            </span>
           </div>
         </div>
 

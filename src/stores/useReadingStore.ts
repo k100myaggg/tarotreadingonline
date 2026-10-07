@@ -34,6 +34,7 @@ interface ReadingState {
   streamError: string | null;
   followups: FollowupMessage[];
   isAudioMuted: boolean;
+  allowReversals: boolean;
 
   // Actions
   setStep: (step: ReadingStep) => void;
@@ -41,6 +42,7 @@ interface ReadingState {
   setOptions: (a: string, b: string) => void;
   setSpreadId: (id: string) => void;
   setPersonaId: (id: string) => void;
+  setAllowReversals: (allow: boolean) => void;
   togglePickIndex: (index: number) => boolean;
   clearPicks: () => void;
   setDrawnCards: (cards: DrawnCardData[], readingId: string) => void;
@@ -72,12 +74,14 @@ export const useReadingStore = create<ReadingState>((set, get) => ({
   streamError: null,
   followups: [],
   isAudioMuted: false,
+  allowReversals: true,
 
   setStep: (step) => set({ step }),
   setQuestion: (question) => set({ question: question.slice(0, 200) }),
   setOptions: (optionA, optionB) => set({ optionA, optionB }),
   setSpreadId: (spreadId) => set({ spreadId, userPickIndices: [] }),
   setPersonaId: (personaId) => set({ personaId }),
+  setAllowReversals: (allowReversals: boolean) => set({ allowReversals }),
 
   togglePickIndex: (index: number) => {
     const { userPickIndices, spreadId } = get();

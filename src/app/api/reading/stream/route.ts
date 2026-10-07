@@ -99,7 +99,8 @@ export async function POST(req: NextRequest) {
 
             // Send done signal
             try {
-              const parsed = JSON.parse(fullAccumulated);
+              const cleaned = fullAccumulated.replace(/```json/gi, "").replace(/```/g, "").trim();
+              const parsed = JSON.parse(cleaned);
               sendEvent({ type: "complete", parsed });
             } catch {
               sendEvent({ type: "complete", rawText: fullAccumulated });

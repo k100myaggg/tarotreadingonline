@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useMemo, useRef } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { useFrame } from "@react-three/fiber";
+import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { DrawnCardData, Locale } from "@/types/tarot";
 import { getCardById, getCardDisplayName } from "@/lib/tarot/data";
@@ -15,6 +16,13 @@ interface SpreadCardModelProps {
   locale: Locale;
 }
 
+// Roman numeral lookup for Major Arcana
+const ROMAN_NUMERALS = [
+  "0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX",
+  "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX",
+  "XX", "XXI",
+];
+
 export function SpreadCardModel({
   cardData,
   positionCoordinates,
@@ -23,17 +31,27 @@ export function SpreadCardModel({
   locale,
 }: SpreadCardModelProps) {
   const meshRef = useRef<THREE.Group>(null);
+  const [hovered, setHovered] = useState(false);
   const cardInfo = useMemo(() => getCardById(cardData.cardId), [cardData.cardId]);
   const cardBackTexture = useMemo(() => getCardBackTexture(), []);
 
   const cardFrontTexture = useMemo(() => {
     if (!cardInfo) return cardBackTexture;
     const displayName = getCardDisplayName(cardInfo, locale);
+
+    // Determine numeral
+    let numeral: string | undefined;
+    if (cardInfo.arcana === "major" && cardInfo.number !== undefined) {
+      numeral = ROMAN_NUMERALS[cardInfo.number] || String(cardInfo.number);
+    }
+
     return getCardFrontTexture(
+      cardInfo.id,
       displayName,
       cardInfo.arcana,
       cardInfo.suit,
-      cardInfo.keywords.upright
+      cardInfo.keywords.upright,
+      numeral
     );
   }, [cardInfo, cardBackTexture, locale]);
 
@@ -41,69 +59,126 @@ export function SpreadCardModel({
   const materials = useMemo(() => {
     const goldEdgeMat = new THREE.MeshStandardMaterial({
       color: "#d4af37",
+      emissive: "#000000",
       metalness: 0.85,
       roughness: 0.25,
     });
 
     const frontMat = new THREE.MeshStandardMaterial({
       map: cardFrontTexture,
-      roughness: 0.35,
+      roughness: 0.3,
+      metalness: 0.05,
     });
 
     const backMat = new THREE.MeshStandardMaterial({
       map: cardBackTexture,
-      roughness: 0.35,
+      roughness: 0.3,
+      metalness: 0.1,
     });
 
     // Box order: right, left, top, bottom, front (+Z), back (-Z)
     return [goldEdgeMat, goldEdgeMat, goldEdgeMat, goldEdgeMat, frontMat, backMat];
   }, [cardFrontTexture, cardBackTexture]);
 
-  useFrame((_, delta) => {
-    if (!meshRef.current) return;
+  const outerGroupRef = useRef<THREE.Group>(null);
+  const cardGroupRef = useRef<THREE.Group>(null);
+  const flipProgress = useRef(isRevealed ? 1 : 0);
 
-    // Target Y-rotation: 0 for face-down (showing back), Math.PI for face-up (showing front)
-    // Front face is +Z in Three.js BoxGeometry; if default faces +Z, back face is -Z.
-    // If not revealed, rotation Y is Math.PI (back faces camera). If revealed, rotation Y is 0.
-    const targetRotY = isRevealed ? 0 : Math.PI;
+  useFrame((state, delta) => {
+    if (!cardGroupRef.current || !outerGroupRef.current) return;
 
-    // If card is reversed, rotate 180 deg around Z axis
-    const targetRotZ = isRevealed && cardData.isReversed ? Math.PI : 0;
+    // Smoothly progress flip state
+    const targetFlip = isRevealed ? 1 : 0;
+    flipProgress.current = THREE.MathUtils.damp(flipProgress.current, targetFlip, 4.5, delta);
 
-    meshRef.current.rotation.y = THREE.MathUtils.damp(meshRef.current.rotation.y, targetRotY, 5, delta);
-    meshRef.current.rotation.z = THREE.MathUtils.damp(meshRef.current.rotation.z, targetRotZ, 5, delta);
+    // Target Y-rotation: 0 for face-up (front faces camera), Math.PI for face-down
+    const targetRotY = THREE.MathUtils.lerp(Math.PI, 0, flipProgress.current);
 
-    // Slight hovering elevation when revealed
-    const targetY = positionCoordinates.y + (isRevealed ? 0.08 : 0);
-    meshRef.current.position.y = THREE.MathUtils.damp(meshRef.current.position.y, targetY, 4, delta);
+    // If card is reversed, rotate 180 deg around Z axis smoothly
+    const targetRotZ = cardData.isReversed ? THREE.MathUtils.lerp(0, Math.PI, flipProgress.current) : 0;
+
+    cardGroupRef.current.rotation.y = targetRotY;
+    cardGroupRef.current.rotation.z = targetRotZ;
+
+    // Parabolic arc lift during flipping: card lifts towards camera as it turns
+    const arcLift = Math.sin(flipProgress.current * Math.PI) * 0.45;
+    cardGroupRef.current.position.z = arcLift;
+
+    // Floating breathing elevation when revealed
+    const time = state.clock.getElapsedTime();
+    const floatOffset = isRevealed ? Math.sin(time * 1.4 + cardData.positionIndex) * 0.03 : 0;
+    const targetY = positionCoordinates.y + (isRevealed ? 0.05 : 0) + floatOffset + (hovered ? 0.12 : 0);
+    outerGroupRef.current.position.y = THREE.MathUtils.damp(outerGroupRef.current.position.y, targetY, 4, delta);
+
+    // Subtle scale spring on hover
+    const targetScale = hovered ? 1.05 : 1.0;
+    cardGroupRef.current.scale.setScalar(
+      THREE.MathUtils.damp(cardGroupRef.current.scale.x, targetScale, 6, delta)
+    );
+
+    // Edge glow illumination
+    const goldEdge = materials[0] as THREE.MeshStandardMaterial;
+    const glowIntensity = isRevealed ? 0.5 : hovered ? 0.3 : 0.05;
+    goldEdge.emissive.setRGB(0.7 * glowIntensity, 0.55 * glowIntensity, 0.15 * glowIntensity);
   });
 
   return (
     <group
-      ref={meshRef}
+      ref={outerGroupRef}
       position={[positionCoordinates.x, positionCoordinates.y, positionCoordinates.z]}
-      rotation={[0, Math.PI, 0]}
       onClick={(e) => {
         e.stopPropagation();
         onRevealClick();
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
+        setHovered(true);
         document.body.style.cursor = "pointer";
       }}
       onPointerOut={() => {
+        setHovered(false);
         document.body.style.cursor = "auto";
       }}
     >
-      <mesh castShadow receiveShadow>
-        <boxGeometry args={[1.15, 1.95, 0.02]} />
-        <primitive object={materials} attach="material" />
-      </mesh>
+      {/* Inner Rotatable Card Mesh Group */}
+      <group ref={cardGroupRef} rotation={[0, Math.PI, 0]}>
+        <mesh castShadow receiveShadow>
+          <boxGeometry args={[1.15, 1.95, 0.02]} />
+          {materials.map((mat, i) => (
+            <primitive key={i} object={mat} attach={`material-${i}`} />
+          ))}
+        </mesh>
 
-      {/* Gold halo aura upon reveal */}
-      {isRevealed && (
-        <pointLight position={[0, 0, 0.4]} intensity={0.6} color="#f9e295" distance={3} />
-      )}
+        {/* Luminous Gold Halo Aura when revealed */}
+        {isRevealed && (
+          <pointLight position={[0, 0, 0.35]} intensity={0.8} color="#ffd875" distance={3.5} />
+        )}
+      </group>
+
+      {/* Floating Sacred Position & Orientation Badge (ALWAYS stable below card, never flipped) */}
+      <Html position={[0, -1.22, 0]} center pointerEvents="none">
+        <div className="flex flex-col items-center pointer-events-none whitespace-nowrap select-none drop-shadow-lg">
+          <span className="font-mono-sacred text-[10px] px-2.5 py-0.5 rounded-full bg-black/90 backdrop-blur-md border border-amber-400/50 text-amber-300 uppercase tracking-wider shadow-lg">
+            {cardData.positionName || `Position ${cardData.positionIndex + 1}`}
+          </span>
+          {isRevealed && (
+            <span
+              className={`font-mono-sacred text-[9px] mt-1 px-2.5 py-0.5 rounded-full font-bold uppercase tracking-widest ${
+                cardData.isReversed
+                  ? "bg-purple-950/90 border border-purple-400/60 text-purple-200"
+                  : "bg-amber-950/90 border border-amber-400/60 text-amber-200"
+              }`}
+            >
+              {cardData.isReversed ? "Reversed ↺" : "Upright ↑"}
+            </span>
+          )}
+          {!isRevealed && (
+            <span className="text-[9px] font-mono-sacred text-amber-400 mt-1 animate-pulse flex items-center gap-1">
+              <span>✦</span> Click to flip
+            </span>
+          )}
+        </div>
+      </Html>
     </group>
   );
 }
