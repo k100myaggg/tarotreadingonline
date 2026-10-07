@@ -66,10 +66,10 @@ export async function POST(req: NextRequest) {
 
     const rawGeminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_KEY || "";
     const geminiApiKey = rawGeminiKey.replace(/['"\s]/g, "");
-    let geminiModel = (process.env.GEMINI_MODEL || "gemini-2.0-flash").trim();
-    if (geminiModel.includes("3.8") || !geminiModel.startsWith("gemini-")) {
-      geminiModel = "gemini-2.0-flash";
-    }
+    const preferredModel = (process.env.GEMINI_MODEL || "gemini-3.8-flash").trim();
+    const candidateStreamModels = Array.from(
+      new Set([preferredModel, "gemini-3.8-flash", "gemini-2.0-flash", "gemini-1.5-flash"])
+    );
 
     const anthropicApiKey = (process.env.ANTHROPIC_API_KEY || "").replace(/['"\s]/g, "");
     const anthropicModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
@@ -83,48 +83,46 @@ export async function POST(req: NextRequest) {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
         };
 
-        // 1. Google Gemini Streaming (Free tier via Google AI Studio)
+        // 1. Google Gemini Streaming (Supports Gemini 3.8 Flash with fast fallback)
         if (geminiApiKey) {
-          try {
-            const genAI = new GoogleGenerativeAI(geminiApiKey);
-            const model = genAI.getGenerativeModel({
-              model: geminiModel,
-              systemInstruction: systemPrompt,
-              generationConfig: {
-                temperature: 0.7,
-                maxOutputTokens: 3500,
-              },
-            });
+          const genAI = new GoogleGenerativeAI(geminiApiKey);
 
-            // 7-second race timeout so Gemini never hangs Vercel serverless function
-            const streamPromise = model.generateContentStream(userPrompt);
-            const timeoutPromise = new Promise<never>((_, reject) =>
-              setTimeout(() => reject(new Error("Gemini stream generation timeout")), 7000)
-            );
-
-            const resultStream = await Promise.race([streamPromise, timeoutPromise]);
-            let fullAccumulated = "";
-
-            for await (const chunk of resultStream.stream) {
-              const text = chunk.text();
-              if (text) {
-                fullAccumulated += text;
-                sendEvent({ type: "delta", text });
-              }
-            }
-
-            // Send done signal
+          for (const modelName of candidateStreamModels) {
             try {
-              const cleaned = fullAccumulated.replace(/```json/gi, "").replace(/```/g, "").trim();
-              const parsed = JSON.parse(cleaned);
-              sendEvent({ type: "complete", parsed });
-            } catch {
-              sendEvent({ type: "complete", rawText: fullAccumulated });
+              const model = genAI.getGenerativeModel({
+                model: modelName,
+                systemInstruction: systemPrompt,
+                generationConfig: {
+                  temperature: 0.7,
+                  maxOutputTokens: 3500,
+                },
+              });
+
+              // 7-second race timeout so Gemini never hangs Vercel serverless function
+              const streamPromise = model.generateContentStream(userPrompt);
+              const timeoutPromise = new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error(`Gemini ${modelName} stream timeout`)), 7000)
+              );
+
+              const resultStream = await Promise.race([streamPromise, timeoutPromise]);
+              let fullAccumulated = "";
+
+              for await (const chunk of resultStream.stream) {
+                const text = chunk.text();
+                if (text) {
+                  fullAccumulated += text;
+                  sendEvent({ type: "delta", text });
+                }
+              }
+
+              if (fullAccumulated) {
+                sendEvent({ type: "complete", rawText: fullAccumulated });
+                controller.close();
+                return;
+              }
+            } catch (geminiErr: any) {
+              console.error(`Gemini streaming error with ${modelName}:`, geminiErr?.message || geminiErr);
             }
-            controller.close();
-            return;
-          } catch (geminiErr: any) {
-            console.error("Gemini API Error, falling back to instant simulation:", geminiErr?.message || geminiErr);
           }
         }
 

@@ -129,9 +129,12 @@ GUIDELINES:
 - Maintain your exact persona voice and ethical guardrails (no deterministic health/legal/death predictions).
 - Respond in ${activeLocale === "hi" ? "Hindi (हिन्दी)" : activeLocale === "ja" ? "Japanese (日本語)" : "English"}.`;
 
-    // 1. Google Gemini Followup (Try Gemini 2.0 Flash then 1.5 Flash with timeout race)
+    // 1. Google Gemini Followup (Supports Gemini 3.8 Flash with fast fallback)
     if (geminiApiKey) {
-      const candidateModels = ["gemini-2.0-flash", "gemini-1.5-flash"];
+      const preferredModel = (process.env.GEMINI_MODEL || "gemini-3.8-flash").trim();
+      const candidateModels = Array.from(
+        new Set([preferredModel, "gemini-3.8-flash", "gemini-2.0-flash", "gemini-1.5-flash"])
+      );
       const genAI = new GoogleGenerativeAI(geminiApiKey);
 
       const historyContext = (conversationHistory as Array<{ role: string; content: string }>)
