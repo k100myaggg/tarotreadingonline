@@ -43,10 +43,14 @@ function CameraController({ step }: { step: string }) {
       // Wider centered view calibrated for the compact 3-row amphitheater
       targetZ = 7.2;
       targetY = 0.0;
-    } else {
-      // revealing / streaming / complete
+    } else if (step === "revealing" || step === "streaming") {
+      // Direct focused altar view: cards perfectly centered and unobstructed
       targetZ = 5.6;
       targetY = 0.0;
+    } else {
+      // step === "complete": camera pulls back and down so cards sit majestically at top of viewport
+      targetZ = 6.4;
+      targetY = -0.75;
     }
 
     camera.position.z = THREE.MathUtils.damp(camera.position.z, targetZ, 2.5, delta);

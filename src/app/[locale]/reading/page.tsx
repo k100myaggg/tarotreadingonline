@@ -9,11 +9,13 @@ import {
   allPersonas,
   getSpreadById,
   getPersonaById,
+  getCardById,
+  getCardDisplayName,
   getSpreadDisplayName,
   getPersonaDisplayName,
 } from "@/lib/tarot/data";
 import { getDictionary } from "@/lib/i18n/dictionaries";
-import { Locale } from "@/types/tarot";
+import { Locale, StructuredReadingResponse } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import { FollowupChat } from "@/components/ui/FollowupChat";
@@ -43,6 +45,52 @@ const INSPIRATION_CHIPS = [
   "What spiritual forces are guiding my creative work?",
   "Which path serves my highest expansion right now?",
 ];
+
+function generateClientReading(
+  spread: any,
+  drawnCards: any[],
+  persona: any,
+  question: string,
+  locale: Locale
+): StructuredReadingResponse {
+  const personaName = persona?.name?.[locale] || persona?.name?.en || "The Oracle";
+  const cards = drawnCards.map((dc, i) => {
+    const card = getCardById(dc.cardId);
+    const cName = card ? getCardDisplayName(card, locale) : dc.cardId;
+    const posName = spread?.positions?.[i]?.name?.[locale] || `Position ${i + 1}`;
+    const isRev = dc.isReversed;
+    const meaning = isRev ? card?.meanings.reversed : card?.meanings.upright;
+    return {
+      cardId: dc.cardId,
+      cardName: cName,
+      orientation: (isRev ? "reversed" : "upright") as "upright" | "reversed",
+      positionIndex: i,
+      positionName: posName,
+      coreEssence: `${cName} in ${posName} reflects ${
+        isRev ? "an introspective internal recalibration of" : "a clear outward manifestation of"
+      } ${card?.keywords.upright[0] || "energy"}.`,
+      contextualMeaning: meaning || "Reflect on this card's guidance for your path.",
+      advice: `Contemplate how ${cName} guides your highest discernment on this path.`,
+    };
+  });
+
+  return {
+    readerPersona: personaName,
+    intro: `Welcome, seeker. The sacred arcana have aligned their tapestry for your inquiry: "${
+      question || "spiritual discernment and growth"
+    }".`,
+    cards,
+    spreadSynthesis: `The sacred interplay of these cards reveals that clarity begins from within. Honor the lessons of the foundation as you bridge into the possibilities ahead.`,
+    actionableStep: `Take one concrete action within 24 hours to honor the guidance revealed by the ${
+      cards[0]?.cardName || "cards"
+    }.`,
+    followUpSuggestions: [
+      `How can I integrate the wisdom of this spread into my daily life?`,
+      `What blind spot should I remain mindful of?`,
+      `What ritual or contemplation will support me today?`,
+    ],
+  };
+}
 
 export default function ReadingPage({ params }: ReadingPageProps) {
   const resolvedParams = use(params);
@@ -218,6 +266,18 @@ export default function ReadingPage({ params }: ReadingPageProps) {
         console.error("Stream reader error:", err);
       } finally {
         setStreaming(false);
+        // Guaranteed fallback: If reading response not yet set, synthesize immediately from canonical card registry
+        if (!useReadingStore.getState().readingResponse) {
+          const fallback = generateClientReading(
+            currentSpread,
+            drawnCards,
+            currentPersona,
+            question,
+            locale
+          );
+          setReadingResponse(fallback);
+          setStep("complete");
+        }
       }
     }
 
@@ -280,8 +340,8 @@ export default function ReadingPage({ params }: ReadingPageProps) {
     }
   };
 
-  // Is current view a full-screen fixed ritual stage (question, shuffling, picking, revealing)?
-  const isRitualStage = step !== "streaming" && step !== "complete";
+  // Is current view a full-screen fixed ritual stage (question, shuffling, cutting, picking, revealing, weaving)?
+  const isRitualStage = step !== "complete" && !readingResponse;
 
   return (
     <div
@@ -718,9 +778,47 @@ export default function ReadingPage({ params }: ReadingPageProps) {
         </>
       )}
 
-      {/* ─── STEP 5 & 6: STREAMED READING ILLUMINATION (Scrollable Reading Sanctuary) ─── */}
-      {(step === "streaming" || step === "complete") && (
-        <div className="relative z-20 w-full max-w-4xl mx-auto pt-24 pb-20 px-4 pointer-events-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
+      {/* ─── STEP 5: WEAVING HUD WHILE SYNTHESIZING (Zero Card Collision!) ─── */}
+      {step === "streaming" && !readingResponse && (
+        <>
+          {/* Top Pinned Glass Oracle Synthesis Badge (Far above the cards) */}
+          <div className="fixed top-16 left-0 right-0 z-30 pointer-events-none text-center px-4 animate-in fade-in duration-500">
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/85 backdrop-blur-xl border border-amber-400/40 shadow-2xl shadow-amber-500/10">
+              <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
+              <span className="font-serif-sacred font-bold text-xs sm:text-sm text-amber-100">
+                {locale === "hi"
+                  ? "ओरेकल आपके कार्ड्स का विश्लेषण कर रहा है..."
+                  : "The Oracle is Weaving Your Reading..."}
+              </span>
+              <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+            </div>
+            <p className="font-mono-sacred text-[11px] text-amber-300/80 mt-2 drop-shadow">
+              {locale === "hi"
+                ? "प्राचीन प्रतीकों और आपकी ऊर्जा का संश्लेषण जारी है"
+                : "COMMUNING WITH ARCHETYPAL FORCES · SYNTHESIZING WISDOM"}
+            </p>
+          </div>
+
+          {/* Bottom Pinned Golden Shimmer Progress Bar (Far below the cards) */}
+          <div className="fixed bottom-7 left-0 right-0 z-30 flex flex-col items-center pointer-events-none px-4 animate-in fade-in duration-500">
+            <div className="w-56 sm:w-64 h-1.5 bg-black/70 rounded-full overflow-hidden border border-amber-500/30 shadow-xl">
+              <div
+                className="h-full bg-gradient-to-r from-amber-500 via-amber-200 to-amber-500 animate-[shimmer_1.5s_infinite]"
+                style={{ width: "100%" }}
+              />
+            </div>
+            <span className="text-[10px] font-mono-sacred text-amber-400/80 mt-2 uppercase tracking-widest flex items-center gap-1.5">
+              <span>✦</span>
+              <span>TRANSCRIBING SACRED CURRENTS...</span>
+              <span>✦</span>
+            </span>
+          </div>
+        </>
+      )}
+
+      {/* ─── STEP 6: COMPLETE READING SANCTUARY (Scrolls cleanly below 3D Altar) ─── */}
+      {(step === "complete" || (step === "streaming" && readingResponse)) && (
+        <div className="relative z-20 w-full max-w-4xl mx-auto pt-[40vh] sm:pt-[44vh] pb-24 px-4 pointer-events-auto animate-in fade-in slide-in-from-bottom-8 duration-700">
           <ReadingStreamViewer
             reading={readingResponse}
             rawStreamText={streamedText}
@@ -736,11 +834,9 @@ export default function ReadingPage({ params }: ReadingPageProps) {
             }}
           />
 
-          {step === "complete" && (
-            <div className="mt-8">
-              <FollowupChat locale={locale} />
-            </div>
-          )}
+          <div className="mt-8">
+            <FollowupChat locale={locale} />
+          </div>
         </div>
       )}
     </div>

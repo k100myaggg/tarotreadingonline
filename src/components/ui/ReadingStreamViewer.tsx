@@ -251,31 +251,7 @@ export function ReadingStreamViewer({
         </div>
       )}
 
-      {/* Shimmering Sacred Weaving State while reading is being synthesized */}
-      {!reading && (
-        <div className="mystic-panel rounded-2xl p-8 border border-amber-500/30 text-center space-y-4 shadow-2xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-amber-500/5 via-purple-500/10 to-amber-500/5 animate-pulse pointer-events-none" />
-          
-          <div className="relative inline-flex items-center justify-center w-16 h-16 rounded-full bg-amber-500/10 border border-amber-400/40 text-2xl shadow-lg shadow-amber-500/20">
-            <span className="animate-spin text-amber-300">✦</span>
-          </div>
 
-          <div className="space-y-1.5 relative">
-            <h4 className="font-serif-sacred text-xl font-bold text-amber-100">
-              {locale === "hi" ? "ओरेकल आपके कार्ड्स का विश्लेषण कर रहा है..." : "The Oracle is Weaving Your Reading..."}
-            </h4>
-            <p className="font-mono-sacred text-xs text-amber-300/80 tracking-wider">
-              {locale === "hi" 
-                ? "प्राचीन प्रतीकों और आपकी ऊर्जा का संश्लेषण जारी है" 
-                : "COMMUNING WITH ARCHETYPAL FORCES · SYNTHESIZING WISDOM"}
-            </p>
-          </div>
-
-          <div className="w-48 h-1 mx-auto bg-neutral-900 rounded-full overflow-hidden border border-amber-500/20">
-            <div className="h-full bg-gradient-to-r from-amber-500 via-amber-300 to-amber-500 animate-[shimmer_1.5s_infinite]" style={{ width: "100%" }} />
-          </div>
-        </div>
-      )}
 
       {/* Poster Generation Modal */}
       {reading && (
