@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { checkCrisisIntent } from "@/lib/ai/safetyGuardrails";
 import { getPersonaById } from "@/lib/tarot/data";
 import { Locale } from "@/types/tarot";
@@ -49,16 +50,15 @@ export async function POST(req: NextRequest) {
     const activeLocale = (locale as Locale) || "en";
     const personaName = persona.name[activeLocale] || persona.name.en;
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    const model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+
+    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    const anthropicModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
 
     let reply = "";
 
-    if (apiKey) {
-      try {
-        const anthropic = new Anthropic({ apiKey });
-
-        const systemPrompt = `You are ${personaName}, continuing a contemplative tarot reading dialogue.
+    const systemPrompt = `You are ${personaName}, continuing a contemplative tarot reading dialogue.
 ${persona.systemPromptModifier}
 
 READING CONTEXT:
@@ -72,6 +72,42 @@ GUIDELINES:
 - Maintain your exact persona voice and ethical guardrails (no deterministic health/legal/death predictions).
 - Respond in ${activeLocale === "hi" ? "Hindi (हिन्दी)" : activeLocale === "ja" ? "Japanese (日本語)" : "English"}.`;
 
+    // 1. Google Gemini Followup (Free tier)
+    if (geminiApiKey) {
+      try {
+        const genAI = new GoogleGenerativeAI(geminiApiKey);
+        const model = genAI.getGenerativeModel({
+          model: geminiModel,
+          systemInstruction: systemPrompt,
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 1200,
+          },
+        });
+
+        const historyContext = (conversationHistory as Array<{ role: string; content: string }>)
+          .map((msg) => `${msg.role === "assistant" ? personaName : "Seeker"}: ${msg.content}`)
+          .join("\n\n");
+
+        const promptWithContext = historyContext
+          ? `${historyContext}\n\nSeeker's Follow-up Question: ${userQuestion}`
+          : `Seeker's Question: ${userQuestion}`;
+
+        const result = await model.generateContent(promptWithContext);
+        const text = result.response.text();
+        if (text) {
+          reply = text;
+        }
+      } catch (geminiErr: any) {
+        console.error("Gemini followup error:", geminiErr?.message || geminiErr);
+      }
+    }
+
+    // 2. Anthropic Claude Followup
+    if (!reply && anthropicApiKey) {
+      try {
+        const anthropic = new Anthropic({ apiKey: anthropicApiKey });
+
         const messages: Anthropic.MessageParam[] = [];
         for (const msg of conversationHistory) {
           messages.push({
@@ -82,7 +118,7 @@ GUIDELINES:
         messages.push({ role: "user", content: userQuestion });
 
         const response = await anthropic.messages.create({
-          model,
+          model: anthropicModel,
           max_tokens: 1000,
           temperature: 0.7,
           system: systemPrompt,

@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { checkCrisisIntent } from "@/lib/ai/safetyGuardrails";
 import { buildTarotReadingPrompt } from "@/lib/ai/promptBuilder";
 import { getSpreadById, getPersonaById, getCardById, getCardDisplayName } from "@/lib/tarot/data";
@@ -61,8 +62,11 @@ export async function POST(req: NextRequest) {
       locale: activeLocale,
     });
 
-    const apiKey = process.env.ANTHROPIC_API_KEY;
-    const model = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
+    const geminiApiKey = process.env.GEMINI_API_KEY;
+    const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+
+    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    const anthropicModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
 
     // Set up Server-Sent Events (SSE) Stream
     const encoder = new TextEncoder();
@@ -73,11 +77,51 @@ export async function POST(req: NextRequest) {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
         };
 
-        if (apiKey) {
+        // 1. Google Gemini Streaming (Free tier via Google AI Studio)
+        if (geminiApiKey) {
           try {
-            const anthropic = new Anthropic({ apiKey });
+            const genAI = new GoogleGenerativeAI(geminiApiKey);
+            const model = genAI.getGenerativeModel({
+              model: geminiModel,
+              systemInstruction: systemPrompt,
+              generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: 3500,
+              },
+            });
+
+            const resultStream = await model.generateContentStream(userPrompt);
+            let fullAccumulated = "";
+
+            for await (const chunk of resultStream.stream) {
+              const text = chunk.text();
+              if (text) {
+                fullAccumulated += text;
+                sendEvent({ type: "delta", text });
+              }
+            }
+
+            // Send done signal
+            try {
+              const cleaned = fullAccumulated.replace(/```json/gi, "").replace(/```/g, "").trim();
+              const parsed = JSON.parse(cleaned);
+              sendEvent({ type: "complete", parsed });
+            } catch {
+              sendEvent({ type: "complete", rawText: fullAccumulated });
+            }
+            controller.close();
+            return;
+          } catch (geminiErr: any) {
+            console.error("Gemini API Error, falling back:", geminiErr?.message || geminiErr);
+          }
+        }
+
+        // 2. Anthropic Claude Streaming
+        if (anthropicApiKey) {
+          try {
+            const anthropic = new Anthropic({ apiKey: anthropicApiKey });
             const responseStream = await anthropic.messages.stream({
-              model,
+              model: anthropicModel,
               max_tokens: 3000,
               temperature: 0.7,
               system: systemPrompt,
