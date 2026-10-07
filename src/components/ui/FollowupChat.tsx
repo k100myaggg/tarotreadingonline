@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { useReadingStore, FollowupMessage } from "@/stores/useReadingStore";
-import { getPersonaById } from "@/lib/tarot/data";
+import { getPersonaById, getCardById, getCardDisplayName } from "@/lib/tarot/data";
 import { getCardImagePath } from "@/lib/tarot/cardImages";
 import { Locale } from "@/types/tarot";
 import { Send, Sparkles, MessageCircle, AlertCircle, PlusCircle, CheckCircle2 } from "lucide-react";
@@ -58,7 +58,15 @@ export function FollowupChat({ locale }: FollowupChatProps) {
     addFollowupMessage(userMsg);
 
     const abortCtrl = new AbortController();
-    const timeoutId = setTimeout(() => abortCtrl.abort(), 9000);
+    const timeoutId = setTimeout(() => abortCtrl.abort(), 30000);
+
+    const formattedCardsSummary = drawnCards
+      .map((c) => {
+        const cardInfo = getCardById(c.cardId);
+        const cardName = cardInfo ? getCardDisplayName(cardInfo, locale) : c.cardId;
+        return `${c.positionName}: ${cardName} (${c.isReversed ? "Reversed" : "Upright"})`;
+      })
+      .join(", ");
 
     try {
       setIsLoading(true);
@@ -70,7 +78,7 @@ export function FollowupChat({ locale }: FollowupChatProps) {
           readingId,
           personaId,
           originalQuestion: question,
-          drawnCardsSummary: drawnCards.map((c) => `${c.positionName}: ${c.cardId} (${c.isReversed ? "rev" : "up"})`).join(", "),
+          drawnCardsSummary: formattedCardsSummary,
           synthesisSummary: readingResponse?.spreadSynthesis || "",
           conversationHistory: followups,
           userQuestion: userText,

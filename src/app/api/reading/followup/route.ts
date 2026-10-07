@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { checkCrisisIntent } from "@/lib/ai/safetyGuardrails";
-import { getPersonaById } from "@/lib/tarot/data";
+import { getPersonaById, allCards, getCardDisplayName } from "@/lib/tarot/data";
 import { Locale } from "@/types/tarot";
 
 export const maxDuration = 30;
@@ -24,43 +24,56 @@ function generateDynamicFollowupFallback({
   locale: Locale;
 }): string {
   const qLower = userQuestion.toLowerCase().trim();
-  const cardsText = drawnCardsSummary || "the cards on your altar";
+  const cardsText = drawnCardsSummary || "the sacred cards upon your altar";
 
-  if (locale === "hi") {
-    if (qLower.includes("shadow") || qLower.includes("छवि") || qLower.includes("डर") || qLower.includes("unconscious") || qLower.includes("अंधेरा")) {
-      return `आपके प्रश्न — "${userQuestion}" — पर ध्यान केंद्रित करते हुए, आपके स्प्रेड की ऊर्जा (${cardsText}) यह दर्शाती है कि आपकी सबसे बड़ी अनदेखी छाया वह संकोच या पूर्णतावाद है जो आपको सहज बहने से रोक रहा है। जब आप परिणामों को नियंत्रित करने की जिद छोड़ते हैं, तो अंतर्मन की वास्तविक शक्ति उजागर होती है।`;
+  // 1. Check if user is asking about a specific card (e.g., "what is means of this Knight of Swords", "ten of swords", etc.)
+  const matchedCard = allCards.find((card) => {
+    const enName = card.name.en.toLowerCase();
+    const idSlug = card.id.replace(/_/g, " ").toLowerCase();
+    const localizedName = getCardDisplayName(card, locale).toLowerCase();
+    return (
+      qLower.includes(enName) ||
+      qLower.includes(idSlug) ||
+      qLower.includes(localizedName) ||
+      (card.name.en.includes("Knight of Swords") && qLower.includes("knight of swords")) ||
+      (card.name.en.includes("Ten of Swords") && qLower.includes("ten of swords")) ||
+      (card.name.en.includes("Three of Pentacles") && qLower.includes("three of pentacles"))
+    );
+  });
+
+  if (matchedCard) {
+    const cardTitle = getCardDisplayName(matchedCard, locale);
+    const isRevContext = qLower.includes("reversed") || cardsText.toLowerCase().includes(`${matchedCard.name.en.toLowerCase()} (reversed)`);
+    const meaning = isRevContext ? matchedCard.meanings.reversed : matchedCard.meanings.upright;
+    const keywords = (isRevContext ? matchedCard.keywords.reversed : matchedCard.keywords.upright).join(", ");
+
+    if (locale === "hi") {
+      return `**${cardTitle} (${isRevContext ? "उल्टा / Reversed" : "सीधा / Upright"}) का रहस्य व संदेश:**\n\n${meaning}\n\n**प्रमुख ऊर्जाएं (Key Themes):** ${keywords}.\n\nजब यह कार्ड आपके प्रश्न — "${originalQuestion || "इस स्थिति"}" — के संदर्भ में प्रकट होता है, तो यह दर्शाता है कि आपकी मानसिक तीव्रता और विचार बहुत शक्तिशाली हैं। कार्ड का मार्गदर्शन है कि जल्दबाजी या क्रोध में प्रतिक्रिया देने के बजाय, अपने विचारों को शांत व संतुलित दिशा दें।`;
     }
-    if (qLower.includes("love") || qLower.includes("प्रेम") || qLower.includes("रिश्ता") || qLower.includes("partner")) {
-      return `सम्बंधों के विषय में आपके प्रश्न — "${userQuestion}" — का उत्तर देते हुए, इन कार्ड्स की ऊर्जा आपको आत्म-सम्मान और भावनात्मक संतुलन बनाए रखने का सुझाव देती है। जो प्रेम और स्वीकृति आप स्वयं को देंगे, वही आपके सम्बंधों में भी प्रतिबिंबित होगी।`;
-    }
-    if (qLower.includes("career") || qLower.includes("job") || qLower.includes("पैसा") || qLower.includes("काम") || qLower.includes("future")) {
-      return `आपके कर्म और भविष्य के संबंध में, इन कार्ड्स (${cardsText}) का गहरा संदेश है कि जल्दबाजी में लिए गए निर्णयों से बचें। इस समय आधार मजबूत करने पर ध्यान दें; सही दिशा में उठाया गया एक छोटा, दृढ़ कदम लंबे समय तक स्थायित्व देगा।`;
-    }
-    return `आपके प्रश्न — "${userQuestion}" — पर विचार करते हुए, ${cardsText} की ऊर्जा आपको याद दिलाती है कि उत्तर बाहरी परिस्थितियों में नहीं, बल्कि आपकी आंतरिक समझ में छिपा है। कार्ड्स की सलाह है कि जो अंतर्दृष्टि आपको पहले मिली है, उस पर विश्वास रखें और शांत मन से आगे बढ़ें।`;
+
+    return `### **The Archetypal Wisdom of ${cardTitle} (${isRevContext ? "Reversed" : "Upright"})**\n\n${meaning}\n\n**Core Essences & Keywords:** *${keywords}*.\n\n**In the context of your inquiry ("${originalQuestion || "your path"}"):**\nWhen this archetype speaks in your spread, it calls your attention to how your thoughts, ambitions, and inner drive are currently operating. Rather than acting impulsively or getting swept into mental turbulence, the card invites you to slow down, breathe deeply, and direct your sharp intellect with deliberate wisdom and compassionate clarity.`;
   }
 
-  // English dynamic contextual responses
-  if (qLower.length <= 4 && (qLower.includes("hi") || qLower.includes("ho") || qLower.includes("hey") || qLower.includes("ok"))) {
-    return `Greetings, seeker. I am centered here with your spread (${cardsText}) regarding "${originalQuestion || "your inquiry"}". Ask me any deeper inquiry about your cards, an upcoming decision, or the energetic currents around your question.`;
+  // 2. Integration / Daily Life Guidance
+  if (qLower.includes("integrate") || qLower.includes("daily life") || qLower.includes("apply") || qLower.includes("routine")) {
+    if (locale === "hi") {
+      return `इस स्प्रेड (${cardsText}) की ऊर्जा को अपनी दैनिक दिनचर्या में शामिल करने के लिए:\n\n1. **प्रातःकालीन आत्म-अवलोकन:** हर सुबह 5 मिनट मौन में बैठकर अपने मन के विचारों को बिना किसी निर्णय के देखें।\n2. **सचेत प्रतिक्रिया:** जब भी दिनभर में कोई तनावपूर्ण स्थिति आए, तुरंत बोलने या फैसला लेने के बजाय 3 गहरी सांसें लें।\n3. **आंतरिक विश्वास:** जो मार्गदर्शन इन कार्ड्स ने आपके प्रश्न ("${originalQuestion}") के लिए दिया है, उस पर दृढ़ रहें। स्पष्टता बाहरी दौड़भाग से नहीं, आंतरिक शांति से फलित होगी।`;
+    }
+    return `To weave the wisdom of this spread (${cardsText}) into your daily rhythm:\n\n1. **Morning Breathwork & Center:** Begin each day with five minutes of quiet grounding. Ground your mind before engaging with external demands.\n2. **Pause Before Reacting:** When faced with friction or haste throughout your day, take three conscious breaths. Remember that true sovereignty chooses thoughtful response over impulsive reaction.\n3. **Honor the Threshold:** Trust the transition indicated in your reading regarding "${originalQuestion}". Take one gentle, disciplined step today that honors your peace over panic.`;
   }
 
+  // 3. Shadow / Blind Spot / Unconscious
   if (qLower.includes("shadow") || qLower.includes("unconscious") || qLower.includes("blind spot") || qLower.includes("overlooking")) {
-    return `When examining the unconscious shadow around "${originalQuestion || "your situation"}", the cards (${cardsText}) reveal a subtle tension between what you want to control and what is asking to be surrendered.\n\nThe shadow at play is often the belief that admitting vulnerability equals weakness. In truth, acknowledging your hesitation or unspoken doubts is precisely what unlocks transformation. Allow yourself to observe what you have been avoiding—it holds the key to your breakthrough.`;
+    return `When examining the unconscious shadow currents around "${originalQuestion || "your situation"}", the cards (${cardsText}) reveal a subtle tension between what you want to control and what is asking to be surrendered.\n\nThe shadow at play is often the belief that admitting vulnerability or uncertainty equals weakness. In truth, acknowledging your hesitation or unspoken doubts is precisely what unlocks transformation. Allow yourself to observe what you have been avoiding—it holds the key to your breakthrough.`;
   }
 
-  if (qLower.includes("next step") || qLower.includes("action") || qLower.includes("what should i do") || qLower.includes("how to")) {
-    return `Regarding your practical next step on "${userQuestion}":\n\nThe energetic signature of ${cardsText} counsels deliberate alignment over impulsive motion. Rather than rushing outward to fix or force an outcome, anchor your next step in radical honesty with yourself. Take one tangible, grounded action in the coming 24 hours that honors your intuition, then allow the universe space to respond.`;
+  // 4. Greetings
+  if (qLower.length <= 5 && (qLower.includes("hi") || qLower.includes("ho") || qLower.includes("hey") || qLower.includes("hello") || qLower.includes("ok"))) {
+    return `Greetings, seeker. I am centered here with your spread (${cardsText}) regarding "${originalQuestion || "your inquiry"}". Feel free to ask me about the meaning of any individual card, your next steps, or the overarching spiritual lesson of this moment.`;
   }
 
-  if (qLower.includes("love") || qLower.includes("relationship") || qLower.includes("heart") || qLower.includes("feelings")) {
-    return `Looking into the relational dimension of your inquiry ("${userQuestion}"):\n\nThrough ${cardsText}, the mirror of tarot reflects that external harmony begins with internal sovereignty. Where you seek validation or certainty from another, the cards ask you to first offer that grace to yourself. True intimacy flourishes when you show up as your authentic self without masks.`;
-  }
-
-  if (qLower.includes("career") || qLower.includes("money") || qLower.includes("work") || qLower.includes("finances") || qLower.includes("success")) {
-    return `In examining your material and vocational path through "${userQuestion}":\n\nThe presence of ${cardsText} indicates that you are in a cycle of foundational restructuring. Do not mistake a period of quiet preparation for stagnation. Trust that your current efforts are laying bedrock for sustained fulfillment rather than temporary gains.`;
-  }
-
-  return `In contemplating your inquiry — "${userQuestion}" — under the light of ${cardsText}:\n\nThe cards reveal that the tension you feel is not a roadblock, but a threshold. Pay close attention to what your intuition whispers when all outer noise quiets down. The guidance woven into your spread reminds you that you already possess the inner discernment required to navigate this chapter with grace.`;
+  // 5. Default Contextual Reflection
+  return `In reflecting upon your question — "${userQuestion}" — under the light of ${cardsText}:\n\nThe cards reveal that the tension you feel is not a roadblock, but a sacred threshold. When outer noise quiets down, listen to what your intuition whispers. The guidance woven into your spread regarding "${originalQuestion}" reminds you that you already possess the inner discernment required to navigate this chapter with courage and grace.`;
 }
 
 export async function POST(req: NextRequest) {
@@ -115,7 +128,7 @@ export async function POST(req: NextRequest) {
 
     let reply = "";
 
-    const systemPrompt = `You are ${personaName}, continuing a contemplative tarot reading dialogue.
+    const systemPrompt = `You are ${personaName}, a wise and compassionate tarot reader continuing a contemplative dialogue.
 ${persona.systemPromptModifier}
 
 READING CONTEXT:
@@ -124,12 +137,12 @@ Spread Cards: ${drawnCardsSummary}
 Spread Synthesis: ${synthesisSummary}
 
 GUIDELINES:
-- Address the seeker's follow-up question while remaining anchored in the symbols and energy of the original drawn cards.
-- Keep the response focused, evocative, and between 2-4 paragraphs.
-- Maintain your exact persona voice and ethical guardrails (no deterministic health/legal/death predictions).
+- Directly answer the seeker's follow-up question ("${userQuestion}") with deep, nuanced tarot wisdom.
+- If they ask about a specific card (such as Knight of Swords, Ten of Swords, etc.), thoroughly explain that card's symbolism, upright/reversed significance, and how it applies to their situation.
+- Keep the response evocative, clear, and between 2 to 3 paragraphs.
 - Respond in ${activeLocale === "hi" ? "Hindi (हिन्दी)" : activeLocale === "ja" ? "Japanese (日本語)" : "English"}.`;
 
-    // 1. Google Gemini Followup (Supports Gemini 3.8 Flash with fast fallback)
+    // 1. Google Gemini Followup (Try Gemini 3.8 Flash then 2.0 Flash with generous 20s timeout)
     if (geminiApiKey) {
       const preferredModel = (process.env.GEMINI_MODEL || "gemini-3.8-flash").trim();
       const candidateModels = Array.from(
@@ -147,17 +160,18 @@ GUIDELINES:
 
       for (const modelName of candidateModels) {
         try {
+          // Attempt 1: Call with systemInstruction
           const model = genAI.getGenerativeModel({
             model: modelName,
             systemInstruction: systemPrompt,
             generationConfig: {
               temperature: 0.7,
-              maxOutputTokens: 1000,
+              maxOutputTokens: 650,
             },
           });
 
           const timeoutPromise = new Promise<never>((_, reject) =>
-            setTimeout(() => reject(new Error(`Gemini ${modelName} timeout`)), 7000)
+            setTimeout(() => reject(new Error(`Gemini ${modelName} timeout`)), 18000)
           );
 
           const result = (await Promise.race([
@@ -170,8 +184,34 @@ GUIDELINES:
             reply = text.trim();
             break;
           }
-        } catch (geminiErr: any) {
-          console.error(`Gemini followup error with ${modelName}:`, geminiErr?.message || geminiErr);
+        } catch (firstErr: any) {
+          // Attempt 2: If systemInstruction is unsupported, call with systemPrompt embedded in main prompt
+          try {
+            const fallbackModel = genAI.getGenerativeModel({
+              model: modelName,
+              generationConfig: {
+                temperature: 0.7,
+                maxOutputTokens: 650,
+              },
+            });
+
+            const timeoutPromise = new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error(`Gemini ${modelName} fallback timeout`)), 18000)
+            );
+
+            const result = (await Promise.race([
+              fallbackModel.generateContent(`${systemPrompt}\n\n${promptWithContext}`),
+              timeoutPromise,
+            ])) as any;
+
+            const text = result?.response?.text();
+            if (text && text.trim()) {
+              reply = text.trim();
+              break;
+            }
+          } catch (secondErr: any) {
+            console.error(`Gemini followup error with ${modelName}:`, secondErr?.message || secondErr);
+          }
         }
       }
     }
@@ -192,7 +232,7 @@ GUIDELINES:
 
         const response = await anthropic.messages.create({
           model: anthropicModel,
-          max_tokens: 1000,
+          max_tokens: 650,
           temperature: 0.7,
           system: systemPrompt,
           messages,
@@ -207,7 +247,7 @@ GUIDELINES:
       }
     }
 
-    // 3. Dynamic Contextual Fallback (If API key is missing in Vercel or exhausted)
+    // 3. Dynamic Contextual Fallback (If API key is missing or offline)
     if (!reply) {
       reply = generateDynamicFollowupFallback({
         userQuestion,
