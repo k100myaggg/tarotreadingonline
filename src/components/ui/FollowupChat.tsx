@@ -96,18 +96,12 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       };
       addFollowupMessage(assistantMsg);
     } catch (err: any) {
-      // Guaranteed fast fallback so user always receives an immediate contemplative answer
-      const fallbackReply = locale === "hi"
-        ? `आपके प्रश्न पर विचार करते हुए, कार्ड संकेत करते हैं कि तात्कालिक उत्तर ढूंढने के बजाय अपने अंतर्मन की शांति को महसूस करें। इस स्प्रेड में प्रकट ऊर्जा आपको सही दिशा में मार्गदर्शन दे रही है।`
-        : `In reflecting upon your question in the presence of these cards, notice how the current energy asks you to step back rather than force an immediate conclusion. True clarity is an internal harvest. Trust what has already been revealed in your spread and let this insight settle within you.`;
-
-      const assistantMsg: FollowupMessage = {
-        id: `ast_${Date.now()}`,
-        role: "assistant",
-        content: fallbackReply,
-        createdAt: new Date().toISOString(),
-      };
-      addFollowupMessage(assistantMsg);
+      console.error("Follow-up error:", err);
+      setErrorMessage(
+        locale === "hi"
+          ? "ओरेकल से संपर्क करने में समस्या हुई। कृपया पुनः प्रयास करें।"
+          : "Unable to connect with the reader. Please try asking again."
+      );
     } finally {
       clearTimeout(timeoutId);
       setIsLoading(false);

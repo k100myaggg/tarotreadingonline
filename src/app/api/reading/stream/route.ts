@@ -64,10 +64,14 @@ export async function POST(req: NextRequest) {
       locale: activeLocale,
     });
 
-    const geminiApiKey = process.env.GEMINI_API_KEY;
-    const geminiModel = process.env.GEMINI_MODEL || "gemini-2.0-flash";
+    const rawGeminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_KEY || "";
+    const geminiApiKey = rawGeminiKey.replace(/['"\s]/g, "");
+    let geminiModel = (process.env.GEMINI_MODEL || "gemini-2.0-flash").trim();
+    if (geminiModel.includes("3.8") || !geminiModel.startsWith("gemini-")) {
+      geminiModel = "gemini-2.0-flash";
+    }
 
-    const anthropicApiKey = process.env.ANTHROPIC_API_KEY;
+    const anthropicApiKey = (process.env.ANTHROPIC_API_KEY || "").replace(/['"\s]/g, "");
     const anthropicModel = process.env.ANTHROPIC_MODEL || "claude-3-5-sonnet-20241022";
 
     // Set up Server-Sent Events (SSE) Stream
