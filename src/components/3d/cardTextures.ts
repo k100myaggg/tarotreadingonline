@@ -1,20 +1,40 @@
 import * as THREE from "three";
-import { CARD_IMAGE_MAP, getCardImagePath } from "@/lib/tarot/cardImages";
+import { CARD_IMAGE_MAP, getCardImagePath, CARD_BACK_IMAGE_PATH } from "@/lib/tarot/cardImages";
 
 // ─── Texture cache to prevent memory leaks and re-generation ───
 const textureCache = new Map<string, THREE.Texture>();
 const loader = new THREE.TextureLoader();
 
 /**
- * Returns the real card back texture loaded from the generated image.
+ * Returns the authentic card back texture loaded from the card_back.jpg artwork image.
+ * Retains procedural canvas as fallback if offline or image loading fails.
  */
 export function getCardBackTexture(): THREE.Texture {
-  const cacheKey = "card_back_radiant_gold";
+  const cacheKey = "card_back_real_artwork";
   if (textureCache.has(cacheKey)) {
     return textureCache.get(cacheKey)!;
   }
 
-  const texture = createProceduralCardBack();
+  if (typeof document === "undefined") {
+    return createProceduralCardBack();
+  }
+
+  const texture = loader.load(
+    CARD_BACK_IMAGE_PATH,
+    (tex) => {
+      tex.anisotropy = 8;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      tex.needsUpdate = true;
+    },
+    undefined,
+    () => {
+      // Fallback if image fails to load
+      const fallback = createProceduralCardBack();
+      textureCache.set(cacheKey, fallback);
+    }
+  );
+  texture.anisotropy = 8;
+  texture.colorSpace = THREE.SRGBColorSpace;
   textureCache.set(cacheKey, texture);
   return texture;
 }
