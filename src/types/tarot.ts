@@ -82,6 +82,7 @@ export interface StructuredReadingCardAnalysis {
 export interface StructuredReadingResponse {
   readerPersona: string;
   intro: string;
+  overallAnalysis?: string;
   cards: StructuredReadingCardAnalysis[];
   spreadSynthesis: string;
   actionableStep: string;

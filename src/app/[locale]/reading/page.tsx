@@ -73,11 +73,23 @@ function generateClientReading(
     };
   });
 
+  const salutationStr = locale === "hi" ? "प्रिय साधक," : locale === "ja" ? "親愛なる探求者様へ、" : "Dear Seeker,";
+  const overallAnalysis = locale === "hi"
+    ? `${salutationStr}\n\n` +
+      `आपके द्वारा पूछे गए प्रश्न "${question || "आंतरिक स्पष्टता और मार्गदर्शन"}" के उत्तर में, ब्रह्मांडीय शक्तियों ने यह पवित्र विन्यास प्रकट किया है।\n\n` +
+      `यह प्रसार दर्शाता है कि आपके जीवन का यह चरण आत्म-चिंतन और सजग निर्णयों का है। अतीत की सीखें वर्तमान के दोराहे पर प्रकाश डाल रही हैं, और आगे का मार्ग आपके आंतरिक संकल्प पर निर्भर करता है।\n\n` +
+      `जब आप भय को त्यागकर सत्य और संतुलन का चयन करते हैं, तो दिशा स्वतः स्पष्ट हो जाती है। इन प्रतीकों की ऊर्जा को आत्मसात करें और सकारात्मक विश्वास के साथ अग्रसर हों।`
+    : `${salutationStr}\n\n` +
+      `In response to your inquiry regarding "${question || "seeking deeper insight and spiritual discernment"}", the cards have revealed an illuminating sacred synthesis.\n\n` +
+      `Across this spread, a clear spiritual trajectory unfolds: you are being guided to step beyond old hesitation and anchor your intentions with quiet confidence. The interplay of archetypes highlights both your hidden inner strengths and the gentle course-corrections required right now.\n\n` +
+      `Remember that tarot is not an unbending prophecy, but an empowering mirror of your living consciousness. As you navigate these currents, honor your discernment, trust the unfolding process, and allow the wisdom of each archetype to ground your daily decisions.`;
+
   return {
     readerPersona: personaName,
     intro: `Welcome, seeker. The sacred arcana have aligned their tapestry for your inquiry: "${
       question || "spiritual discernment and growth"
     }".`,
+    overallAnalysis,
     cards,
     spreadSynthesis: `The sacred interplay of these cards reveals that clarity begins from within. Honor the lessons of the foundation as you bridge into the possibilities ahead.`,
     actionableStep: `Take one concrete action within 24 hours to honor the guidance revealed by the ${
@@ -794,19 +806,19 @@ export default function ReadingPage({ params }: ReadingPageProps) {
         <>
           {/* Top Pinned Glass Oracle Synthesis Badge (Far above the cards) */}
           <div className="fixed top-16 left-0 right-0 z-30 pointer-events-none text-center px-4 animate-in fade-in duration-500">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-black/85 backdrop-blur-xl border border-amber-400/40 shadow-2xl shadow-amber-500/10">
+            <div className="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full bg-black/90 backdrop-blur-xl border border-amber-400/50 shadow-2xl shadow-amber-500/20">
               <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
               <span className="font-serif-sacred font-bold text-xs sm:text-sm text-amber-100">
                 {locale === "hi"
-                  ? "ओरेकल आपके कार्ड्स का विश्लेषण कर रहा है..."
-                  : "The Oracle is Weaving Your Reading..."}
+                  ? "जेमिनी एआई गहन ब्रह्मांडीय शोध व विश्लेषण कर रहा है..."
+                  : "Gemini AI is Conducting Deep Cosmic Research..."}
               </span>
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             </div>
             <p className="font-mono-sacred text-[11px] text-amber-300/80 mt-2 drop-shadow">
               {locale === "hi"
-                ? "प्राचीन प्रतीकों और आपकी ऊर्जा का संश्लेषण जारी है"
-                : "COMMUNING WITH ARCHETYPAL FORCES · SYNTHESIZING WISDOM"}
+                ? "प्राचीन प्रतीकों व 78 कार्ड्स की ऊर्जाओं का गहन संश्लेषण जारी है"
+                : "CONSULTING CELESTIAL ARCHIVES · WEAVING 15-LINE COMPREHENSIVE GUIDANCE"}
             </p>
           </div>
 

@@ -50,10 +50,13 @@ Key Symbols: ${card.symbolism.join(", ")}`;
 
   // 3. Language instruction
   let languageDirective = "Respond in natural, elegant English.";
+  let salutation = "Dear Seeker,";
   if (locale === "hi") {
     languageDirective = "Respond entirely in fluent, dignified, and culturally evocative Hindi (हिन्दी) using Devanagari script. Use clear and poetic vocabulary appropriate for spiritual contemplation.";
+    salutation = "प्रिय साधक / जिज्ञासु,";
   } else if (locale === "ja") {
     languageDirective = "Respond entirely in polished, respectful, and nuanced Japanese (日本語) appropriate for professional tarot interpretation and psychological counseling.";
+    salutation = "親愛なる探求者様へ、";
   }
 
   // 4. Assemble System Prompt
@@ -93,6 +96,7 @@ Return a single JSON object with this exact structure:
 {
   "readerPersona": "${persona.name[locale] || persona.name.en}",
   "intro": "A 2-3 sentence evocative opening addressing the seeker's inquiry in the persona's voice.",
+  "overallAnalysis": "A comprehensive, beautifully composed 10-15 line in-depth narrative synthesis starting exactly with '${salutation}\\n\\n'. Directly interpret their situation, synthesize how the drawn cards converse with each other across their positions, and illuminate the core psychological and spiritual currents answering their question.",
   "cards": [
     {
       "cardId": "string matching card ID",

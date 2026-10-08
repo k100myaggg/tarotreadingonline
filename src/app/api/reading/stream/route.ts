@@ -66,9 +66,9 @@ export async function POST(req: NextRequest) {
 
     const rawGeminiKey = process.env.GEMINI_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_KEY || "";
     const geminiApiKey = rawGeminiKey.replace(/['"\s]/g, "");
-    const preferredModel = (process.env.GEMINI_MODEL || "gemini-3.8-flash").trim();
+    const preferredModel = (process.env.GEMINI_MODEL || "gemini-2.0-flash").trim();
     const candidateStreamModels = Array.from(
-      new Set([preferredModel, "gemini-3.8-flash", "gemini-2.0-flash", "gemini-1.5-flash"])
+      new Set([preferredModel, "gemini-2.0-flash", "gemini-1.5-flash", "gemini-1.5-pro"])
     );
 
     const anthropicApiKey = (process.env.ANTHROPIC_API_KEY || "").replace(/['"\s]/g, "");
@@ -83,7 +83,7 @@ export async function POST(req: NextRequest) {
           controller.enqueue(encoder.encode(`data: ${JSON.stringify(data)}\n\n`));
         };
 
-        // 1. Google Gemini Streaming (Supports Gemini 3.8 Flash with fast fallback)
+        // 1. Google Gemini Streaming (Deep research via Gemini 2.0 Flash / 1.5 Flash)
         if (geminiApiKey) {
           const genAI = new GoogleGenerativeAI(geminiApiKey);
 
@@ -98,10 +98,10 @@ export async function POST(req: NextRequest) {
                 },
               });
 
-              // 7-second race timeout so Gemini never hangs Vercel serverless function
+              // 20-second timeout allows thorough archetypal research
               const streamPromise = model.generateContentStream(userPrompt);
               const timeoutPromise = new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error(`Gemini ${modelName} stream timeout`)), 7000)
+                setTimeout(() => reject(new Error(`Gemini ${modelName} stream timeout`)), 20000)
               );
 
               const resultStream = await Promise.race([streamPromise, timeoutPromise]);
@@ -116,7 +116,13 @@ export async function POST(req: NextRequest) {
               }
 
               if (fullAccumulated) {
-                sendEvent({ type: "complete", rawText: fullAccumulated });
+                try {
+                  const cleaned = fullAccumulated.replace(/```json/gi, "").replace(/```/g, "").trim();
+                  const parsed = JSON.parse(cleaned);
+                  sendEvent({ type: "complete", parsed });
+                } catch {
+                  sendEvent({ type: "complete", rawText: fullAccumulated });
+                }
                 controller.close();
                 return;
               }
@@ -191,11 +197,25 @@ export async function POST(req: NextRequest) {
           };
         });
 
+        const salutationStr = activeLocale === "hi" ? "प्रिय साधक," : activeLocale === "ja" ? "親愛なる探求者様へ、" : "Dear Seeker,";
+        const narrativeAnalysis = activeLocale === "hi"
+          ? `${salutationStr}\n\n` +
+            `आपके द्वारा पूछे गए प्रश्न "${question || "मार्गदर्शन और आंतरिक स्पष्टता"}" के संदर्भ में, टैरो के दिव्य प्रतीकों ने एक अत्यंत गहन और सामंजस्यपूर्ण विन्यास प्रस्तुत किया है।\n\n` +
+            `इस प्रसार के केंद्र में उपस्थित ऊर्जाएं दर्शाती हैं कि आप अपने जीवन के एक महत्वपूर्ण परिवर्तनकारी मोड़ पर खड़े हैं। जहाँ अतीत के अनुभव आपको एक सुदृढ़ आध्यात्मिक आधार प्रदान कर रहे हैं, वहीं वर्तमान की चुनौतियां आपको अपनी आंतरिक शक्तियों को पहचानने का अवसर दे रही हैं।\n\n` +
+            `कार्ड्स का यह परस्पर संयोजन स्पष्ट करता है कि किसी भी बाहरी निर्णय से पहले मन की शांति और संतुलन स्थापित करना अनिवार्य है। जब आप अपने अंतर्ज्ञान पर विश्वास करते हैं, तो उलझनें स्वतः समाप्त होने लगती हैं।\n\n` +
+            `आने वाले समय में अपनी सीमाओं का सम्मान करते हुए, धैर्य और आत्मविश्वास के साथ आगे बढ़ें। ब्रह्मांड आपकी यात्रा का साक्षी है और सकारात्मक परिणाम आपके प्रयासों की प्रतीक्षा कर रहे हैं।`
+          : `${salutationStr}\n\n` +
+            `In exploring your contemplation—"${question || "seeking profound clarity and energetic alignment"}"—the sacred archetypes have woven an intricate tapestry reflecting both your present crossroads and the emerging possibilities before you.\n\n` +
+            `The progression across this spread reveals a powerful shift from old foundational patterns into conscious self-sovereignty. The cards illuminate not a fixed or passive fate, but a living dialogue between your deepest intentions and the unseen currents guiding your path.\n\n` +
+            `At the heart of this inquiry, there is a clear calling to honor both vulnerability and strategic discernment. While past momentum brought you to this threshold, the next chapter demands inner conviction over external validation.\n\n` +
+            `By aligning your day-to-day choices with the elemental wisdom uncovered in these cards, clarity will replace doubt. Trust that the transition you are navigating is serving your highest personal expansion.`;
+
         const simulatedResponse: StructuredReadingResponse = {
           readerPersona: personaName,
           intro: `Greetings, seeker. The cards have arranged themselves across the cosmic loom. In response to your question: "${
             question || "General guidance"
           }", let us examine what has been brought forth from the depths.`,
+          overallAnalysis: narrativeAnalysis,
           cards: simulatedCards,
           spreadSynthesis: `Synthesizing this spread reveals a sacred progression. The foundational forces call for honest discernment, bridging the space between old habits and emerging possibilities. With ${
             validatedCards.filter((c) => c.isReversed).length
