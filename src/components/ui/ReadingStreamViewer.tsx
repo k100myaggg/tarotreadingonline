@@ -38,7 +38,7 @@ export function ReadingStreamViewer({
   onSelectFollowup,
 }: ReadingStreamViewerProps) {
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
-  const { drawnCards, question, setSpreadId, setStep } = useReadingStore();
+  const { drawnCards, question, setSpreadId, setStep, resetReading } = useReadingStore();
 
   // 5-Star Rating State
   const [userRating, setUserRating] = useState<number>(0);
@@ -358,42 +358,71 @@ export function ReadingStreamViewer({
 
       {/* ─── 8. EXPLORE OUR OTHER READINGS ─── */}
       {reading && !isStreaming && (
-        <div className="space-y-4 pt-4 border-t border-white/10">
+        <div className="space-y-4 pt-6 border-t border-white/10">
           <div className="text-center">
             <h5 className="font-serif-sacred text-xl sm:text-2xl font-bold text-amber-100 flex items-center justify-center gap-2">
               <BookOpen className="w-5 h-5 text-amber-400" />
-              <span>{locale === "hi" ? "अन्य रीडिंग खोजें" : "Explore our other readings"}</span>
+              <span>{locale === "hi" ? "अन्य पवित्र रीडिंग खोजें" : "Explore Our Other Readings"}</span>
             </h5>
             <p className="text-xs text-slate-400 mt-1">
-              Select another sacred architecture to consult the cards on different life facets.
+              {locale === "hi"
+                ? "जीवन के विभिन्न पहलुओं पर दिव्य अंतर्दृष्टि के लिए समर्पित रीडिंग रूम चुनें।"
+                : "Select another dedicated sacred reading room to consult the cards on different life facets."}
             </p>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {allSpreads.map((spread) => (
-              <button
-                key={spread.id}
-                type="button"
+            {[
+              {
+                href: `/${locale}/yes-or-no-tarot`,
+                badge: "1 Card · Instant",
+                title: locale === "hi" ? "हाँ या ना टैरो" : "Yes/No Reading",
+                desc: locale === "hi" ? "त्वरित निर्णायक उत्तर" : "Instant decisive verdict",
+              },
+              {
+                href: `/${locale}/love-tarot-reading`,
+                badge: "3 Cards · Romance",
+                title: locale === "hi" ? "प्रेम और संबंध" : "Love Reading",
+                desc: locale === "hi" ? "दिल की सच्चाई और भविष्य" : "Heart dynamics & romance",
+              },
+              {
+                href: `/${locale}/career-tarot-reading`,
+                badge: "3 Cards · Wealth",
+                title: locale === "hi" ? "करियर व उद्देश्य" : "Career & Purpose",
+                desc: locale === "hi" ? "कार्यक्षेत्र व आर्थिक दिशा" : "Work, wealth & calling",
+              },
+              {
+                href: `/${locale}/card-of-the-day`,
+                badge: "1 Card · Daily",
+                title: locale === "hi" ? "दिन का कार्ड" : "Card of the Day",
+                desc: locale === "hi" ? "दैनिक मार्गदर्शन व ध्यान" : "Daily guiding archetype",
+              },
+            ].map((item) => (
+              <Link
+                key={item.href}
+                href={item.href}
                 onClick={() => {
-                  setSpreadId(spread.id);
-                  setStep("question");
-                  window.scrollTo({ top: 0, behavior: "smooth" });
+                  resetReading();
+                  window.scrollTo({ top: 0, behavior: "instant" });
                 }}
                 className="p-4 rounded-xl mystic-panel border border-amber-900/40 hover:border-amber-400/60 hover:scale-[1.02] transition-all text-left flex flex-col justify-between group bg-black/40 shadow-lg"
               >
                 <div>
                   <span className="font-mono-sacred text-[10px] text-amber-400 block mb-1">
-                    ✦ {spread.cardCount} {spread.cardCount === 1 ? "Card" : "Cards"}
+                    ✦ {item.badge}
                   </span>
                   <h6 className="font-serif-sacred font-bold text-sm text-amber-100 group-hover:text-amber-200">
-                    {spread.name[locale] || spread.name.en}
+                    {item.title}
                   </h6>
+                  <p className="text-[11px] text-slate-400 font-light mt-0.5 line-clamp-1">
+                    {item.desc}
+                  </p>
                 </div>
                 <div className="mt-3 flex items-center gap-1 text-[11px] font-mono-sacred text-amber-400/80 group-hover:text-amber-300">
-                  <span>Begin</span>
+                  <span>Enter Room</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </div>
-              </button>
+              </Link>
             ))}
           </div>
         </div>

@@ -358,7 +358,8 @@ export default function ReadingPage({ params }: ReadingPageProps) {
   };
 
   // Is current view a full-screen fixed ritual stage (question, shuffling, cutting, picking, revealing, weaving)?
-  const isRitualStage = step !== "complete" && !readingResponse;
+  const isCompleteStage = step === "complete" && Boolean(readingResponse);
+  const isRitualStage = !isCompleteStage;
 
   return (
     <div
@@ -437,7 +438,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
       {/* ─── 3. STEP-SPECIFIC OVERLAYS (PINNED WITH ZERO CARD COLLISION) ─── */}
 
       {/* ─── STEP 1: FLOATING GLASS QUESTION INQUIRY (COMPACT & VIEWPORT SAFE) ─── */}
-      {step === "question" && (
+      {step === "question" && isRitualStage && (
         <div className="fixed inset-0 z-20 flex items-center justify-center p-3 sm:p-4 pt-14 pointer-events-none">
           <div className="w-full max-w-lg pointer-events-auto transition-all animate-in fade-in zoom-in-95 duration-400 max-h-[calc(100vh-4.2rem)] flex flex-col">
             <div className="rounded-2xl p-4 sm:p-5 bg-[#0b0816]/95 backdrop-blur-2xl border border-amber-500/30 shadow-2xl shadow-purple-950/60 space-y-3 overflow-y-auto">
@@ -840,7 +841,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
       )}
 
       {/* ─── STEP 6: COMPLETE READING VIEW (HERO CARDS ALTAR ON TOP + RESULTS NEATLY BELOW, ZERO OVERLAP!) ─── */}
-      {!isRitualStage && (
+      {isCompleteStage && (
         <div className="relative w-full min-h-screen pt-16 flex flex-col items-center">
           {/* Top Hero Section: 3D Cards Altar displayed prominently at the top */}
           <div className="w-full h-[360px] sm:h-[420px] relative z-10">

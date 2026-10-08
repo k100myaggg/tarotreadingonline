@@ -148,9 +148,16 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
 
   // Initialize reading spread for this page
   useEffect(() => {
-    setSpreadId(config.spreadId);
-    if (!question) {
+    const store = useReadingStore.getState();
+    if (store.spreadId !== config.spreadId || store.step === "complete") {
+      resetReading();
+      setSpreadId(config.spreadId);
       setQuestion(config.defaultQuestion[locale] || config.defaultQuestion.en);
+    } else {
+      setSpreadId(config.spreadId);
+      if (!question) {
+        setQuestion(config.defaultQuestion[locale] || config.defaultQuestion.en);
+      }
     }
     if (config.isTwoChoices) {
       setShowOptions(true);
@@ -336,7 +343,8 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
     }
   };
 
-  const isRitualStage = step !== "complete" && !readingResponse;
+  const isCompleteStage = step === "complete" && Boolean(readingResponse);
+  const isRitualStage = !isCompleteStage;
 
   // Compute Yes/No verdict if this is a Yes/No reading
   let yesNoVerdict: YesNoVerdict | null = null;
@@ -420,7 +428,7 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
       </div>
 
       {/* ─── 3. STEP 1: DEDICATED QUESTION INQUIRY MODAL ─── */}
-      {step === "question" && (
+      {step === "question" && isRitualStage && (
         <div className="fixed inset-0 z-20 flex items-center justify-center p-3 sm:p-4 pt-14 pointer-events-none">
           <div className="w-full max-w-lg pointer-events-auto transition-all animate-in fade-in zoom-in-95 duration-400 max-h-[calc(100vh-4.2rem)] flex flex-col">
             <div className="rounded-2xl p-4 sm:p-5 bg-[#0b0816]/95 backdrop-blur-2xl border border-amber-500/30 shadow-2xl shadow-purple-950/60 space-y-3 overflow-y-auto">
@@ -775,7 +783,7 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
       )}
 
       {/* ─── STEP 6: COMPLETE READING VIEW (HERO CARDS ON TOP + VERDICT + DEEP WISDOM) ─── */}
-      {!isRitualStage && (
+      {isCompleteStage && (
         <div className="relative w-full min-h-screen pt-16 flex flex-col items-center">
           <div className="w-full h-[360px] sm:h-[420px] relative z-10">
             {use2DFallback ? (
