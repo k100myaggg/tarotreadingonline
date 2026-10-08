@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/card-of-the-day",
     "/yes-or-no-tarot",
     "/love-tarot-reading",
+    "/career-tarot-reading",
     "/relationship-tarot-reading",
     "/two-choices-tarot-reading",
     "/question-tarot-reading",

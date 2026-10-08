@@ -59,6 +59,7 @@ export function Header({ locale }: HeaderProps) {
     "/two-choices-tarot-reading",
     "/question-tarot-reading",
     "/month-ahead-tarot-reading",
+    "/career-tarot-reading",
   ].some((r) => pathname?.includes(r));
 
   if (isDedicatedReadingRoom) {
@@ -72,46 +73,32 @@ export function Header({ locale }: HeaderProps) {
     return segments.join("/");
   };
 
+  // Curated, highest-intent & high-volume tarot categories (Refined, no generic clutter)
   const readingOptions = [
-    {
-      href: `/${locale}/spreads`,
-      label: locale === "hi" ? "समस्त टैरो विन्यास" : locale === "ja" ? "すべてのリーディング" : "All our readings",
-      badge: "Overview",
-    },
-    {
-      href: `/${locale}/card-of-the-day`,
-      label: locale === "hi" ? "दिन का कार्ड" : locale === "ja" ? "今日のカード" : "Card of the day",
-      badge: "XXI · Daily",
-    },
-    {
-      href: `/${locale}/love-tarot-reading`,
-      label: locale === "hi" ? "प्रेम टैरो" : locale === "ja" ? "愛のリーディング" : "Love reading",
-      badge: "XIV · Romance",
-    },
-    {
-      href: `/${locale}/relationship-tarot-reading`,
-      label: locale === "hi" ? "रिश्ता स्पष्टता" : locale === "ja" ? "関係性リーディング" : "Relationship Reading",
-      badge: "VI · Partners",
-    },
     {
       href: `/${locale}/yes-or-no-tarot`,
       label: locale === "hi" ? "हाँ या ना टैरो" : locale === "ja" ? "イエス・ノー リーディング" : "Yes/No Reading",
-      badge: "XVII · Decisive",
+      badge: "XVII · Instant Verdict",
     },
     {
-      href: `/${locale}/question-tarot-reading`,
-      label: locale === "hi" ? "प्रश्न टैरो" : locale === "ja" ? "質問リーディング" : "Question Reading",
-      badge: "XVIII · Clarity",
+      href: `/${locale}/love-tarot-reading`,
+      label: locale === "hi" ? "प्रेम और संबंध टैरो" : locale === "ja" ? "愛と絆のリーディング" : "Love & Relationship",
+      badge: "XIV · Romance",
     },
     {
-      href: `/${locale}/two-choices-tarot-reading`,
-      label: locale === "hi" ? "दो विकल्प तुलना" : locale === "ja" ? "二者択一リーディング" : "Two Choices Reading",
-      badge: "XIX · Compare",
+      href: `/${locale}/career-tarot-reading`,
+      label: locale === "hi" ? "करियर और जीवन उद्देश्य" : locale === "ja" ? "キャリア＆ライフパーパス" : "Career & Purpose",
+      badge: "IV · Wealth & Growth",
     },
     {
-      href: `/${locale}/month-ahead-tarot-reading`,
-      label: locale === "hi" ? "मासिक भविष्यवाणी" : locale === "ja" ? "マンスアヘッド" : "Month-Ahead Reading",
-      badge: "IX · 4 Weeks",
+      href: `/${locale}/card-of-the-day`,
+      label: locale === "hi" ? "दिन का कार्ड" : locale === "ja" ? "今日のカード" : "Card of the Day",
+      badge: "XXI · Daily Guide",
+    },
+    {
+      href: `/${locale}/spreads`,
+      label: locale === "hi" ? "समस्त टैरो विन्यास" : locale === "ja" ? "すべてのリーディング" : "All Spreads & Celtic Cross",
+      badge: "Overview",
     },
   ];
 

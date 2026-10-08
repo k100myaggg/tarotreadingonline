@@ -338,8 +338,66 @@ export const READING_TYPES: ReadingTypeConfig[] = [
       ],
     },
   },
+  {
+    slug: "career-tarot-reading",
+    spreadId: "career_reading",
+    romanNumeral: "IV",
+    cardCount: 3,
+    badge: "Career & Wealth",
+    heroCardId: "major_04_emperor",
+    name: {
+      en: "Career & Purpose",
+      hi: "करियर और जीवन उद्देश्य",
+      ja: "キャリア＆ライフパーパス",
+    },
+    subtitle: {
+      en: "Unlock professional breakthroughs & financial clarity",
+      hi: "कार्यक्षेत्र, धन और उन्नति में स्पष्ट दिशा पाएं",
+      ja: "仕事の転機、才能の開花、成功への道筋",
+    },
+    description: {
+      en: "Illuminate your professional trajectory, wealth currents, vocational calling, and the most auspicious strategic move for success.",
+      hi: "अपने करियर, धन, पदोन्नति और जीवन के सही उद्देश्य की दिशा में दिव्य मार्गदर्शन प्राप्त करें।",
+      ja: "仕事の展望、キャリア転換、才能の開花、そして成功への具体的戦略を導き出します。",
+    },
+    defaultQuestion: {
+      en: "What strategic move will unlock my highest career potential?",
+      hi: "मेरे करियर और धन के क्षेत्र में आगे क्या अवसर हैं?",
+      ja: "私のキャリアと経済面でどのような好転が待っていますか？",
+    },
+    chips: {
+      en: [
+        "What is the best strategic move for my career right now?",
+        "How can I unlock greater financial abundance?",
+        "Should I transition to a new job or double down here?",
+        "What hidden opportunity am I not seeing in my work?",
+      ],
+      hi: [
+        "मुझे अपने करियर में अभी क्या कदम उठाना चाहिए?",
+        "क्या यह नौकरी बदलने का सही समय है?",
+        "मेरे कार्यक्षेत्र में कौन सा नया अवसर आ रहा है?",
+      ],
+      ja: [
+        "今、仕事で取るべき最も賢明な行動は何ですか？",
+        "転職や新しい挑戦に踏み出すべき時期ですか？",
+        "仕事で見落としている重要なチャンスとは？",
+      ],
+    },
+  },
+];
+
+/**
+ * Top 4 Highest-Demand Curated Readings globally
+ * (1: Yes/No, 2: Love & Romance, 3: Career & Wealth, 4: Card of the Day)
+ */
+export const FEATURED_READING_TYPES: ReadingTypeConfig[] = [
+  READING_TYPES.find((r) => r.slug === "card-of-the-day")!,
+  READING_TYPES.find((r) => r.slug === "yes-or-no-tarot")!,
+  READING_TYPES.find((r) => r.slug === "love-tarot-reading")!,
+  READING_TYPES.find((r) => r.slug === "career-tarot-reading")!,
 ];
 
 export function getReadingTypeBySlug(slug: string): ReadingTypeConfig | undefined {
   return READING_TYPES.find((rt) => rt.slug === slug);
 }
+

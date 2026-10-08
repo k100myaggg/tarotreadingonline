@@ -3,7 +3,7 @@
 import React from "react";
 import Link from "next/link";
 import { Locale } from "@/types/tarot";
-import { READING_TYPES } from "@/lib/tarot/readingTypes";
+import { READING_TYPES, FEATURED_READING_TYPES } from "@/lib/tarot/readingTypes";
 import { useSoundscape } from "@/lib/audio/useSoundscape";
 
 interface ChooseYourReadingSectionProps {
@@ -181,6 +181,31 @@ function CardIllustration({ slug }: { slug: string }) {
         </svg>
       );
 
+    case "career-tarot-reading":
+      // Arcanum IV - The Emperor / Throne, Scepter, Pentacle & Mountain Peaks
+      return (
+        <svg viewBox="0 0 160 220" className="w-full h-full text-neutral-900" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <rect x="8" y="8" width="144" height="204" rx="6" strokeWidth="2" />
+          <rect x="13" y="13" width="134" height="194" rx="4" strokeWidth="1" strokeDasharray="3 2" />
+          <text x="80" y="32" textAnchor="middle" className="text-[15px] font-serif font-black tracking-widest" fill="currentColor" stroke="none">IV</text>
+          {/* Mountain Peaks in background */}
+          <polygon points="32,106 58,62 84,106" strokeWidth="1.8" />
+          <polygon points="76,106 102,68 128,106" strokeWidth="1.8" />
+          {/* Stone Throne */}
+          <rect x="42" y="86" width="76" height="88" rx="4" strokeWidth="2.5" />
+          {/* Crown */}
+          <polygon points="68,86 72,74 80,78 88,74 92,86" fill="currentColor" />
+          {/* Ankh / Scepter in right hand */}
+          <circle cx="106" cy="116" r="6" strokeWidth="2" />
+          <line x1="106" y1="122" x2="106" y2="152" strokeWidth="2.5" />
+          <line x1="100" y1="128" x2="112" y2="128" strokeWidth="2" />
+          {/* Golden Pentacle Globe in left hand */}
+          <circle cx="54" cy="126" r="12" strokeWidth="2.5" />
+          <polygon points="54,116 57,124 66,124 59,129 61,137 54,132 47,137 49,129 42,124 51,124" fill="currentColor" />
+          <path d="M 30 185 Q 80 195 130 185" strokeWidth="2.5" />
+        </svg>
+      );
+
     case "month-ahead-tarot-reading":
     default:
       // Arcanum IX - The Hermit (Hooded sage with glowing lantern & staff)
@@ -219,49 +244,51 @@ export function ChooseYourReadingSection({ locale }: ChooseYourReadingSectionPro
 
   return (
     <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center">
-      {/* Section Title matching competitor screenshot */}
-      <div className="text-center mb-12 sm:mb-16">
+      {/* Section Title */}
+      <div className="text-center mb-10 sm:mb-14">
         <h2 className="font-serif-sacred text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#f4ebd0] drop-shadow-sm">
-          {locale === "hi" ? "अपना टैरो विन्यास चुनें" : locale === "ja" ? "リーディングを選択する" : "Choose your Reading"}
+          {locale === "hi" ? "अपना पवित्र टैरो विन्यास चुनें" : locale === "ja" ? "聖なるリーディングを選択する" : "Choose your Reading"}
         </h2>
         <p className="text-xs sm:text-sm font-mono-sacred text-amber-400/80 uppercase tracking-widest mt-2">
-          ✦ 78-CARD RWS CANON · REAL-TIME 3D DIVINATION · DEDICATED URLS ✦
+          ✦ HIGH-DEMAND SACRED ARCHETYPES · REAL-TIME 3D DIVINATION · DEDICATED ORACLES ✦
         </p>
       </div>
 
-      {/* Horizontal Cards Row matching competitor screenshot */}
-      <div className="w-full overflow-x-auto pb-6 scrollbar-thin scrollbar-thumb-amber-500/20 scrollbar-track-transparent">
-        <div className="flex items-stretch justify-start lg:justify-center gap-4 sm:gap-5 min-w-max px-2">
-          {READING_TYPES.map((reading) => {
-            const href = `/${locale}/${reading.slug}`;
-            return (
-              <Link
-                key={reading.slug}
-                href={href}
-                onClick={() => playButtonClick?.()}
-                className="group flex flex-col items-center w-[140px] sm:w-[155px] focus:outline-none"
-              >
-                {/* 1. Vintage Ivory Card Frame */}
-                <div className="w-full aspect-[1/1.5] rounded-xl bg-[#f6f2e8] p-1.5 shadow-xl shadow-black/80 border border-[#e5dcba] group-hover:-translate-y-2 group-hover:shadow-2xl group-hover:shadow-amber-400/30 group-hover:border-amber-400/70 transition-all duration-300 relative flex items-center justify-center overflow-hidden">
-                  <div className="w-full h-full rounded-lg border border-neutral-900/10 flex items-center justify-center p-1 bg-[#f9f6ed]">
-                    <CardIllustration slug={reading.slug} />
-                  </div>
+      {/* Curated Grid of 4 High-Demand Readings */}
+      <div className="w-full max-w-5xl grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 px-2">
+        {FEATURED_READING_TYPES.map((reading) => {
+          const href = `/${locale}/${reading.slug}`;
+          return (
+            <Link
+              key={reading.slug}
+              href={href}
+              onClick={() => playButtonClick?.()}
+              className="group flex flex-col items-center p-3 sm:p-4 rounded-2xl mystic-panel border border-amber-500/20 hover:border-amber-400/60 hover:-translate-y-2 hover:shadow-2xl hover:shadow-amber-500/20 transition-all duration-300 focus:outline-none"
+            >
+              {/* 1. Vintage Ivory Card Frame */}
+              <div className="w-full max-w-[155px] aspect-[1/1.5] rounded-xl bg-[#f6f2e8] p-1.5 shadow-xl shadow-black/80 border border-[#e5dcba] group-hover:border-amber-400/70 transition-all relative flex items-center justify-center overflow-hidden">
+                <div className="w-full h-full rounded-lg border border-neutral-900/10 flex items-center justify-center p-1 bg-[#f9f6ed]">
+                  <CardIllustration slug={reading.slug} />
                 </div>
+              </div>
 
-                {/* 2. Title & Subtitle below the card */}
-                <div className="mt-3.5 text-center flex flex-col items-center px-1">
-                  <h3 className="font-serif-sacred text-sm sm:text-base font-bold text-[#c084fc] group-hover:text-amber-200 transition-colors leading-tight">
-                    {reading.name[locale] || reading.name.en}
-                  </h3>
-                  <p className="font-serif-sacred italic text-[11px] sm:text-xs text-slate-300 font-light mt-1.5 leading-tight line-clamp-2">
-                    {reading.subtitle[locale] || reading.subtitle.en}
-                  </p>
-                </div>
-              </Link>
-            );
-          })}
-        </div>
+              {/* 2. Badge, Title & Subtitle */}
+              <div className="mt-4 text-center flex flex-col items-center w-full px-1">
+                <span className="text-[9px] font-mono-sacred text-amber-400/90 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 uppercase tracking-wider mb-1">
+                  {reading.badge}
+                </span>
+                <h3 className="font-serif-sacred text-sm sm:text-base font-bold text-amber-100 group-hover:text-amber-200 transition-colors leading-tight">
+                  {reading.name[locale] || reading.name.en}
+                </h3>
+                <p className="font-serif-sacred italic text-[11px] sm:text-xs text-slate-300 font-light mt-1 leading-tight line-clamp-2">
+                  {reading.subtitle[locale] || reading.subtitle.en}
+                </p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
     </section>
   );
 }
+
