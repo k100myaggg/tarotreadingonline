@@ -4,7 +4,21 @@ import { allCards, allSpreads } from "@/lib/tarot/data";
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://arcana3d.com";
   const locales = ["en", "hi", "ja"];
-  const staticRoutes = ["", "/reading", "/daily", "/cards", "/spreads", "/dashboard"];
+  const staticRoutes = [
+    "",
+    "/reading",
+    "/card-of-the-day",
+    "/yes-or-no-tarot",
+    "/love-tarot-reading",
+    "/relationship-tarot-reading",
+    "/two-choices-tarot-reading",
+    "/question-tarot-reading",
+    "/month-ahead-tarot-reading",
+    "/daily",
+    "/cards",
+    "/spreads",
+    "/dashboard",
+  ];
 
   const urls: MetadataRoute.Sitemap = [];
 

@@ -4,6 +4,7 @@ import { Sparkles, Moon, Layers, ShieldCheck, Compass, ArrowRight, Dna, Cpu, Eye
 import { Locale } from "@/types/tarot";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { allSpreads, allPersonas } from "@/lib/tarot/data";
+import { ChooseYourReadingSection } from "@/components/ui/ChooseYourReadingSection";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -76,6 +77,9 @@ export default async function HomePage({ params }: HomePageProps) {
           </div>
         </div>
       </section>
+
+      {/* Choose your Reading Showcase (Matching competitor layout with dedicated URLs) */}
+      <ChooseYourReadingSection locale={activeLocale} />
 
       {/* Spreads Showcase Section */}
       <section className="w-full py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-amber-900/20">

@@ -15,6 +15,7 @@ import {
   ArrowRight,
   Music,
   Globe,
+  ChevronDown,
 } from "lucide-react";
 import { Locale } from "@/types/tarot";
 import { getDictionary } from "@/lib/i18n/dictionaries";
@@ -49,7 +50,18 @@ export function Header({ locale }: HeaderProps) {
   }, [mobileMenuOpen]);
 
   // The 3D reading room has its own specialized minimalist HUD
-  if (pathname?.includes("/reading")) {
+  const isDedicatedReadingRoom = [
+    "/reading",
+    "/card-of-the-day",
+    "/yes-or-no-tarot",
+    "/love-tarot-reading",
+    "/relationship-tarot-reading",
+    "/two-choices-tarot-reading",
+    "/question-tarot-reading",
+    "/month-ahead-tarot-reading",
+  ].some((r) => pathname?.includes(r));
+
+  if (isDedicatedReadingRoom) {
     return null;
   }
 
@@ -60,36 +72,63 @@ export function Header({ locale }: HeaderProps) {
     return segments.join("/");
   };
 
-  const navLinks = [
+  const readingOptions = [
     {
-      href: `/${locale}/reading`,
-      label: dict.nav.reading || "Oracle Reading",
-      sub: "Interactive 3D divination ritual",
-      icon: Sparkles,
-      highlight: true,
+      href: `/${locale}/spreads`,
+      label: locale === "hi" ? "समस्त टैरो विन्यास" : locale === "ja" ? "すべてのリーディング" : "All our readings",
+      badge: "Overview",
     },
+    {
+      href: `/${locale}/card-of-the-day`,
+      label: locale === "hi" ? "दिन का कार्ड" : locale === "ja" ? "今日のカード" : "Card of the day",
+      badge: "XXI · Daily",
+    },
+    {
+      href: `/${locale}/love-tarot-reading`,
+      label: locale === "hi" ? "प्रेम टैरो" : locale === "ja" ? "愛のリーディング" : "Love reading",
+      badge: "XIV · Romance",
+    },
+    {
+      href: `/${locale}/relationship-tarot-reading`,
+      label: locale === "hi" ? "रिश्ता स्पष्टता" : locale === "ja" ? "関係性リーディング" : "Relationship Reading",
+      badge: "VI · Partners",
+    },
+    {
+      href: `/${locale}/yes-or-no-tarot`,
+      label: locale === "hi" ? "हाँ या ना टैरो" : locale === "ja" ? "イエス・ノー リーディング" : "Yes/No Reading",
+      badge: "XVII · Decisive",
+    },
+    {
+      href: `/${locale}/question-tarot-reading`,
+      label: locale === "hi" ? "प्रश्न टैरो" : locale === "ja" ? "質問リーディング" : "Question Reading",
+      badge: "XVIII · Clarity",
+    },
+    {
+      href: `/${locale}/two-choices-tarot-reading`,
+      label: locale === "hi" ? "दो विकल्प तुलना" : locale === "ja" ? "二者択一リーディング" : "Two Choices Reading",
+      badge: "XIX · Compare",
+    },
+    {
+      href: `/${locale}/month-ahead-tarot-reading`,
+      label: locale === "hi" ? "मासिक भविष्यवाणी" : locale === "ja" ? "マンスアヘッド" : "Month-Ahead Reading",
+      badge: "IX · 4 Weeks",
+    },
+  ];
+
+  const standardNavLinks = [
     {
       href: `/${locale}/daily`,
       label: dict.nav.daily || "Daily Card",
-      sub: "Archetype of the day",
       icon: Moon,
     },
     {
       href: `/${locale}/cards`,
       label: dict.nav.cards || "78 Cards",
-      sub: "RWS Symbolism & Meanings",
       icon: BookOpen,
-    },
-    {
-      href: `/${locale}/spreads`,
-      label: dict.nav.spreads || "Spreads",
-      sub: "Celtic cross, 3-card & more",
-      icon: Layers,
     },
     {
       href: `/${locale}/dashboard`,
       label: dict.nav.dashboard || "My Journey",
-      sub: "History & saved readings",
       icon: Compass,
     },
   ];
@@ -117,9 +156,44 @@ export function Header({ locale }: HeaderProps) {
             </div>
           </Link>
 
-          {/* 2. Desktop Navigation (Spacious, elegant, uncluttered) */}
-          <nav className="hidden lg:flex items-center gap-1.5 xl:gap-2.5" aria-label="Main Navigation">
-            {navLinks.map((link) => {
+          {/* 2. Desktop Navigation with Readings Dropdown matching Competitor */}
+          <nav className="hidden lg:flex items-center gap-2 xl:gap-3" aria-label="Main Navigation">
+            {/* Readings Dropdown */}
+            <div className="relative group">
+              <button
+                type="button"
+                className="flex items-center gap-1.5 text-xs xl:text-sm font-medium tracking-wide px-3.5 py-1.5 rounded-full text-amber-200 bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 transition-all cursor-pointer"
+                aria-haspopup="true"
+              >
+                <Sparkles className="w-3.5 h-3.5 text-amber-300" />
+                <span className="font-serif-sacred font-semibold">Readings</span>
+                <ChevronDown className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-180 transition-transform duration-200" />
+              </button>
+
+              {/* Glass Dropdown Popover matching competitor */}
+              <div className="absolute left-0 top-full pt-2 w-64 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                <div className="rounded-2xl p-2 bg-[#090714]/95 backdrop-blur-2xl border border-amber-500/30 shadow-2xl shadow-purple-950/70 space-y-1">
+                  {readingOptions.map((opt) => (
+                    <Link
+                      key={opt.href}
+                      href={opt.href}
+                      onClick={() => playButtonClick?.()}
+                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-serif-sacred text-slate-200 hover:text-amber-200 hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all group/item"
+                    >
+                      <span className="font-medium group-hover/item:translate-x-0.5 transition-transform">
+                        {opt.label}
+                      </span>
+                      <span className="text-[9px] font-mono-sacred text-amber-400/70 group-hover/item:text-amber-300 px-1.5 py-0.5 rounded bg-black/40">
+                        {opt.badge}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Standard Nav Links */}
+            {standardNavLinks.map((link) => {
               const Icon = link.icon;
               const isActive = pathname === link.href || (link.href !== `/${locale}` && pathname?.startsWith(link.href));
               return (
@@ -131,10 +205,6 @@ export function Header({ locale }: HeaderProps) {
                     isActive
                       ? "text-amber-200 bg-amber-500/20 border border-amber-400/50 shadow-md shadow-amber-500/10 font-semibold"
                       : "text-slate-300 hover:text-amber-200 hover:bg-white/5 border border-transparent"
-                  } ${
-                    link.highlight && !isActive
-                      ? "bg-gradient-to-r from-amber-500/10 to-purple-500/10 border-amber-500/30 text-amber-100"
-                      : ""
                   }`}
                 >
                   <Icon className={`w-3.5 h-3.5 ${isActive ? "text-amber-300" : "text-amber-400/70"}`} />
@@ -229,49 +299,66 @@ export function Header({ locale }: HeaderProps) {
               </Link>
             </div>
 
-            {/* Nav Items */}
-            {navLinks.map((link) => {
-              const Icon = link.icon;
-              const isActive = pathname === link.href || (link.href !== `/${locale}` && pathname?.startsWith(link.href));
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className={`w-full flex items-center justify-between p-3.5 rounded-2xl border transition-all ${
-                    isActive
-                      ? "bg-amber-500/15 border-amber-400/60 text-amber-100 shadow-md shadow-amber-500/10"
-                      : "bg-black/40 border-white/5 text-slate-200 hover:border-amber-500/30 hover:bg-white/5"
-                  }`}
-                >
-                  <div className="flex items-center gap-3.5">
-                    <div
-                      className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                        isActive
-                          ? "bg-amber-500/25 text-amber-300 border border-amber-400/40"
-                          : "bg-white/5 text-slate-300 border border-white/5"
-                      }`}
-                    >
-                      <Icon className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <div className="font-serif-sacred font-bold text-sm text-slate-100 flex items-center gap-2">
-                        <span>{link.label}</span>
-                        {link.highlight && (
-                          <span className="text-[9px] font-mono-sacred px-2 py-0.5 rounded-full bg-amber-400 text-neutral-950 font-bold uppercase">
-                            Ritual
-                          </span>
-                        )}
+            {/* Sacred Readings Accordion Section */}
+            <div className="space-y-1 mb-4">
+              <span className="font-mono-sacred text-[10px] text-amber-400 tracking-widest uppercase px-1">
+                ✦ SACRED READINGS (DEDICATED ROOMS) ✦
+              </span>
+              <div className="grid grid-cols-1 gap-1.5 pt-1">
+                {readingOptions.map((opt) => (
+                  <Link
+                    key={opt.href}
+                    href={opt.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-black/40 border border-white/5 hover:border-amber-500/30 text-xs font-serif-sacred text-slate-200 hover:text-amber-200 transition-all"
+                  >
+                    <span className="font-medium">{opt.label}</span>
+                    <span className="text-[9px] font-mono-sacred text-amber-400/80 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
+                      {opt.badge}
+                    </span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+
+            {/* Standard Sanctuary Links */}
+            <div className="space-y-1.5 pt-2 border-t border-white/5">
+              <span className="font-mono-sacred text-[10px] text-slate-400 tracking-widest uppercase px-1">
+                SANCTUARY
+              </span>
+              {standardNavLinks.map((link) => {
+                const Icon = link.icon;
+                const isActive = pathname === link.href || pathname?.startsWith(link.href);
+                return (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`w-full flex items-center justify-between p-3 rounded-xl border transition-all ${
+                      isActive
+                        ? "bg-amber-500/15 border-amber-400/60 text-amber-100 shadow-md shadow-amber-500/10"
+                        : "bg-black/40 border-white/5 text-slate-200 hover:border-amber-500/30 hover:bg-white/5"
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`w-8 h-8 rounded-lg flex items-center justify-center ${
+                          isActive
+                            ? "bg-amber-500/25 text-amber-300 border border-amber-400/40"
+                            : "bg-white/5 text-slate-300 border border-white/5"
+                        }`}
+                      >
+                        <Icon className="w-4 h-4" />
                       </div>
-                      <div className="text-[11px] text-slate-400 font-light mt-0.5">
-                        {link.sub}
+                      <div className="font-serif-sacred font-bold text-xs text-slate-100">
+                        {link.label}
                       </div>
                     </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-amber-400/60" />
-                </Link>
-              );
-            })}
+                    <ArrowRight className="w-3.5 h-3.5 text-amber-400/60" />
+                  </Link>
+                );
+              })}
+            </div>
           </div>
 
           {/* Drawer Footer: Language & Quick Audio */}

@@ -4,6 +4,7 @@ import { allSpreads, getSpreadDisplayName } from "@/lib/tarot/data";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { Locale } from "@/types/tarot";
 import { Layers, ArrowRight, Sparkles } from "lucide-react";
+import { ChooseYourReadingSection } from "@/components/ui/ChooseYourReadingSection";
 
 interface SpreadsIndexProps {
   params: Promise<{ locale: string }>;
@@ -28,6 +29,9 @@ export default async function SpreadsIndexPage({ params }: SpreadsIndexProps) {
           Each spread functions as an energetic matrix. Learn the position roles and purpose of each classical tarot layout.
         </p>
       </div>
+
+      {/* Quick Visual Grid matching competitor layout with dedicated URLs */}
+      <ChooseYourReadingSection locale={activeLocale} />
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {allSpreads.map((spread) => {
