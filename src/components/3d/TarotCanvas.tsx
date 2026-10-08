@@ -96,20 +96,21 @@ function SceneContent({
       {/* Step 3: Intuitive Picking — Full-screen Panoramic Floating Card Cosmos */}
       {step === "picking" && <FloatingCardField />}
 
-      {/* Step 4 & 5: Spread Altar Layout */}
+      {/* Step 4 & 5: Spread Altar Layout (Clean, non-congested horizontal line matching competitor) */}
       {(step === "revealing" || step === "streaming" || step === "complete") && currentSpread && (
-        <group position={[0, -0.35, 0]}>
+        <group position={[0, -0.15, 0]}>
           {drawnCards.map((drawnCard, idx) => {
-            const posConfig = currentSpread.positions[idx] || {
-              coordinates: { x: (idx - 1) * 2.5, y: 0, z: 0 },
-            };
+            const total = drawnCards.length;
+            const spacing = total <= 1 ? 0 : total <= 3 ? 2.1 : total <= 5 ? 1.48 : 1.25;
+            const horizontalX = (idx - (total - 1) / 2) * spacing;
+            const coords = { x: horizontalX, y: 0, z: 0 };
             const isRevealed = revealedIndices.includes(idx);
 
             return (
               <SpreadCardModel
                 key={drawnCard.cardId + "_" + idx}
                 cardData={drawnCard}
-                positionCoordinates={posConfig.coordinates}
+                positionCoordinates={coords}
                 isRevealed={isRevealed}
                 onRevealClick={() => revealCard(idx)}
                 locale={locale}

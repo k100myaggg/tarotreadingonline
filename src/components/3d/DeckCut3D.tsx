@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, useMemo } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { getCardBackTexture } from "./cardTextures";
@@ -20,28 +20,38 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
   const [cutState, setCutState] = useState<"united" | "splitting" | "split" | "completed">("united");
   const [hovered, setHovered] = useState(false);
 
-  // High-performance shared geometry (1 single geometry instance for entire component)
-  const deckGeometry = useMemo(() => new THREE.BoxGeometry(1.2, 2.0, 0.22), []);
+  // Clean cursor on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.style.cursor = "auto";
+      }
+    };
+  }, []);
 
-  // Materials with enhanced gold foil metallic sheen
+  // High-performance shared geometry for each half-deck cut
+  const deckGeometry = useMemo(() => new THREE.BoxGeometry(1.2, 2.0, 0.18), []);
+
+  // Gold edge foil material
   const goldEdgeMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: "#d4af37",
-        metalness: 0.92,
-        roughness: 0.15,
-        emissive: new THREE.Color("#755208"),
-        emissiveIntensity: 0.35,
+        metalness: 0.90,
+        roughness: 0.20,
+        emissive: new THREE.Color("#604005"),
+        emissiveIntensity: 0.3,
       }),
     []
   );
 
+  // Authentic card back material: high roughness & low metalness prevents washed-out white glare
   const backMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         map: cardBackTexture,
-        roughness: 0.28,
-        metalness: 0.18,
+        roughness: 0.62,
+        metalness: 0.04,
       }),
     [cardBackTexture]
   );
@@ -52,8 +62,8 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
     [goldEdgeMat, backMat]
   );
 
-  // Smooth position vectors
-  const leftStackPos = useRef(new THREE.Vector3(0, 0, 0));
+  // Position & rotation vectors for both stacks
+  const leftStackPos = useRef(new THREE.Vector3(0, 0, 0.02));
   const rightStackPos = useRef(new THREE.Vector3(0, 0, 0));
   const leftStackRot = useRef(new THREE.Euler(0, 0, 0));
   const rightStackRot = useRef(new THREE.Euler(0, 0, 0));
@@ -61,7 +71,7 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
   // Stardust explosion particles on cut
   const particleGeo = useMemo(() => {
     const geo = new THREE.BufferGeometry();
-    const count = 60;
+    const count = 50;
     const positions = new Float32Array(count * 3);
     for (let i = 0; i < count * 3; i += 3) {
       positions[i] = (Math.random() - 0.5) * 3.0;
@@ -72,6 +82,17 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
     return geo;
   }, []);
 
+  const handlePointerOver = () => {
+    setHovered(true);
+    if (typeof document !== "undefined") document.body.style.cursor = "pointer";
+    if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
+  };
+
+  const handlePointerOut = () => {
+    setHovered(false);
+    if (typeof document !== "undefined") document.body.style.cursor = "auto";
+  };
+
   const handleDeckClick = () => {
     if (cutState === "united") {
       setCutState("splitting");
@@ -79,13 +100,16 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
         mysticAudio.playCardShuffle?.();
         setTimeout(() => mysticAudio.playCardFlip?.(), 250);
       }
-      setTimeout(() => setCutState("split"), 450);
+      setTimeout(() => setCutState("split"), 500);
     } else if (cutState === "split") {
       setCutState("completed");
       if (typeof window !== "undefined") {
         mysticAudio.playCardShuffle?.();
       }
-      setTimeout(() => onCutComplete(), 600);
+      setTimeout(() => {
+        if (typeof document !== "undefined") document.body.style.cursor = "auto";
+        onCutComplete();
+      }, 550);
     }
   };
 
@@ -94,8 +118,8 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
 
     // Target positions based on cut state
     let targetLeftX = 0;
-    let targetLeftY = hovered && cutState === "united" ? 0.12 : 0;
-    let targetLeftZ = 0;
+    let targetLeftY = hovered && cutState === "united" ? 0.08 : 0;
+    let targetLeftZ = cutState === "united" ? 0.02 : 0.08;
     let targetLeftRotZ = 0;
 
     let targetRightX = 0;
@@ -104,54 +128,62 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
     let targetRightRotZ = 0;
 
     if (cutState === "splitting" || cutState === "split") {
+      const breath = cutState === "split" ? Math.sin(time * 1.4) * 0.015 : 0;
       targetLeftX = -1.35;
-      targetLeftY = 0.05 + Math.sin(time * 2) * 0.025;
-      targetLeftRotZ = -0.06;
+      targetLeftY = 0.04 + breath;
+      targetLeftZ = 0.08;
+      targetLeftRotZ = -0.05;
 
       targetRightX = 1.35;
-      targetRightY = Math.cos(time * 2) * 0.025;
-      targetRightRotZ = 0.06;
+      targetRightY = -breath;
+      targetRightZ = 0;
+      targetRightRotZ = 0.05;
     } else if (cutState === "completed") {
       targetLeftX = 0;
       targetLeftY = 0;
+      targetLeftZ = 0.02;
       targetRightX = 0;
       targetRightY = 0;
+      targetRightZ = 0;
     }
 
-    // Spring damping
-    leftStackPos.current.x = THREE.MathUtils.damp(leftStackPos.current.x, targetLeftX, 6, delta);
-    leftStackPos.current.y = THREE.MathUtils.damp(leftStackPos.current.y, targetLeftY, 6, delta);
-    leftStackPos.current.z = THREE.MathUtils.damp(leftStackPos.current.z, targetLeftZ, 6, delta);
-    leftStackRot.current.z = THREE.MathUtils.damp(leftStackRot.current.z, targetLeftRotZ, 6, delta);
+    // Silky smooth spring damping (Zero jitter, Zero z-fighting)
+    leftStackPos.current.x = THREE.MathUtils.damp(leftStackPos.current.x, targetLeftX, 5.5, delta);
+    leftStackPos.current.y = THREE.MathUtils.damp(leftStackPos.current.y, targetLeftY, 5.5, delta);
+    leftStackPos.current.z = THREE.MathUtils.damp(leftStackPos.current.z, targetLeftZ, 5.5, delta);
+    leftStackRot.current.z = THREE.MathUtils.damp(leftStackRot.current.z, targetLeftRotZ, 5.5, delta);
 
-    rightStackPos.current.x = THREE.MathUtils.damp(rightStackPos.current.x, targetRightX, 6, delta);
-    rightStackPos.current.y = THREE.MathUtils.damp(rightStackPos.current.y, targetRightY, 6, delta);
-    rightStackPos.current.z = THREE.MathUtils.damp(rightStackPos.current.z, targetRightZ, 6, delta);
-    rightStackRot.current.z = THREE.MathUtils.damp(rightStackRot.current.z, targetRightRotZ, 6, delta);
+    rightStackPos.current.x = THREE.MathUtils.damp(rightStackPos.current.x, targetRightX, 5.5, delta);
+    rightStackPos.current.y = THREE.MathUtils.damp(rightStackPos.current.y, targetRightY, 5.5, delta);
+    rightStackPos.current.z = THREE.MathUtils.damp(rightStackPos.current.z, targetRightZ, 5.5, delta);
+    rightStackRot.current.z = THREE.MathUtils.damp(rightStackRot.current.z, targetRightRotZ, 5.5, delta);
 
     if (groupRef.current) {
-      groupRef.current.rotation.y = Math.sin(time * 0.5) * 0.06;
-      groupRef.current.rotation.x = Math.cos(time * 0.4) * 0.03 - 0.2;
+      groupRef.current.rotation.y = Math.sin(time * 0.4) * 0.04;
+      groupRef.current.rotation.x = Math.cos(time * 0.3) * 0.02 - 0.12;
     }
 
-    // Dynamic metallic foil shimmer
-    const shimmer = Math.sin(time * 2.5) * 0.5 + 0.5;
-    goldEdgeMat.emissiveIntensity = 0.25 + shimmer * 0.35;
+    // Subtle edge foil shimmer
+    const shimmer = Math.sin(time * 2) * 0.5 + 0.5;
+    goldEdgeMat.emissiveIntensity = 0.2 + shimmer * 0.25;
   });
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      <pointLight position={[0, 1.5, 2]} intensity={2.2} color="#ffe58f" distance={8} />
-      <pointLight position={[0, -1, 1]} intensity={0.8} color="#c084fc" distance={6} />
+      {/* Soft, non-glaring illumination so the purple & gold card back artwork remains rich and visible */}
+      <directionalLight position={[0, 4, 5]} intensity={0.8} color="#fff6e8" />
+      <pointLight position={[0, -2, 3]} intensity={0.5} color="#c084fc" distance={10} decay={2} />
+      <pointLight position={[-3, 2, 3]} intensity={0.4} color="#fde047" distance={8} decay={2} />
+      <pointLight position={[3, 2, 3]} intensity={0.4} color="#fde047" distance={8} decay={2} />
 
       {/* Sparkles particle aura */}
       {(cutState === "splitting" || cutState === "split") && (
         <points geometry={particleGeo}>
           <pointsMaterial
-            size={0.04}
+            size={0.035}
             color="#ffd700"
             transparent
-            opacity={0.8}
+            opacity={0.7}
             blending={THREE.AdditiveBlending}
           />
         </points>
@@ -161,23 +193,16 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
       <mesh
         geometry={deckGeometry}
         material={cardMaterials}
-        position={[leftStackPos.current.x, leftStackPos.current.y, leftStackPos.current.z + (cutState === "united" ? 0.01 : 0)]}
+        position={[leftStackPos.current.x, leftStackPos.current.y, leftStackPos.current.z]}
         rotation={[leftStackRot.current.x, Math.PI, leftStackRot.current.z]}
         onClick={handleDeckClick}
-        onPointerOver={() => {
-          setHovered(true);
-          document.body.style.cursor = "pointer";
-          if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
-        }}
-        onPointerOut={() => {
-          setHovered(false);
-          document.body.style.cursor = "auto";
-        }}
+        onPointerOver={handlePointerOver}
+        onPointerOut={handlePointerOut}
         castShadow
         receiveShadow
       />
 
-      {/* Right Stack (Bottom cut of the deck) - only renders separately when split/splitting */}
+      {/* Right Stack (Bottom cut of the deck) - Smoothly separates without Z-fighting */}
       {cutState !== "united" && (
         <mesh
           geometry={deckGeometry}
@@ -185,13 +210,15 @@ export function DeckCut3D({ onCutComplete }: DeckCut3DProps) {
           position={[rightStackPos.current.x, rightStackPos.current.y, rightStackPos.current.z]}
           rotation={[rightStackRot.current.x, Math.PI, rightStackRot.current.z]}
           onClick={handleDeckClick}
+          onPointerOver={handlePointerOver}
+          onPointerOut={handlePointerOut}
           castShadow
           receiveShadow
         />
       )}
 
-      {/* 3D Floating Interactive Badge (Centered cleanly right below the deck, guaranteed single line, never overlapping bottom buttons) */}
-      <Html position={[0, -1.12, 0]} center pointerEvents="none">
+      {/* 3D Floating Interactive Badge */}
+      <Html position={[0, -1.18, 0]} center pointerEvents="none">
         <div className="flex flex-col items-center select-none pointer-events-none drop-shadow-2xl whitespace-nowrap">
           <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-black/95 backdrop-blur-md border border-amber-400/70 shadow-2xl shadow-amber-500/30 text-xs font-mono-sacred text-amber-200 uppercase tracking-widest whitespace-nowrap animate-pulse">
             <Sparkles className="w-3.5 h-3.5 text-amber-400 shrink-0" />

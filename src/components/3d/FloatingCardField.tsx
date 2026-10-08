@@ -57,9 +57,9 @@ function FloatingCardItem({
     [cardEdgeMat, backMat]
   );
 
-  // Staggered deal delay: rapid cascade dealing across the 3 rows (~1.2s total)
-  const dealDelay = 0.08 + index * 0.015;
-  const dealDuration = 0.38;
+  // Staggered deal delay: rapid cascade dealing across the 2 rows (~1.0s total)
+  const dealDelay = 0.05 + index * 0.012;
+  const dealDuration = 0.35;
 
   useFrame((state, delta) => {
     if (!meshRef.current) return;
@@ -79,10 +79,8 @@ function FloatingCardItem({
     if (elapsedSinceMount < dealDelay + dealDuration) {
       // Actively dealing: flies smoothly from center deck into row position
       const p = (elapsedSinceMount - dealDelay) / dealDuration;
-      // Smooth ease-out-cubic
       const ease = 1 - Math.pow(1 - p, 3);
-      // Parabolic flight arc lift
-      const arcLift = Math.sin(p * Math.PI) * 0.38;
+      const arcLift = Math.sin(p * Math.PI) * 0.35;
 
       meshRef.current.position.x = THREE.MathUtils.lerp(0, basePosition.x, ease);
       meshRef.current.position.y = THREE.MathUtils.lerp(-0.3, basePosition.y, ease) + arcLift;
@@ -98,9 +96,8 @@ function FloatingCardItem({
     }
 
     // ─── Phase 2: Interactive Settled State (Breathing & Selection) ───
-    // Gentle organic breathing
-    const breatheY = Math.sin(time * 0.6 + floatPhase) * 0.012;
-    const breatheZ = Math.sin(time * 0.4 + floatPhase * 1.3) * 0.006;
+    const breatheY = Math.sin(time * 0.6 + floatPhase) * 0.01;
+    const breatheZ = Math.sin(time * 0.4 + floatPhase * 1.3) * 0.005;
 
     let targetX = basePosition.x;
     let targetY = basePosition.y + breatheY;
@@ -110,13 +107,12 @@ function FloatingCardItem({
     let targetRotY = baseRotation.y;
     let targetRotZ = baseRotation.z;
 
-    // Vibrant baseline gold glow so cards pop out against black background!
     let targetGlow = 0.28;
     let targetScale = scale;
 
     if (isSelected) {
       // Selected: card steps FORWARD into clear view
-      targetY += 0.12;
+      targetY += 0.14;
       targetZ += 1.35;
       targetRotX = 0;
       targetRotY = 0;
@@ -125,15 +121,14 @@ function FloatingCardItem({
       targetScale = scale * (hovered ? 1.22 : 1.18);
     } else if (hovered) {
       // Hover: gentle lift, forward step, and interactive cursor tilt
-      targetY += 0.08;
-      targetZ += 0.55;
-      targetRotX = baseRotation.x * 0.3 - state.pointer.y * 0.18;
-      targetRotY = baseRotation.y * 0.4 + state.pointer.x * 0.18;
+      targetY += 0.10;
+      targetZ += 0.60;
+      targetRotX = baseRotation.x * 0.3 - state.pointer.y * 0.16;
+      targetRotY = baseRotation.y * 0.4 + state.pointer.x * 0.16;
       targetGlow = 0.85;
-      targetScale = scale * 1.08;
+      targetScale = scale * 1.12;
     }
 
-    // Silky smooth damping
     const dampRate = isSelected ? 8 : hovered ? 7 : 4.5;
     meshRef.current.position.x = THREE.MathUtils.damp(meshRef.current.position.x, targetX, dampRate, delta);
     meshRef.current.position.y = THREE.MathUtils.damp(meshRef.current.position.y, targetY, dampRate, delta);
@@ -143,22 +138,18 @@ function FloatingCardItem({
     meshRef.current.rotation.y = THREE.MathUtils.damp(meshRef.current.rotation.y, targetRotY, dampRate, delta);
     meshRef.current.rotation.z = THREE.MathUtils.damp(meshRef.current.rotation.z, targetRotZ, dampRate, delta);
 
-    // Scale spring
     const curScale = meshRef.current.scale.x;
     meshRef.current.scale.setScalar(THREE.MathUtils.damp(curScale, targetScale, 8, delta));
 
-    // Dynamic metallic gold foil shimmer reacting to light and time
-    cardEdgeMat.metalness = 0.92;
-    cardEdgeMat.roughness = 0.16;
+    cardEdgeMat.metalness = 0.90;
+    cardEdgeMat.roughness = 0.18;
     glowIntensity.current = THREE.MathUtils.damp(glowIntensity.current, targetGlow, 6, delta);
     const g = glowIntensity.current;
     const shimmer = Math.sin(time * 2.8 + floatPhase) * 0.25 + 0.75;
 
     if (isSelected && hovered) {
-      // Warm rose-gold cue for unselect
       cardEdgeMat.emissive.setRGB(0.95 * g * shimmer, 0.4 * g * shimmer, 0.3 * g * shimmer);
     } else {
-      // Brilliant radiant gold edge illumination
       cardEdgeMat.emissive.setRGB(0.95 * g * shimmer, 0.76 * g * shimmer, 0.24 * g * shimmer);
     }
   });
@@ -166,14 +157,14 @@ function FloatingCardItem({
   const handlePointerOver = useCallback((e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHovered(true);
-    document.body.style.cursor = "pointer";
+    if (typeof document !== "undefined") document.body.style.cursor = "pointer";
     if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
   }, []);
 
   const handlePointerOut = useCallback((e: ThreeEvent<PointerEvent>) => {
     e.stopPropagation();
     setHovered(false);
-    document.body.style.cursor = "auto";
+    if (typeof document !== "undefined") document.body.style.cursor = "auto";
   }, []);
 
   const handleClick = useCallback(
@@ -225,14 +216,21 @@ function FloatingCardItem({
   );
 }
 
-// ─── Main 3D Floating Cosmos Card Field ───
-// Professional amphitheater fan arc calibrated for standard screens
 export function FloatingCardField() {
   const { userPickIndices, togglePickIndex } = useReadingStore();
   const groupRef = useRef<THREE.Group>(null);
   const { pointer } = useThree();
   const cardBackTexture = useMemo(() => getCardBackTexture(), []);
   const [mountTime, setMountTime] = useState(0);
+
+  // Clean cursor on unmount
+  useEffect(() => {
+    return () => {
+      if (typeof document !== "undefined") {
+        document.body.style.cursor = "auto";
+      }
+    };
+  }, []);
 
   // Play realistic card dealing riffle audio ("khad-khad-khad") on deal start
   useEffect(() => {
@@ -252,51 +250,40 @@ export function FloatingCardField() {
     []
   );
 
+  // Softened roughness & lowered metalness to eliminate white wash-out glare
   const masterBackMat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         map: cardBackTexture,
-        roughness: 0.28,
-        metalness: 0.12,
+        roughness: 0.58,
+        metalness: 0.05,
       }),
     [cardBackTexture]
   );
 
-  // ─── Calibrated 3-row amphitheater fan arc layout with realistic card overlap ───
+  // ─── Clean 2-Row Compact Fanned Ribbon (Less congested, elegant & spacious) ───
   const cardLayouts = useMemo(() => {
     const total = 78;
     const rng = seededRandom(42);
 
     const rows = [
-      // Front row (bottom): 26 cards
+      // Top row: 39 cards
       {
-        count: 26,
-        radius: 6.0,
-        yCenter: -0.70,
-        zBase: 0.35,
-        angleSpan: Math.PI * 0.54, // ~97 degrees
-        scale: 0.84,
-        tiltX: -0.09,
+        count: 39,
+        spanWidth: 8.6,
+        yCenter: 0.46,
+        zBase: -0.10,
+        scale: 0.78,
+        tiltX: -0.07,
       },
-      // Middle row: 26 cards
+      // Bottom row: 39 cards
       {
-        count: 26,
-        radius: 6.4,
-        yCenter: 0.0,
-        zBase: -0.25,
-        angleSpan: Math.PI * 0.50, // ~90 degrees
-        scale: 0.76,
-        tiltX: -0.06,
-      },
-      // Back row (top): 26 cards
-      {
-        count: 26,
-        radius: 6.8,
-        yCenter: 0.70,
-        zBase: -0.85,
-        angleSpan: Math.PI * 0.46, // ~83 degrees
-        scale: 0.68,
-        tiltX: -0.03,
+        count: 39,
+        spanWidth: 8.6,
+        yCenter: -0.42,
+        zBase: 0.10,
+        scale: 0.78,
+        tiltX: -0.07,
       },
     ];
 
@@ -314,23 +301,18 @@ export function FloatingCardField() {
       for (let i = 0; i < row.count && cardIdx < total; i++) {
         const t = row.count > 1 ? i / (row.count - 1) : 0.5;
 
-        // Card angle along the fan arc (centered at 0)
-        const angle = -row.angleSpan / 2 + t * row.angleSpan;
-
-        // Natural overlap: sequential micro z-layering so cards layer over each other like real cards
-        const overlapZ = (i / row.count) * 0.04;
-
-        // Position on arc: center cards closest, wings curve gently BACK into depth
-        const x = Math.sin(angle) * row.radius;
-        const z = (Math.cos(angle) - 1) * (row.radius * 0.35) + row.zBase + overlapZ;
+        // Linear horizontal fanning with gentle arc
+        const x = -row.spanWidth / 2 + t * row.spanWidth;
+        const arcZ = Math.sin(t * Math.PI) * 0.14;
+        const overlapZ = (i / row.count) * 0.035;
+        const z = row.zBase + arcZ + overlapZ;
         const y = row.yCenter;
 
-        // Cards angle inward to face camera naturally
-        const rotY = -angle * 0.55;
+        // Subtle inward turn to face viewer naturally
+        const rotY = (t - 0.5) * -0.16;
 
-        // Subtle organic breathing phase
-        const microY = (rng() - 0.5) * 0.02;
-        const microRotZ = (rng() - 0.5) * 0.01;
+        const microY = (rng() - 0.5) * 0.015;
+        const microRotZ = (rng() - 0.5) * 0.008;
 
         list.push({
           index: cardIdx,
@@ -356,8 +338,8 @@ export function FloatingCardField() {
     if (!groupRef.current) return;
     const time = state.clock.getElapsedTime();
 
-    const targetRotY = pointer.x * 0.08;
-    const targetRotX = -pointer.y * 0.04;
+    const targetRotY = pointer.x * 0.06;
+    const targetRotX = -pointer.y * 0.03;
 
     groupRef.current.rotation.y = THREE.MathUtils.damp(
       groupRef.current.rotation.y,
@@ -374,20 +356,19 @@ export function FloatingCardField() {
     // Subtle collective breathing
     groupRef.current.position.y = THREE.MathUtils.damp(
       groupRef.current.position.y,
-      Math.sin(time * 0.3) * 0.015,
+      Math.sin(time * 0.3) * 0.012,
       3,
       delta
     );
   });
 
   return (
-    <group ref={groupRef} position={[0, -0.05, 0]}>
-      {/* High-illumination warm spotlights illuminating all 3 tiers of cards */}
-      <pointLight position={[0, -0.6, 4.0]} intensity={2.2} color="#fff6d9" distance={15} decay={1.5} />
-      <pointLight position={[0, 0.0, 3.8]} intensity={2.2} color="#fff6d9" distance={15} decay={1.5} />
-      <pointLight position={[0, 0.7, 3.5]} intensity={2.0} color="#fff6d9" distance={15} decay={1.5} />
-      <pointLight position={[-4, 0, 3.0]} intensity={1.4} color="#fde047" distance={14} decay={1.8} />
-      <pointLight position={[4, 0, 3.0]} intensity={1.4} color="#fde047" distance={14} decay={1.8} />
+    <group ref={groupRef} position={[0, -0.02, 0]}>
+      {/* Balanced, diffuse scene illumination preserving rich purple & gold colors without white glares */}
+      <directionalLight position={[0, 4, 6]} intensity={0.85} color="#fff8e7" />
+      <pointLight position={[0, 0, 4.0]} intensity={0.7} color="#fef08a" distance={18} decay={1.8} />
+      <pointLight position={[-4, 0, 3.2]} intensity={0.4} color="#e9d5ff" distance={12} decay={2} />
+      <pointLight position={[4, 0, 3.2]} intensity={0.4} color="#e9d5ff" distance={12} decay={2} />
 
       {cardLayouts.map((card) => (
         <FloatingCardItem

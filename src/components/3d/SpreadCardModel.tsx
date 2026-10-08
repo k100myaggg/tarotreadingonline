@@ -1,9 +1,9 @@
 "use client";
 
-import React, { useMemo, useRef, useState } from "react";
+import React, { useRef, useState, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import * as THREE from "three";
+import { Html } from "@react-three/drei";
 import { DrawnCardData, Locale } from "@/types/tarot";
 import { getCardById, getCardDisplayName } from "@/lib/tarot/data";
 import { getCardBackTexture, getCardFrontTexture } from "./cardTextures";
@@ -17,12 +17,30 @@ interface SpreadCardModelProps {
   locale: Locale;
 }
 
-// Roman numeral lookup for Major Arcana
-const ROMAN_NUMERALS = [
-  "0", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX",
-  "X", "XI", "XII", "XIII", "XIV", "XV", "XVI", "XVII", "XVIII", "XIX",
-  "XX", "XXI",
-];
+const ROMAN_NUMERALS: Record<number, string> = {
+  0: "0",
+  1: "I",
+  2: "II",
+  3: "III",
+  4: "IV",
+  5: "V",
+  6: "VI",
+  7: "VII",
+  8: "VIII",
+  9: "IX",
+  10: "X",
+  11: "XI",
+  12: "XII",
+  13: "XIII",
+  14: "XIV",
+  15: "XV",
+  16: "XVI",
+  17: "XVII",
+  18: "XVIII",
+  19: "XIX",
+  20: "XX",
+  21: "XXI",
+};
 
 export function SpreadCardModel({
   cardData,
@@ -31,7 +49,6 @@ export function SpreadCardModel({
   onRevealClick,
   locale,
 }: SpreadCardModelProps) {
-  const meshRef = useRef<THREE.Group>(null);
   const [hovered, setHovered] = useState(false);
   const cardInfo = useMemo(() => getCardById(cardData.cardId), [cardData.cardId]);
   const cardBackTexture = useMemo(() => getCardBackTexture(), []);
@@ -40,7 +57,6 @@ export function SpreadCardModel({
     if (!cardInfo) return cardBackTexture;
     const displayName = getCardDisplayName(cardInfo, locale);
 
-    // Determine numeral
     let numeral: string | undefined;
     if (cardInfo.arcana === "major" && cardInfo.number !== undefined) {
       numeral = ROMAN_NUMERALS[cardInfo.number] || String(cardInfo.number);
@@ -56,25 +72,25 @@ export function SpreadCardModel({
     );
   }, [cardInfo, cardBackTexture, locale]);
 
-  // Materials: front, back, gold edges
+  // Materials: front, back, gold edges (matte linen finishes prevent blinding white glare)
   const materials = useMemo(() => {
     const goldEdgeMat = new THREE.MeshStandardMaterial({
       color: "#f5c542",
       emissive: "#d4af37",
-      metalness: 0.92,
-      roughness: 0.16,
+      metalness: 0.90,
+      roughness: 0.18,
     });
 
     const frontMat = new THREE.MeshStandardMaterial({
       map: cardFrontTexture,
-      roughness: 0.25,
-      metalness: 0.08,
+      roughness: 0.45,
+      metalness: 0.04,
     });
 
     const backMat = new THREE.MeshStandardMaterial({
       map: cardBackTexture,
-      roughness: 0.25,
-      metalness: 0.12,
+      roughness: 0.58,
+      metalness: 0.04,
     });
 
     // Box order: right, left, top, bottom, front (+Z), back (-Z)
@@ -92,7 +108,7 @@ export function SpreadCardModel({
     const targetFlip = isRevealed ? 1 : 0;
     flipProgress.current = THREE.MathUtils.damp(flipProgress.current, targetFlip, 4.5, delta);
 
-    // Target Y-rotation: 0 for face-up (front faces camera), Math.PI for face-down
+    // Target Y-rotation: 0 for face-up, Math.PI for face-down
     const targetRotY = THREE.MathUtils.lerp(Math.PI, 0, flipProgress.current);
 
     // If card is reversed, rotate 180 deg around Z axis smoothly
@@ -107,14 +123,14 @@ export function SpreadCardModel({
 
     // Floating breathing elevation when revealed
     const time = state.clock.getElapsedTime();
-    const floatOffset = isRevealed ? Math.sin(time * 1.4 + cardData.positionIndex) * 0.03 : 0;
-    const targetY = positionCoordinates.y + (isRevealed ? 0.05 : 0) + floatOffset + (hovered ? 0.12 : 0);
+    const floatOffset = isRevealed ? Math.sin(time * 1.4 + cardData.positionIndex) * 0.025 : 0;
+    const targetY = positionCoordinates.y + (isRevealed ? 0.04 : 0) + floatOffset + (hovered ? 0.10 : 0);
     outerGroupRef.current.position.y = THREE.MathUtils.damp(outerGroupRef.current.position.y, targetY, 4, delta);
 
     // Interactive cursor parallax tilt
     if (hovered) {
-      outerGroupRef.current.rotation.x = THREE.MathUtils.damp(outerGroupRef.current.rotation.x, -state.pointer.y * 0.22, 6, delta);
-      outerGroupRef.current.rotation.y = THREE.MathUtils.damp(outerGroupRef.current.rotation.y, state.pointer.x * 0.22, 6, delta);
+      outerGroupRef.current.rotation.x = THREE.MathUtils.damp(outerGroupRef.current.rotation.x, -state.pointer.y * 0.18, 6, delta);
+      outerGroupRef.current.rotation.y = THREE.MathUtils.damp(outerGroupRef.current.rotation.y, state.pointer.x * 0.18, 6, delta);
     } else {
       outerGroupRef.current.rotation.x = THREE.MathUtils.damp(outerGroupRef.current.rotation.x, 0, 5, delta);
       outerGroupRef.current.rotation.y = THREE.MathUtils.damp(outerGroupRef.current.rotation.y, 0, 5, delta);
@@ -126,11 +142,11 @@ export function SpreadCardModel({
       THREE.MathUtils.damp(cardGroupRef.current.scale.x, targetScale, 6, delta)
     );
 
-    // Edge metallic foil shimmer: high contrast baseline glow so cards pop out against black space
+    // Edge metallic foil shimmer
     const goldEdge = materials[0] as THREE.MeshStandardMaterial;
-    goldEdge.metalness = 0.94;
-    goldEdge.roughness = 0.14;
-    const glowIntensity = isRevealed ? 0.85 : hovered ? 0.7 : 0.35;
+    goldEdge.metalness = 0.90;
+    goldEdge.roughness = 0.18;
+    const glowIntensity = isRevealed ? 0.75 : hovered ? 0.65 : 0.30;
     const shimmer = Math.sin(time * 3 + cardData.positionIndex) * 0.25 + 0.75;
     goldEdge.emissive.setRGB(0.95 * glowIntensity * shimmer, 0.76 * glowIntensity * shimmer, 0.24 * glowIntensity * shimmer);
   });
@@ -146,12 +162,12 @@ export function SpreadCardModel({
       onPointerOver={(e) => {
         e.stopPropagation();
         setHovered(true);
-        document.body.style.cursor = "pointer";
+        if (typeof document !== "undefined") document.body.style.cursor = "pointer";
         if (typeof window !== "undefined") mysticAudio.playButtonClick?.();
       }}
       onPointerOut={() => {
         setHovered(false);
-        document.body.style.cursor = "auto";
+        if (typeof document !== "undefined") document.body.style.cursor = "auto";
       }}
     >
       {/* Inner Rotatable Card Mesh Group */}
@@ -160,45 +176,29 @@ export function SpreadCardModel({
           <boxGeometry args={[1.15, 1.95, 0.02]} />
         </mesh>
 
-        {/* Dedicated Golden Aura Illuminating both face-down and face-up states */}
+        {/* Soft, non-glaring golden aura */}
         <pointLight
           position={[0, 0, 0.45]}
-          intensity={isRevealed ? 1.2 : 0.85}
-          color={isRevealed ? "#ffe885" : "#fef08a"}
-          distance={3.8}
+          intensity={isRevealed ? 0.5 : 0.35}
+          color="#fff4d0"
+          distance={3.0}
         />
       </group>
 
-      {/* Floating Sacred Position, Card Name & Orientation Badge */}
-      <Html position={[0, -1.25, 0]} center pointerEvents="none">
-        <div className="flex flex-col items-center pointer-events-none whitespace-nowrap select-none drop-shadow-lg gap-1">
-          {/* Position Name */}
-          <span className="font-mono-sacred text-[10px] px-2.5 py-0.5 rounded-full bg-black/90 backdrop-blur-md border border-amber-400/50 text-amber-300 uppercase tracking-wider shadow-lg">
-            {cardData.positionName || `Position ${cardData.positionIndex + 1}`}
+      {/* Clean, elegant position title matching competitor (Screenshot 5) */}
+      <Html position={[0, -1.22, 0]} center pointerEvents="none">
+        <div className="flex flex-col items-center pointer-events-none select-none text-center whitespace-nowrap">
+          <span className="font-serif-sacred text-xs sm:text-sm font-semibold text-amber-200 tracking-wide drop-shadow">
+            {cardData.positionName || `Card ${cardData.positionIndex + 1}`}
           </span>
-
-          {/* Official Card Name (Always clearly shown when revealed, e.g. "Four of Cups", "Temperance") */}
           {isRevealed && cardInfo && (
-            <span className="font-serif-sacred text-[11px] font-bold px-3 py-0.5 rounded-full bg-gradient-to-r from-amber-950/90 via-black/90 to-amber-950/90 border border-amber-400/70 text-amber-100 uppercase tracking-wide shadow-xl drop-shadow">
-              ✦ {getCardDisplayName(cardInfo, locale)} ✦
-            </span>
-          )}
-
-          {/* Orientation Badge */}
-          {isRevealed && (
-            <span
-              className={`font-mono-sacred text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-widest ${
-                cardData.isReversed
-                  ? "bg-purple-950/90 border border-purple-400/60 text-purple-200"
-                  : "bg-amber-950/90 border border-amber-400/60 text-amber-200"
-              }`}
-            >
-              {cardData.isReversed ? "Reversed ↺" : "Upright ↑"}
+            <span className="font-sans text-[10.5px] text-amber-300/85 mt-0.5">
+              {getCardDisplayName(cardInfo, locale)} {cardData.isReversed ? "· ↺" : ""}
             </span>
           )}
           {!isRevealed && (
-            <span className="text-[9px] font-mono-sacred text-amber-400 mt-0.5 animate-pulse flex items-center gap-1">
-              <span>✦</span> Click to flip
+            <span className="text-[9.5px] font-mono-sacred text-amber-400/70 mt-0.5 animate-pulse">
+              ✦ Click to flip
             </span>
           )}
         </div>

@@ -113,22 +113,22 @@ export function StarfieldNebula() {
         />
       </points>
 
-      {/* ─── Scene Lighting (High Contrast illumination for crystal clear card visibility) ─── */}
+      {/* ─── Scene Lighting (Balanced illumination for rich purple & gold colors without white glares) ─── */}
       {/* Warm radiant ambient */}
-      <ambientLight intensity={0.85} color="#fff8ec" />
+      <ambientLight intensity={0.7} color="#fff8ec" />
 
       {/* Key frontal directional light illuminating card faces and gold foil */}
-      <directionalLight position={[0, 4, 8]} intensity={1.5} color="#fff6e5" />
+      <directionalLight position={[0, 4, 8]} intensity={0.9} color="#fff6e5" />
 
       {/* Key light: warm gold from above-front */}
-      <pointLight position={[0, 5, 10]} intensity={2.2} color="#fde68a" distance={35} decay={1.8} />
+      <pointLight position={[0, 5, 10]} intensity={1.1} color="#fde68a" distance={35} decay={1.8} />
 
       {/* Fill light: luminous celestial purple from below */}
-      <pointLight position={[0, -4, 4]} intensity={1.0} color="#c084fc" distance={25} decay={2} />
+      <pointLight position={[0, -4, 4]} intensity={0.7} color="#c084fc" distance={25} decay={2} />
 
       {/* Rim lights: side highlights for metallic edges */}
-      <pointLight position={[-7, 2, 2]} intensity={0.7} color="#fef08a" distance={18} decay={2} />
-      <pointLight position={[7, 2, 2]} intensity={0.7} color="#fef08a" distance={18} decay={2} />
+      <pointLight position={[-7, 2, 2]} intensity={0.5} color="#fef08a" distance={18} decay={2} />
+      <pointLight position={[7, 2, 2]} intensity={0.5} color="#fef08a" distance={18} decay={2} />
     </group>
   );
 }
