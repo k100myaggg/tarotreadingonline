@@ -20,6 +20,7 @@ import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import { FollowupChat } from "@/components/ui/FollowupChat";
 import { SanctuarySettingsModal } from "@/components/ui/SanctuarySettingsModal";
+import { PersonaAvatar } from "@/components/ui/PersonaAvatar";
 import {
   Sparkles,
   ArrowRight,
@@ -582,7 +583,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                             : "bg-black/40 border-white/5 text-slate-400 hover:border-amber-500/30"
                         }`}
                       >
-                        <span className="text-base mb-0.5">{persona.avatar}</span>
+                        <PersonaAvatar personaId={persona.id} size="sm" active={isSelected} className="mb-1" />
                         <span className="font-serif-sacred font-bold text-[10px] truncate w-full">
                           {getPersonaDisplayName(persona, locale)}
                         </span>

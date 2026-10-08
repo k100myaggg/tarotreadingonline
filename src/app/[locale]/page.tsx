@@ -5,6 +5,7 @@ import { Locale } from "@/types/tarot";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 import { allSpreads, allPersonas } from "@/lib/tarot/data";
 import { ChooseYourReadingSection } from "@/components/ui/ChooseYourReadingSection";
+import { PersonaAvatar } from "@/components/ui/PersonaAvatar";
 
 interface HomePageProps {
   params: Promise<{ locale: string }>;
@@ -63,10 +64,16 @@ export default async function HomePage({ params }: HomePageProps) {
         <div className="mt-16 w-full max-w-3xl p-1 rounded-2xl bg-gradient-to-b from-amber-500/20 via-purple-500/10 to-transparent">
           <div className="rounded-2xl mystic-panel p-6 sm:p-10 text-center relative overflow-hidden">
             <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(212,175,55,0.08),transparent_70%)] pointer-events-none" />
-            <div className="flex justify-center items-center gap-4 mb-4">
-              <span className="text-3xl">🎴</span>
-              <span className="text-3xl animate-bounce">✨</span>
-              <span className="text-3xl">🌌</span>
+            <div className="flex justify-center items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-400/40 flex items-center justify-center text-amber-300 shadow-lg shadow-amber-400/10">
+                <Layers className="w-5 h-5" />
+              </div>
+              <div className="w-12 h-12 rounded-full bg-amber-500/20 border border-amber-400/60 flex items-center justify-center text-amber-200 shadow-xl shadow-amber-400/25 ring-2 ring-amber-400/30">
+                <Sparkles className="w-6 h-6 animate-pulse" />
+              </div>
+              <div className="w-10 h-10 rounded-full bg-purple-500/10 border border-purple-400/40 flex items-center justify-center text-purple-300 shadow-lg shadow-purple-400/10">
+                <Moon className="w-5 h-5" />
+              </div>
             </div>
             <h3 className="font-serif-sacred text-xl sm:text-2xl text-amber-200 mb-2">
               Three-Dimensional Card Physics & Sound
@@ -146,9 +153,7 @@ export default async function HomePage({ params }: HomePageProps) {
               key={persona.id}
               className="mystic-panel rounded-2xl p-7 border border-amber-500/20 relative group hover:border-amber-400/60 transition-all"
             >
-              <div className="text-4xl mb-4 p-3 w-16 h-16 rounded-xl bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
-                {persona.avatar}
-              </div>
+              <PersonaAvatar personaId={persona.id} size="lg" className="mb-4" />
               <h3 className="font-serif-sacred text-xl font-bold text-amber-200 mb-1">
                 {persona.name[activeLocale] || persona.name.en}
               </h3>

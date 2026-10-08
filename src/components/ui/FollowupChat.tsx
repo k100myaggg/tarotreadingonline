@@ -6,6 +6,7 @@ import { getPersonaById, getCardById, getCardDisplayName } from "@/lib/tarot/dat
 import { getCardImagePath } from "@/lib/tarot/cardImages";
 import { Locale } from "@/types/tarot";
 import { Send, Sparkles, MessageCircle, AlertCircle, PlusCircle, CheckCircle2 } from "lucide-react";
+import { PersonaAvatar } from "@/components/ui/PersonaAvatar";
 
 interface FollowupChatProps {
   locale: Locale;
@@ -160,9 +161,7 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-amber-900/30">
         <div className="flex items-center gap-3">
-          <div className="text-2xl p-2 rounded-xl bg-amber-500/10 border border-amber-500/30">
-            {persona?.avatar || "🔮"}
-          </div>
+          <PersonaAvatar personaId={persona?.id || "sage"} size="md" />
           <div>
             <h4 className="font-serif-sacred text-lg font-bold text-amber-200">
               Dialogue with {personaName}

@@ -19,6 +19,7 @@ import {
   Send,
   BookOpen,
 } from "lucide-react";
+import { PersonaAvatar } from "./PersonaAvatar";
 
 interface ReadingStreamViewerProps {
   reading: StructuredReadingResponse | null;
@@ -38,7 +39,7 @@ export function ReadingStreamViewer({
   onSelectFollowup,
 }: ReadingStreamViewerProps) {
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
-  const { drawnCards, question, setSpreadId, setStep, resetReading } = useReadingStore();
+  const { drawnCards, question, personaId, setSpreadId, setStep, resetReading } = useReadingStore();
 
   // 5-Star Rating State
   const [userRating, setUserRating] = useState<number>(0);
@@ -91,9 +92,7 @@ export function ReadingStreamViewer({
       {/* ─── 1. STREAMING / SYNTHESIS STATUS BANNER ─── */}
       <div className="mystic-panel rounded-2xl p-6 border border-amber-500/30 flex items-center justify-between shadow-2xl">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-amber-500/10 border border-amber-500/30 flex items-center justify-center text-xl">
-            🔮
-          </div>
+          <PersonaAvatar personaId={personaId || "sage"} size="md" />
           <div>
             <h3 className="font-serif-sacred text-lg font-bold text-amber-200">
               {reading?.readerPersona || "The Oracle Voice"}

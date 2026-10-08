@@ -20,6 +20,7 @@ import { FollowupChat } from "@/components/ui/FollowupChat";
 import { SanctuarySettingsModal } from "@/components/ui/SanctuarySettingsModal";
 import { ReadingTypeConfig } from "@/lib/tarot/readingTypes";
 import { calculateYesNoVerdict, YesNoVerdict } from "@/lib/tarot/yesNoLogic";
+import { PersonaAvatar } from "@/components/ui/PersonaAvatar";
 import {
   Sparkles,
   ArrowRight,
@@ -534,7 +535,7 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
                             : "bg-black/40 border-white/5 text-slate-400 hover:border-amber-500/30"
                         }`}
                       >
-                        <span className="text-base mb-0.5">{persona.avatar}</span>
+                        <PersonaAvatar personaId={persona.id} size="sm" active={isSelected} className="mb-1" />
                         <span className="font-serif-sacred font-bold text-[10px] truncate w-full">
                           {getPersonaDisplayName(persona, locale)}
                         </span>
