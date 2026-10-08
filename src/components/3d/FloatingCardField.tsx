@@ -8,15 +8,6 @@ import { useReadingStore } from "@/stores/useReadingStore";
 import { getCardBackTexture } from "./cardTextures";
 import { mysticAudio } from "@/lib/audio/soundscape";
 
-// ─── Seeded pseudo-random for stable deterministic layout ───
-function seededRandom(seed: number) {
-  let s = seed;
-  return () => {
-    s = (s * 16807) % 2147483647;
-    return (s - 1) / 2147483646;
-  };
-}
-
 interface FloatingCardItemProps {
   index: number;
   basePosition: THREE.Vector3;
@@ -95,13 +86,10 @@ function FloatingCardItem({
       return;
     }
 
-    // ─── Phase 2: Interactive Settled State (Breathing & Selection) ───
-    const breatheY = Math.sin(time * 0.6 + floatPhase) * 0.01;
-    const breatheZ = Math.sin(time * 0.4 + floatPhase * 1.3) * 0.005;
-
+    // ─── Phase 2: Interactive Settled State (Selection & Hover) ───
     let targetX = basePosition.x;
-    let targetY = basePosition.y + breatheY;
-    let targetZ = basePosition.z + breatheZ;
+    let targetY = basePosition.y;
+    let targetZ = basePosition.z;
 
     let targetRotX = baseRotation.x;
     let targetRotY = baseRotation.y;
@@ -113,20 +101,20 @@ function FloatingCardItem({
     if (isSelected) {
       // Selected: card steps FORWARD into clear view
       targetY += 0.14;
-      targetZ += 1.35;
+      targetZ += 1.25;
       targetRotX = 0;
       targetRotY = 0;
       targetRotZ = 0;
       targetGlow = hovered ? 1.4 : 1.1;
-      targetScale = scale * (hovered ? 1.22 : 1.18);
+      targetScale = scale * (hovered ? 1.20 : 1.15);
     } else if (hovered) {
       // Hover: gentle lift, forward step, and interactive cursor tilt
-      targetY += 0.10;
-      targetZ += 0.60;
-      targetRotX = baseRotation.x * 0.3 - state.pointer.y * 0.16;
-      targetRotY = baseRotation.y * 0.4 + state.pointer.x * 0.16;
+      targetY += 0.08;
+      targetZ += 0.55;
+      targetRotX = baseRotation.x - state.pointer.y * 0.12;
+      targetRotY = state.pointer.x * 0.12;
       targetGlow = 0.85;
-      targetScale = scale * 1.12;
+      targetScale = scale * 1.10;
     }
 
     const dampRate = isSelected ? 8 : hovered ? 7 : 4.5;
@@ -219,7 +207,7 @@ function FloatingCardItem({
 export function FloatingCardField() {
   const { userPickIndices, togglePickIndex } = useReadingStore();
   const groupRef = useRef<THREE.Group>(null);
-  const { pointer } = useThree();
+  const { pointer, viewport, size } = useThree();
   const cardBackTexture = useMemo(() => getCardBackTexture(), []);
   const [mountTime, setMountTime] = useState(0);
 
@@ -261,29 +249,37 @@ export function FloatingCardField() {
     [cardBackTexture]
   );
 
-  // ─── Clean 2-Row Compact Fanned Ribbon (Less congested, elegant & spacious) ───
+  // ─── Pristine 2-Row Fanned Ribbon Spread (Zero jitter, razor-sharp alignment & larger on desktop) ───
   const cardLayouts = useMemo(() => {
     const total = 78;
-    const rng = seededRandom(42);
+    const isDesktop = size.width >= 1024;
+    const isTablet = size.width >= 640 && size.width < 1024;
+
+    // Responsive desktop scaling: significantly larger on desktop as requested
+    const scale = isDesktop ? 0.94 : isTablet ? 0.82 : 0.70;
+
+    // Span width: proportioned cleanly to span comfortably across the screen
+    const maxSpan = isDesktop ? 10.2 : isTablet ? 8.6 : 7.0;
+    const spanWidth = Math.min(maxSpan, Math.max(6.0, viewport.width * 0.92));
 
     const rows = [
-      // Top row: 39 cards
+      // Top row: 39 cards (index 0 to 38)
       {
         count: 39,
-        spanWidth: 8.6,
-        yCenter: 0.46,
-        zBase: -0.10,
-        scale: 0.78,
-        tiltX: -0.07,
+        spanWidth,
+        yCenter: isDesktop ? 0.60 : 0.50,
+        zBase: -0.06,
+        scale,
+        tiltX: -0.06,
       },
-      // Bottom row: 39 cards
+      // Bottom row: 39 cards (index 39 to 77)
       {
         count: 39,
-        spanWidth: 8.6,
-        yCenter: -0.42,
-        zBase: 0.10,
-        scale: 0.78,
-        tiltX: -0.07,
+        spanWidth,
+        yCenter: isDesktop ? -0.56 : -0.46,
+        zBase: 0.06,
+        scale,
+        tiltX: -0.06,
       },
     ];
 
@@ -301,24 +297,21 @@ export function FloatingCardField() {
       for (let i = 0; i < row.count && cardIdx < total; i++) {
         const t = row.count > 1 ? i / (row.count - 1) : 0.5;
 
-        // Linear horizontal fanning with gentle arc
+        // Perfectly uniform, linear horizontal fanning
         const x = -row.spanWidth / 2 + t * row.spanWidth;
-        const arcZ = Math.sin(t * Math.PI) * 0.14;
-        const overlapZ = (i / row.count) * 0.035;
-        const z = row.zBase + arcZ + overlapZ;
+
+        // Monotonic Z-stacking from left to right:
+        // Each card cleanly overlaps the one to its left. Zero z-fighting, zero clashing!
+        const z = row.zBase + (i - (row.count - 1) / 2) * 0.0028;
+
+        // Perfectly level horizontal baseline: zero microY, zero crooked tilt!
         const y = row.yCenter;
-
-        // Subtle inward turn to face viewer naturally
-        const rotY = (t - 0.5) * -0.16;
-
-        const microY = (rng() - 0.5) * 0.015;
-        const microRotZ = (rng() - 0.5) * 0.008;
 
         list.push({
           index: cardIdx,
-          position: new THREE.Vector3(x, y + microY, z),
-          rotation: new THREE.Euler(row.tiltX, rotY, microRotZ),
-          floatPhase: rng() * Math.PI * 2,
+          position: new THREE.Vector3(x, y, z),
+          rotation: new THREE.Euler(row.tiltX, 0, 0),
+          floatPhase: (cardIdx / total) * Math.PI * 2,
           scale: row.scale,
         });
 
@@ -327,7 +320,7 @@ export function FloatingCardField() {
     }
 
     return list;
-  }, []);
+  }, [viewport.width, size.width]);
 
   // Set mount time on initial frame
   useFrame((state, delta) => {

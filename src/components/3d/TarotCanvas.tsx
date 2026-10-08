@@ -22,13 +22,12 @@ interface TarotCanvasProps {
 }
 
 function CameraController({ step }: { step: string }) {
-  const { camera } = useThree();
+  const { camera, size } = useThree();
 
   useFrame((_, delta) => {
     // Cinematic camera positions calibrated for full-screen immersion
     let targetZ = 6.0;
     let targetY = 0;
-    let targetFov = 50;
 
     if (step === "question") {
       targetZ = 6.4;
@@ -40,8 +39,10 @@ function CameraController({ step }: { step: string }) {
       targetZ = 4.5;
       targetY = 0.22;
     } else if (step === "picking") {
-      // Wider centered view calibrated for the compact 3-row amphitheater
-      targetZ = 7.2;
+      // Responsive camera distance: closer on desktop for significantly larger, majestic cards
+      const isDesktop = size.width >= 1024;
+      const isTablet = size.width >= 640 && size.width < 1024;
+      targetZ = isDesktop ? 6.2 : isTablet ? 6.8 : 7.6;
       targetY = 0.0;
     } else if (step === "revealing" || step === "streaming") {
       // Direct focused altar view: cards perfectly centered and unobstructed
