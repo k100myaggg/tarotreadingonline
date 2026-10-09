@@ -1,4 +1,5 @@
 import { getCardById } from "@/lib/tarot/data";
+import { Locale } from "@/types/tarot";
 
 export interface HistoricalReadingItem {
   id: string;
@@ -20,7 +21,7 @@ export interface RecurringThemesAnalysis {
 
 export function analyzeHistoricalThemes(
   readings: HistoricalReadingItem[],
-  locale: "en" | "hi" | "ja" = "en"
+  locale: Locale = "en"
 ): RecurringThemesAnalysis {
   const readingsCount = readings.length;
   const isUnlocked = readingsCount >= 7;

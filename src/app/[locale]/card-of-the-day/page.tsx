@@ -4,12 +4,14 @@ import { Locale } from "@/types/tarot";
 import { READING_TYPES, getReadingTypeBySlug } from "@/lib/tarot/readingTypes";
 import { DedicatedReadingRoom } from "@/components/reading/DedicatedReadingRoom";
 
+import { supportedLocales } from "@/lib/i18n/dictionaries";
+
 interface PageProps {
   params: Promise<{ locale: string }>;
 }
 
 export function generateStaticParams() {
-  return [{ locale: "en" }, { locale: "hi" }, { locale: "ja" }];
+  return supportedLocales.map((locale) => ({ locale }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -3,8 +3,9 @@
 import React from "react";
 import Link from "next/link";
 import { Locale } from "@/types/tarot";
-import { READING_TYPES, FEATURED_READING_TYPES } from "@/lib/tarot/readingTypes";
+import { READING_TYPES, FEATURED_READING_TYPES, getReadingTypeBadge } from "@/lib/tarot/readingTypes";
 import { useSoundscape } from "@/lib/audio/useSoundscape";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 interface ChooseYourReadingSectionProps {
   locale: Locale;
@@ -241,16 +242,17 @@ function CardIllustration({ slug }: { slug: string }) {
 
 export function ChooseYourReadingSection({ locale }: ChooseYourReadingSectionProps) {
   const { playButtonClick } = useSoundscape();
+  const dict = getDictionary(locale);
 
   return (
     <section className="w-full py-16 sm:py-24 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex flex-col items-center">
       {/* Section Title */}
       <div className="text-center mb-10 sm:mb-14">
         <h2 className="font-serif-sacred text-3xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#f4ebd0] drop-shadow-sm">
-          {locale === "hi" ? "अपना पवित्र टैरो विन्यास चुनें" : locale === "ja" ? "聖なるリーディングを選択する" : "Choose your Reading"}
+          {dict.chooseReading?.title || "Choose your Reading"}
         </h2>
         <p className="text-xs sm:text-sm font-mono-sacred text-amber-400/80 uppercase tracking-widest mt-2">
-          ✦ HIGH-DEMAND SACRED ARCHETYPES · REAL-TIME 3D DIVINATION · DEDICATED ORACLES ✦
+          ✦ {dict.chooseReading?.badge || "HIGH-DEMAND SACRED ARCHETYPES · REAL-TIME 3D DIVINATION · DEDICATED ORACLES"} ✦
         </p>
       </div>
 
@@ -275,7 +277,7 @@ export function ChooseYourReadingSection({ locale }: ChooseYourReadingSectionPro
               {/* 2. Badge, Title & Subtitle */}
               <div className="mt-4 text-center flex flex-col items-center w-full px-1">
                 <span className="text-[9px] font-mono-sacred text-amber-400/90 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 uppercase tracking-wider mb-1">
-                  {reading.badge}
+                  {getReadingTypeBadge(reading, locale)}
                 </span>
                 <h3 className="font-serif-sacred text-sm sm:text-base font-bold text-amber-100 group-hover:text-amber-200 transition-colors leading-tight">
                   {reading.name[locale] || reading.name.en}

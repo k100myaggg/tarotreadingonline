@@ -6,11 +6,12 @@ export interface ReadingTypeConfig {
   romanNumeral: string;
   cardCount: number;
   badge: string;
-  name: Record<Locale, string>;
-  subtitle: Record<Locale, string>;
-  description: Record<Locale, string>;
-  defaultQuestion: Record<Locale, string>;
-  chips: Record<Locale, string[]>;
+  badgeMap?: Partial<Record<Locale, string>>;
+  name: Partial<Record<Locale, string>> & { en: string; [key: string]: string | undefined };
+  subtitle: Partial<Record<Locale, string>> & { en: string; [key: string]: string | undefined };
+  description: Partial<Record<Locale, string>> & { en: string; [key: string]: string | undefined };
+  defaultQuestion: Partial<Record<Locale, string>> & { en: string; [key: string]: string | undefined };
+  chips: Partial<Record<Locale, string[]>> & { en: string[]; [key: string]: string[] | undefined };
   heroCardId: string;
   isYesNo?: boolean;
   isTwoChoices?: boolean;
@@ -399,5 +400,38 @@ export const FEATURED_READING_TYPES: ReadingTypeConfig[] = [
 
 export function getReadingTypeBySlug(slug: string): ReadingTypeConfig | undefined {
   return READING_TYPES.find((rt) => rt.slug === slug);
+}
+
+export function getReadingTypeBadge(config: ReadingTypeConfig, locale: Locale): string {
+  if (config.badgeMap && config.badgeMap[locale]) {
+    return config.badgeMap[locale]!;
+  }
+  if (locale === "ja") {
+    switch (config.slug) {
+      case "card-of-the-day": return "無料デイリー";
+      case "yes-or-no-tarot": return "即答イエス／ノー";
+      case "two-choices-tarot-reading": return "二者択一・進路決定";
+      case "love-tarot-reading": return "愛とロマンス";
+      case "relationship-tarot-reading": return "二人の絆・深層心理";
+      case "question-tarot-reading": return "あらゆる問いへの指針";
+      case "month-ahead-tarot-reading": return "今月の運勢・4週間";
+      case "career-tarot-reading": return "天職・キャリア開花";
+      default: return config.badge;
+    }
+  }
+  if (locale === "hi") {
+    switch (config.slug) {
+      case "card-of-the-day": return "निःशुल्क दैनिक ड्रा";
+      case "yes-or-no-tarot": return "तुरंत हाँ या ना";
+      case "two-choices-tarot-reading": return "द्विमार्गी निर्णय";
+      case "love-tarot-reading": return "प्रेम और संबंध";
+      case "relationship-tarot-reading": return "गहरा संबंध विश्लेषण";
+      case "question-tarot-reading": return "स्पष्ट उत्तर मार्गदर्शन";
+      case "month-ahead-tarot-reading": return "मासिक पूर्वानुमान";
+      case "career-tarot-reading": return "करियर और उद्देश्य";
+      default: return config.badge;
+    }
+  }
+  return config.badge;
 }
 

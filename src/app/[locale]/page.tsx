@@ -76,10 +76,10 @@ export default async function HomePage({ params }: HomePageProps) {
               </div>
             </div>
             <h3 className="font-serif-sacred text-xl sm:text-2xl text-amber-200 mb-2">
-              Three-Dimensional Card Physics & Sound
+              {dict.physics3d?.title || "Three-Dimensional Card Physics & Sound"}
             </h3>
             <p className="text-sm text-slate-400 max-w-lg mx-auto">
-              Cards float in a volumetric orbital field. Shuffle, inspect holographic card backs, select cards with real-time feedback, and watch them flip on a sacred velvet spread.
+              {dict.physics3d?.desc || "Cards float in a volumetric orbital field. Shuffle, inspect holographic card backs, select cards with real-time feedback, and watch them flip on a sacred velvet spread."}
             </p>
           </div>
         </div>
@@ -92,10 +92,10 @@ export default async function HomePage({ params }: HomePageProps) {
       <section className="w-full py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-amber-900/20">
         <div className="text-center mb-12">
           <h2 className="font-serif-sacred text-2xl sm:text-4xl text-amber-100 font-bold mb-3">
-            Sacred Spread Geometries
+            {dict.spreadsSection?.title || "Sacred Spread Geometries"}
           </h2>
           <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
-            Choose the layout that mirrors the nature of your current life crossroads.
+            {dict.spreadsSection?.desc || "Choose the layout that mirrors the nature of your current life crossroads."}
           </p>
         </div>
 
@@ -108,10 +108,14 @@ export default async function HomePage({ params }: HomePageProps) {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <span className="font-mono-sacred text-xs px-2.5 py-1 rounded bg-amber-500/10 text-amber-300 border border-amber-500/20">
-                    {spread.cardCount} {spread.cardCount === 1 ? "CARD" : "CARDS"}
+                    {spread.cardCount === 1
+                      ? (dict.spreadsSection?.cardSingular || "1 CARD")
+                      : `${spread.cardCount} ${dict.spreadsSection?.cardPlural || "CARDS"}`}
                   </span>
                   <span className="font-mono-sacred text-[11px] text-slate-400">
-                    {spread.creditCost === 0 ? "FREE" : `${spread.creditCost} CREDITS`}
+                    {spread.creditCost === 0
+                      ? (dict.spreadsSection?.freeBadge || "FREE")
+                      : `${spread.creditCost} ${dict.spreadsSection?.creditsBadge || "CREDITS"}`}
                   </span>
                 </div>
                 <h3 className="font-serif-sacred text-lg font-bold text-amber-200 mb-2">
@@ -127,7 +131,7 @@ export default async function HomePage({ params }: HomePageProps) {
                   href={`/${activeLocale}/reading?spread=${spread.id}`}
                   className="inline-flex items-center gap-1.5 text-xs font-mono-sacred text-amber-400 hover:text-amber-300 transition-colors"
                 >
-                  <span>Select Spread</span>
+                  <span>{dict.spreadsSection?.selectSpread || "Select Spread"}</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </Link>
               </div>
@@ -140,10 +144,10 @@ export default async function HomePage({ params }: HomePageProps) {
       <section className="w-full py-16 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto border-t border-amber-900/20">
         <div className="text-center mb-12">
           <h2 className="font-serif-sacred text-2xl sm:text-4xl text-amber-100 font-bold mb-3">
-            Three Sovereign Reader Voices
+            {dict.personasSection?.title || "Three Sovereign Reader Voices"}
           </h2>
           <p className="text-sm sm:text-base text-slate-400 max-w-xl mx-auto">
-            The same spread resonates differently depending on the reader you choose. Select a guide whose energy matches your soul's readiness.
+            {dict.personasSection?.desc || "The same spread resonates differently depending on the reader you choose. Select a guide whose energy matches your soul's readiness."}
           </p>
         </div>
 
@@ -164,7 +168,7 @@ export default async function HomePage({ params }: HomePageProps) {
                 {persona.description[activeLocale] || persona.description.en}
               </p>
               <div className="pt-3 border-t border-white/5 text-[11px] font-mono-sacred text-slate-400 italic">
-                Tone: {persona.tone}
+                {dict.personasSection?.toneLabel || "Tone"}: {persona.tone}
               </div>
             </div>
           ))}
@@ -179,10 +183,10 @@ export default async function HomePage({ params }: HomePageProps) {
               <Dna className="w-5 h-5 text-amber-400" />
             </div>
             <h4 className="font-serif-sacred text-base font-bold text-amber-200">
-              Cryptographic Randomness
+              {dict.foundations?.randomTitle || "Cryptographic Randomness"}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Every card draw uses server-side CSPRNG with rejection sampling. The AI model is never allowed to pick cards.
+              {dict.foundations?.randomDesc || "Every card draw uses server-side CSPRNG with rejection sampling. The AI model is never allowed to pick cards."}
             </p>
           </div>
 
@@ -191,10 +195,10 @@ export default async function HomePage({ params }: HomePageProps) {
               <Cpu className="w-5 h-5 text-amber-400" />
             </div>
             <h4 className="font-serif-sacred text-base font-bold text-amber-200">
-              Streamed Synthesis
+              {dict.foundations?.streamTitle || "Streamed Synthesis"}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Sub-second response streaming brings your reader's interpretation to life without long loading screens.
+              {dict.foundations?.streamDesc || "Sub-second response streaming brings your reader's interpretation to life without long loading screens."}
             </p>
           </div>
 
@@ -203,10 +207,10 @@ export default async function HomePage({ params }: HomePageProps) {
               <ShieldCheck className="w-5 h-5 text-amber-400" />
             </div>
             <h4 className="font-serif-sacred text-base font-bold text-amber-200">
-              Ethical Reflection Mirror
+              {dict.foundations?.ethicsTitle || "Ethical Reflection Mirror"}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Grounding in personal autonomy and discernment. Zero fatalism or fabricated certainty.
+              {dict.foundations?.ethicsDesc || "Grounding in personal autonomy and discernment. Zero fatalism or fabricated certainty."}
             </p>
           </div>
         </div>

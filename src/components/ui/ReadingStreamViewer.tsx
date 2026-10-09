@@ -20,6 +20,7 @@ import {
   BookOpen,
 } from "lucide-react";
 import { PersonaAvatar } from "./PersonaAvatar";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 interface ReadingStreamViewerProps {
   reading: StructuredReadingResponse | null;
@@ -40,6 +41,7 @@ export function ReadingStreamViewer({
   onSelectFollowup,
   followupChatNode,
 }: ReadingStreamViewerProps) {
+  const dict = getDictionary(locale);
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
   const { drawnCards, question, personaId, setSpreadId, setStep, resetReading } = useReadingStore();
 
@@ -57,7 +59,7 @@ export function ReadingStreamViewer({
         <div className="flex items-center gap-3 text-rose-400 mb-4">
           <Heart className="w-7 h-7 animate-pulse" />
           <h3 className="font-serif-sacred text-2xl font-bold text-rose-200">
-            You Are Not Alone
+            {locale === "ja" ? "あなたは一人ではありません" : locale === "hi" ? "आप अकेले नहीं हैं" : "You Are Not Alone"}
           </h3>
         </div>
         <p className="text-sm text-slate-200 leading-relaxed mb-6 font-light">
@@ -65,7 +67,7 @@ export function ReadingStreamViewer({
         </p>
         <div className="p-4 rounded-xl bg-black/50 border border-rose-900/40 space-y-2">
           <h4 className="font-mono-sacred text-xs text-rose-300 uppercase tracking-wider">
-            Confidential 24/7 Helplines:
+            {dict.footer.supportTitle}:
           </h4>
           <ul className="text-xs text-slate-300 space-y-1.5 font-mono-sacred">
             {crisisData.helplines?.map((hl: any, i: number) => (
@@ -100,7 +102,7 @@ export function ReadingStreamViewer({
               {reading?.readerPersona || "The Oracle Voice"}
             </h3>
             <p className="font-mono-sacred text-[11px] text-amber-400/70">
-              {isStreaming ? "TRANSCRIBING SACRED CURRENTS & CELESTIAL GUIDANCE..." : "SYNTHESIS MANIFESTED"}
+              {isStreaming ? (locale === "ja" ? "聖なる神託と宇宙の導きを受信中..." : "TRANSCRIBING SACRED CURRENTS & CELESTIAL GUIDANCE...") : (locale === "ja" ? "神託が示されました" : "SYNTHESIS MANIFESTED")}
             </p>
           </div>
         </div>
@@ -108,7 +110,7 @@ export function ReadingStreamViewer({
         {isStreaming ? (
           <div className="flex items-center gap-2 text-xs font-mono-sacred text-amber-300">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
-            <span>Streaming</span>
+            <span>{locale === "ja" ? "交信中" : "Streaming"}</span>
           </div>
         ) : reading ? (
           <button
@@ -117,7 +119,7 @@ export function ReadingStreamViewer({
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500/20 via-amber-400/20 to-amber-500/20 hover:from-amber-500/30 hover:to-amber-400/30 border border-amber-400/50 hover:border-amber-300 text-amber-200 text-xs font-serif-sacred font-semibold uppercase tracking-wider shadow-lg shadow-amber-500/10 transition-all hover:scale-105 active:scale-95"
           >
             <Share2 className="w-3.5 h-3.5 text-amber-400" />
-            <span>Share Poster</span>
+            <span>{dict.reader.sharePoster}</span>
           </button>
         ) : null}
       </div>
@@ -129,11 +131,11 @@ export function ReadingStreamViewer({
             <div className="flex items-center gap-2.5">
               <Sparkles className="w-5 h-5 text-amber-400 animate-pulse" />
               <h4 className="font-serif-sacred text-xl sm:text-2xl font-bold text-amber-100 tracking-wide">
-                {locale === "hi" ? "सम्पूर्ण विश्लेषण (Overall Analysis)" : "Overall Reading Analysis"}
+                {dict.reader.overallAnalysis}
               </h4>
             </div>
             <span className="font-mono-sacred text-[10px] px-3 py-1 rounded-full bg-amber-500/15 text-amber-300 border border-amber-500/30 uppercase tracking-widest shadow-sm">
-              ✦ Deep Synthesis ✦
+              ✦ {dict.reader.deepSynthesis} ✦
             </span>
           </div>
 
@@ -148,10 +150,10 @@ export function ReadingStreamViewer({
         <div className="space-y-6 pt-2">
           <div className="flex items-center gap-2 border-b border-white/10 pb-2">
             <h4 className="font-serif-sacred text-lg sm:text-xl font-bold text-amber-200">
-              {locale === "hi" ? "कार्ड-वार विस्तृत विवेचन" : "Individual Card Illuminations"}
+              {dict.reader.cardBreakdown}
             </h4>
             <span className="text-xs font-mono-sacred text-slate-400">
-              ({reading.cards.length} {reading.cards.length === 1 ? "Card" : "Cards"})
+              ({reading.cards.length} {locale === "ja" ? "枚" : reading.cards.length === 1 ? "Card" : "Cards"})
             </span>
           </div>
 
@@ -189,12 +191,12 @@ export function ReadingStreamViewer({
                           : "bg-amber-950/60 text-amber-300 border border-amber-500/30"
                       }`}
                     >
-                      {c.orientation === "reversed" ? "Reversed ↺" : "Upright ↑"}
+                      {c.orientation === "reversed" ? (locale === "ja" ? "逆位置 ↺" : locale === "hi" ? "उल्टा ↺" : "Reversed ↺") : (locale === "ja" ? "正位置 ↑" : locale === "hi" ? "सीधा ↑" : "Upright ↑")}
                     </span>
                   </div>
 
                   <p className="text-xs font-mono-sacred text-amber-300/90 mb-3 italic">
-                    Essence: {c.coreEssence}
+                    {locale === "ja" ? "本質：" : locale === "hi" ? "मूल तत्व: " : "Essence: "} {c.coreEssence}
                   </p>
 
                   <div className="text-sm text-slate-200/90 leading-relaxed mb-4 whitespace-pre-line space-y-2">
@@ -203,7 +205,7 @@ export function ReadingStreamViewer({
 
                   {c.advice && (
                     <div className="pt-3 border-t border-white/5 text-xs text-slate-400 font-serif-sacred flex items-start gap-2">
-                      <span className="text-amber-400">✦ Contemplation:</span>
+                      <span className="text-amber-400">{locale === "ja" ? "✦ 深思の指針：" : locale === "hi" ? "✦ चिंतन सूत्र: " : "✦ Contemplation: "}</span>
                       <span>{c.advice}</span>
                     </div>
                   )}
@@ -222,7 +224,7 @@ export function ReadingStreamViewer({
           </div>
           <div>
             <h5 className="font-serif-sacred font-bold text-base text-amber-100 mb-1">
-              {locale === "hi" ? "व्यावहारिक कर्म संकेत (Action Anchor)" : "Practical Action Anchor"}
+              {dict.reader.practicalStepTitle}
             </h5>
             <p className="text-sm text-slate-300 leading-relaxed">
               {reading.actionableStep}
@@ -236,7 +238,7 @@ export function ReadingStreamViewer({
         <div className="space-y-3 pt-2">
           <h5 className="font-mono-sacred text-xs text-amber-300/80 uppercase tracking-wider flex items-center gap-2">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            <span>{locale === "hi" ? "गहराई में जाएं (Go deeper into this reading)" : "Go deeper into this reading"}</span>
+            <span>{dict.reader.goDeeper}</span>
           </h5>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
             {reading.followUpSuggestions.map((q, i) => (
@@ -248,7 +250,7 @@ export function ReadingStreamViewer({
               >
                 <span className="leading-snug">{q}</span>
                 <span className="inline-flex items-center gap-1 text-[10px] font-mono-sacred text-amber-400 mt-2 opacity-60 group-hover:opacity-100 transition-opacity">
-                  <span>Ask this</span>
+                  <span>{dict.reader.askThis}</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </button>
@@ -273,13 +275,13 @@ export function ReadingStreamViewer({
             </div>
             <div>
               <h5 className="font-serif-sacred font-bold text-base text-amber-100 flex items-center gap-2">
-                <span>{locale === "hi" ? "आपकी रीडिंग सुरक्षित है" : "Your reading is saved"}</span>
+                <span>{dict.reader.readingSaved}</span>
                 <span className="text-[10px] font-mono-sacred px-2 py-0.5 rounded-full bg-amber-400 text-neutral-950 font-bold uppercase">
-                  Story Ready
+                  {dict.reader.storyReady}
                 </span>
               </h5>
               <p className="text-xs text-slate-300 mt-1 leading-relaxed">
-                Download an illuminated Instagram Story or WhatsApp status poster of your reading.
+                {dict.reader.downloadPosterDesc}
               </p>
             </div>
           </div>
@@ -290,7 +292,7 @@ export function ReadingStreamViewer({
             className="w-full sm:w-auto px-6 py-3 rounded-full bg-gradient-to-r from-amber-400 to-amber-300 hover:from-amber-300 hover:to-amber-200 text-neutral-950 font-serif-sacred font-bold text-xs uppercase tracking-wider shadow-lg shadow-amber-400/25 flex items-center justify-center gap-2 transition-all hover:scale-105 active:scale-95 shrink-0"
           >
             <Share2 className="w-4 h-4" />
-            <span>Download & Save as Image</span>
+            <span>{dict.reader.downloadPosterBtn}</span>
           </button>
         </div>
       )}
@@ -299,17 +301,15 @@ export function ReadingStreamViewer({
       {reading && !isStreaming && (
         <div className="mystic-panel rounded-2xl p-6 sm:p-7 border border-amber-500/25 text-center space-y-4 bg-black/50">
           <h5 className="font-serif-sacred text-lg sm:text-xl font-bold text-amber-100">
-            {locale === "hi" ? "आपकी रीडिंग कैसी रही?" : "How was your reading?"}
+            {dict.reader.rateReadingTitle}
           </h5>
           <p className="text-xs text-slate-400 font-light max-w-md mx-auto">
-            {locale === "hi"
-              ? "आपका अनुभव हमारे ओरेकल की सटीकता और मार्गदर्शन को बेहतर बनाता है।"
-              : "Help us refine our sacred oracle. Rate your reading and leave your reflections."}
+            {dict.reader.rateReadingDesc}
           </p>
 
           {isRatingSubmitted ? (
             <div className="p-4 rounded-xl bg-emerald-950/40 border border-emerald-500/40 text-emerald-200 text-xs sm:text-sm font-serif-sacred animate-in fade-in">
-              ✦ Thank you, seeker! Your sacred feedback has been recorded in the cosmos. ✦
+              {dict.reader.rateSuccess}
             </div>
           ) : (
             <form onSubmit={handleRatingSubmit} className="space-y-4 max-w-md mx-auto">
@@ -342,11 +342,7 @@ export function ReadingStreamViewer({
                   rows={2}
                   value={ratingFeedback}
                   onChange={(e) => setRatingFeedback(e.target.value)}
-                  placeholder={
-                    locale === "hi"
-                      ? "अपने विचार लिखें (वैकल्पिक)..."
-                      : "Share your thoughts or reflection (optional)..."
-                  }
+                  placeholder={dict.reader.rateFeedbackPlaceholder}
                   className="w-full bg-[#080512] border border-white/10 rounded-xl px-3 py-2 text-xs text-slate-200 placeholder:text-slate-500 focus:outline-none focus:border-amber-400 resize-none shadow-inner"
                 />
               </div>
@@ -357,7 +353,7 @@ export function ReadingStreamViewer({
                 className="px-6 py-2 rounded-full bg-amber-400/20 hover:bg-amber-400/30 border border-amber-400/50 text-amber-200 font-mono-sacred text-xs uppercase tracking-wider transition-all disabled:opacity-40 disabled:pointer-events-none flex items-center justify-center gap-2 mx-auto"
               >
                 <Send className="w-3.5 h-3.5" />
-                <span>Submit Feedback</span>
+                <span>{dict.reader.submitFeedback}</span>
               </button>
             </form>
           )}
@@ -370,12 +366,10 @@ export function ReadingStreamViewer({
           <div className="text-center">
             <h5 className="font-serif-sacred text-xl sm:text-2xl font-bold text-amber-100 flex items-center justify-center gap-2">
               <BookOpen className="w-5 h-5 text-amber-400" />
-              <span>{locale === "hi" ? "अन्य पवित्र रीडिंग खोजें" : "Explore Our Other Readings"}</span>
+              <span>{dict.reader.exploreOtherTitle}</span>
             </h5>
             <p className="text-xs text-slate-400 mt-1">
-              {locale === "hi"
-                ? "जीवन के विभिन्न पहलुओं पर दिव्य अंतर्दृष्टि के लिए समर्पित रीडिंग रूम चुनें।"
-                : "Select another dedicated sacred reading room to consult the cards on different life facets."}
+              {dict.reader.exploreOtherDesc}
             </p>
           </div>
 
@@ -383,27 +377,27 @@ export function ReadingStreamViewer({
             {[
               {
                 href: `/${locale}/yes-or-no-tarot`,
-                badge: "1 Card · Instant",
-                title: locale === "hi" ? "हाँ या ना टैरो" : "Yes/No Reading",
-                desc: locale === "hi" ? "त्वरित निर्णायक उत्तर" : "Instant decisive verdict",
+                badge: locale === "ja" ? "1枚 · 即答" : locale === "hi" ? "1 कार्ड · त्वरित" : "1 Card · Instant",
+                title: locale === "ja" ? "イエス・ノータロット" : locale === "hi" ? "हाँ या ना टैरो" : "Yes/No Reading",
+                desc: locale === "ja" ? "直観的な明確さと即座の判定" : locale === "hi" ? "त्वरित निर्णायक उत्तर" : "Instant decisive verdict",
               },
               {
                 href: `/${locale}/love-tarot-reading`,
-                badge: "3 Cards · Romance",
-                title: locale === "hi" ? "प्रेम और संबंध" : "Love Reading",
-                desc: locale === "hi" ? "दिल की सच्चाई और भविष्य" : "Heart dynamics & romance",
+                badge: locale === "ja" ? "3枚 · 恋愛" : locale === "hi" ? "3 कार्ड · प्रेम" : "3 Cards · Romance",
+                title: locale === "ja" ? "愛のタロットリーディング" : locale === "hi" ? "प्रेम और संबंध" : "Love Reading",
+                desc: locale === "ja" ? "心の真実と二人の愛の未来" : locale === "hi" ? "दिल की सच्चाई और भविष्य" : "Heart dynamics & romance",
               },
               {
                 href: `/${locale}/career-tarot-reading`,
-                badge: "3 Cards · Wealth",
-                title: locale === "hi" ? "करियर व उद्देश्य" : "Career & Purpose",
-                desc: locale === "hi" ? "कार्यक्षेत्र व आर्थिक दिशा" : "Work, wealth & calling",
+                badge: locale === "ja" ? "3枚 · 使命" : locale === "hi" ? "3 कार्ड · करियर" : "3 Cards · Wealth",
+                title: locale === "ja" ? "キャリア＆ライフパーパス" : locale === "hi" ? "करियर व उद्देश्य" : "Career & Purpose",
+                desc: locale === "ja" ? "才能の開花と仕事の具体的戦略" : locale === "hi" ? "कार्यक्षेत्र व आर्थिक दिशा" : "Work, wealth & calling",
               },
               {
                 href: `/${locale}/card-of-the-day`,
-                badge: "1 Card · Daily",
-                title: locale === "hi" ? "दिन का कार्ड" : "Card of the Day",
-                desc: locale === "hi" ? "दैनिक मार्गदर्शन व ध्यान" : "Daily guiding archetype",
+                badge: locale === "ja" ? "1枚 · デイリー" : locale === "hi" ? "1 कार्ड · दैनिक" : "1 Card · Daily",
+                title: locale === "ja" ? "今日のカード" : locale === "hi" ? "दिन का कार्ड" : "Card of the Day",
+                desc: locale === "ja" ? "今日という日の基調と指針" : locale === "hi" ? "दैनिक मार्गदर्शन व ध्यान" : "Daily guiding archetype",
               },
             ].map((item) => (
               <Link
@@ -427,7 +421,7 @@ export function ReadingStreamViewer({
                   </p>
                 </div>
                 <div className="mt-3 flex items-center gap-1 text-[11px] font-mono-sacred text-amber-400/80 group-hover:text-amber-300">
-                  <span>Enter Room</span>
+                  <span>{dict.reader.enterRoom}</span>
                   <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
                 </div>
               </Link>

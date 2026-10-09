@@ -148,7 +148,7 @@ export function Header({ locale }: HeaderProps) {
                 aria-haspopup="true"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span className="font-medium">Readings</span>
+                <span className="font-medium">{dict.nav?.readingsDropdown || "Readings"}</span>
                 <ChevronDown className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-180 transition-transform duration-200" />
               </button>
 
@@ -204,7 +204,7 @@ export function Header({ locale }: HeaderProps) {
               title="Available Divine Credits"
             >
               <Coins className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
-              <span className="font-bold tracking-wider">1 CREDIT</span>
+              <span className="font-bold tracking-wider">1 {dict.nav?.creditPill || "CREDIT"}</span>
             </Link>
 
             {/* Consolidated Settings Popover (Audio, Theme, Language) */}
@@ -265,9 +265,11 @@ export function Header({ locale }: HeaderProps) {
                 </div>
                 <div>
                   <div className="text-xs font-mono-sacred text-amber-300 font-bold uppercase tracking-wider">
-                    Sacred Balance
+                    {dict.nav?.sacredBalance || "Sacred Balance"}
                   </div>
-                  <div className="text-[11px] text-slate-400">1 Free Daily Divination Credit</div>
+                  <div className="text-[11px] text-slate-400">
+                    {dict.nav?.freeDailyCreditDesc || "1 Free Daily Divination Credit"}
+                  </div>
                 </div>
               </div>
               <Link
@@ -275,14 +277,14 @@ export function Header({ locale }: HeaderProps) {
                 onClick={() => setMobileMenuOpen(false)}
                 className="text-[10px] font-mono-sacred text-amber-400 hover:text-amber-200 border border-amber-500/30 px-2.5 py-1 rounded-full bg-black/60 uppercase"
               >
-                View
+                {dict.nav?.view || "View"}
               </Link>
             </div>
 
             {/* Readings Section */}
             <div className="space-y-1 mb-4">
               <span className="text-[11px] font-semibold text-amber-400 tracking-wider uppercase px-1">
-                Readings
+                {dict.nav?.readingsDropdown || "Readings"}
               </span>
               <div className="grid grid-cols-1 gap-1.5 pt-1">
                 {readingOptions.map((opt) => (
@@ -302,7 +304,7 @@ export function Header({ locale }: HeaderProps) {
             {/* Standard Sanctuary Links */}
             <div className="space-y-1.5 pt-2 border-t border-white/5">
               <span className="font-mono-sacred text-[10px] text-slate-400 tracking-widest uppercase px-1">
-                SANCTUARY
+                {dict.nav?.sanctuaryHeader || "SANCTUARY"}
               </span>
               {standardNavLinks.map((link) => {
                 const Icon = link.icon;
@@ -345,19 +347,21 @@ export function Header({ locale }: HeaderProps) {
             <div className="flex items-center justify-between">
               <span className="text-xs font-mono-sacred text-amber-400/80 flex items-center gap-1.5 uppercase">
                 <Globe className="w-3.5 h-3.5" />
-                <span>Language</span>
+                <span>{dict.settings?.languageSection || "Language"}</span>
               </span>
               <div className="flex items-center gap-1">
                 {[
                   { id: "en", label: "EN" },
                   { id: "hi", label: "हिन्दी" },
                   { id: "ja", label: "日本語" },
+                  { id: "zh", label: "中文" },
+                  { id: "es", label: "ES" },
                 ].map((item) => (
                   <Link
                     key={item.id}
                     href={getLocaleUrl(item.id as Locale)}
                     onClick={() => setMobileMenuOpen(false)}
-                    className={`px-3 py-1 rounded-lg text-xs font-mono-sacred transition-all ${
+                    className={`px-2.5 py-1 rounded-lg text-xs font-mono-sacred transition-all ${
                       locale === item.id
                         ? "bg-amber-500/25 border border-amber-400/60 text-amber-200 font-bold"
                         : "text-slate-400 hover:text-slate-200 bg-white/5"
@@ -377,10 +381,10 @@ export function Header({ locale }: HeaderProps) {
             >
               <span className="flex items-center gap-2">
                 <Music className="w-4 h-4 text-amber-400" />
-                <span>Sacred Ambience</span>
+                <span>{dict.settings?.ambienceSection || "Sacred Ambience"}</span>
               </span>
               <span className={`px-2.5 py-0.5 rounded-full text-[10px] ${!isMuted ? "bg-amber-500/20 text-amber-300 border border-amber-400/40" : "bg-neutral-800 text-neutral-400"}`}>
-                {!isMuted ? "ACTIVE" : "MUTED"}
+                {!isMuted ? (dict.settings?.soundOn || "ACTIVE") : (dict.settings?.muted || "MUTED")}
               </span>
             </button>
           </div>

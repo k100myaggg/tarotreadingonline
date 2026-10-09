@@ -636,7 +636,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-[#f4ebd0] via-[#fff7e6] to-[#f4ebd0] hover:brightness-105 text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/25 active:scale-[0.98] transition-all flex items-center justify-center gap-2 group"
                 >
                   <Sparkles className="w-3.5 h-3.5 text-amber-800 group-hover:rotate-12 transition-transform" />
-                  <span>START DIVINATION</span>
+                  <span>{(dict.readingRoom?.startDivination || "START")} DIVINATION</span>
                   <ArrowRight className="w-3.5 h-3.5 text-amber-800 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
@@ -652,10 +652,10 @@ export default function ReadingPage({ params }: ReadingPageProps) {
           <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4 animate-in fade-in duration-500">
             <span className="font-mono-sacred text-[11px] text-amber-400 tracking-widest uppercase flex items-center justify-center gap-1.5 mb-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-spin" />
-              <span>ALIGNING ARCHETYPAL FREQUENCIES</span>
+              <span>{dict.readingRoom?.aligningFreq || "ALIGNING ARCHETYPAL FREQUENCIES"}</span>
             </span>
             <h2 className="font-serif-sacred text-2xl sm:text-3xl font-bold text-amber-100 drop-shadow">
-              Shuffling... Please meditate on your question
+              {dict.readingRoom?.shufflingHeader || "Shuffling... Please meditate on your question"}
             </h2>
             <p className="font-serif-sacred text-xs sm:text-sm text-amber-200/80 italic max-w-md mx-auto mt-1 line-clamp-1">
               "{question}"
@@ -670,7 +670,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               disabled={isCollapsingShuffle}
               className="px-9 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
             >
-              <span>{isCollapsingShuffle ? "COALESCING DECK..." : "FINISH SHUFFLING"}</span>
+              <span>{isCollapsingShuffle ? (dict.readingRoom?.coalescingDeck || "COALESCING DECK...") : (dict.readingRoom?.finishShuffling || "FINISH SHUFFLING")}</span>
               <ArrowRight className="w-4 h-4 text-amber-800" />
             </button>
           </div>
@@ -683,13 +683,13 @@ export default function ReadingPage({ params }: ReadingPageProps) {
           <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4 animate-in fade-in duration-500">
             <span className="font-mono-sacred text-[11px] text-amber-400 tracking-widest uppercase flex items-center justify-center gap-1.5 mb-1">
               <Sparkles className="w-3.5 h-3.5 text-amber-300 animate-pulse" />
-              <span>SACRED RITUAL · PERSONAL ENERGETIC IMPRINT</span>
+              <span>{dict.readingRoom?.cutRitualBadge || "SACRED RITUAL · PERSONAL ENERGETIC IMPRINT"}</span>
             </span>
             <h2 className="font-serif-sacred text-2xl sm:text-3xl font-bold text-amber-100 drop-shadow">
-              Cut the Sacred Deck
+              {dict.readingRoom?.cutRitualTitle || "Cut the Sacred Deck"}
             </h2>
             <p className="font-sans text-xs sm:text-sm text-amber-200/80 max-w-md mx-auto mt-1">
-              Tap the deck above to divide the cards and imprint your intention into the reading.
+              {dict.readingRoom?.cutRitualHint || "Tap the deck above to divide the cards and imprint your intention into the reading."}
             </p>
           </div>
 
@@ -699,7 +699,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               onClick={() => setStep("picking")}
               className="px-8 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-xs uppercase tracking-widest shadow-2xl shadow-amber-400/30 hover:scale-105 active:scale-95 transition-all flex items-center gap-2"
             >
-              <span>Fan Out Cards</span>
+              <span>{dict.readingRoom?.fanOutCards || "Fan Out Cards"}</span>
               <ArrowRight className="w-4 h-4 text-amber-800" />
             </button>
           </div>
@@ -712,12 +712,12 @@ export default function ReadingPage({ params }: ReadingPageProps) {
           {/* Top Pinned Instructions */}
           <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4">
             <h2 className="text-xl sm:text-2xl text-amber-100 font-semibold drop-shadow">
-              Select {requiredPicks} {requiredPicks === 1 ? "card" : "cards"}
+              {dict.readingRoom?.selectCardsPrompt || "Select"} {requiredPicks} {requiredPicks === 1 ? (dict.spreadsSection?.cardSingular || "card") : (dict.spreadsSection?.cardPlural || "cards")}
             </h2>
             <p className="text-xs text-amber-200/80 mt-1 font-medium">
               {picksRemaining > 0
-                ? `${userPickIndices.length} of ${requiredPicks} selected`
-                : "All cards selected"}
+                ? `${userPickIndices.length} / ${requiredPicks}`
+                : (dict.readingRoom?.allCardsSelected || "All cards selected")}
             </p>
           </div>
 
@@ -731,7 +731,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                 className="px-10 py-3.5 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-[#0d091a] font-serif-sacred font-bold text-sm uppercase tracking-widest shadow-2xl shadow-amber-400/40 hover:scale-105 active:scale-95 transition-all flex items-center gap-2.5 animate-bounce"
               >
                 <Sparkles className="w-4 h-4 text-amber-800" />
-                <span>{isSubmittingDraw ? "CASTING SPREAD..." : "REVEAL SPREAD →"}</span>
+                <span>{isSubmittingDraw ? "..." : (dict.readingRoom?.revealAllCards || "REVEAL SPREAD →")}</span>
               </button>
             </div>
           )}
@@ -747,10 +747,10 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               ✦ SACRED SACRAMENT ✦
             </span>
             <h2 className="font-serif-sacred text-2xl sm:text-3xl text-amber-100 font-bold">
-              Flip the cards to reveal their orientation
+              {dict.reader?.revealButton || "Flip the cards to reveal their orientation"}
             </h2>
             <p className="text-xs font-mono-sacred text-slate-300 mt-1">
-              Click each card to flip and commune with its divine arcana
+              {dict.readingRoom?.cutRitualHint || "Click each card to flip and commune with its divine arcana"}
             </p>
           </div>
 
@@ -761,7 +761,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               onClick={revealAllCards}
               className="px-6 py-2.5 rounded-full bg-black/85 backdrop-blur-md border border-amber-400/60 text-amber-200 text-xs font-mono-sacred hover:bg-amber-500/20 transition-all shadow-xl shadow-black/90"
             >
-              Reveal All ({revealedIndices.length}/{drawnCards.length})
+              {dict.readingRoom?.revealAllCards || "Reveal All"} ({revealedIndices.length}/{drawnCards.length})
             </button>
 
             {revealedIndices.length === drawnCards.length && (
@@ -770,7 +770,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                 onClick={() => setStep("streaming")}
                 className="px-8 py-3 rounded-full bg-[#f4ebd0] hover:bg-[#fff7e6] text-neutral-950 font-serif-sacred font-bold text-xs uppercase tracking-wider transition-all shadow-2xl shadow-amber-400/40 hover:scale-105 active:scale-95 flex items-center gap-2"
               >
-                <span>Synthesize Oracle Reading</span>
+                <span>{(dict.readingRoom?.synthesizeReading || "Synthesize Oracle Reading")}</span>
                 <ArrowRight className="w-3.5 h-3.5 text-amber-800" />
               </button>
             )}

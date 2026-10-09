@@ -8,17 +8,15 @@ import {
   X,
   Volume2,
   VolumeX,
-  Sliders,
-  Sparkles,
   Globe,
   Monitor,
   Check,
   Music,
-  Radio,
 } from "lucide-react";
 import { useSoundscape } from "@/lib/audio/useSoundscape";
 import { AmbientSoundMode } from "@/lib/audio/soundscape";
-import { Locale } from "@/types/tarot";
+import { Locale, ALL_LANGUAGES } from "@/types/tarot";
+import { getDictionary } from "@/lib/i18n/dictionaries";
 
 interface SanctuarySettingsModalProps {
   locale: Locale;
@@ -26,27 +24,6 @@ interface SanctuarySettingsModalProps {
   onToggle2D?: () => void;
   is2DActive?: boolean;
 }
-
-const AMBIENT_TONES: { id: AmbientSoundMode; label: string; desc: string; hz: string }[] = [
-  {
-    id: "solfeggio",
-    label: "528Hz Solfeggio",
-    desc: "Miracle tone of renewal & heart expansion",
-    hz: "528 Hz",
-  },
-  {
-    id: "nebula",
-    label: "Celestial Nebula",
-    desc: "Deep cosmic drone for meditative grounding",
-    hz: "Sub-harmonic",
-  },
-  {
-    id: "temple_winds",
-    label: "Temple Singing Bowls",
-    desc: "Tibetan bowl harmonics with sacred breeze",
-    hz: "432 Hz",
-  },
-];
 
 export function SanctuarySettingsModal({
   locale,
@@ -57,6 +34,7 @@ export function SanctuarySettingsModal({
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
+  const dict = getDictionary(locale);
 
   const {
     isMuted,
@@ -69,6 +47,27 @@ export function SanctuarySettingsModal({
     toggleSfx,
     playButtonClick,
   } = useSoundscape();
+
+  const ambientTones: { id: AmbientSoundMode; label: string; desc: string; hz: string }[] = [
+    {
+      id: "solfeggio",
+      label: dict.settings?.toneSolfeggioLabel || "528Hz Solfeggio",
+      desc: dict.settings?.toneSolfeggioDesc || "Miracle tone of renewal & heart expansion",
+      hz: "528 Hz",
+    },
+    {
+      id: "nebula",
+      label: dict.settings?.toneNebulaLabel || "Celestial Nebula",
+      desc: dict.settings?.toneNebulaDesc || "Deep cosmic drone for meditative grounding",
+      hz: "Sub-harmonic",
+    },
+    {
+      id: "temple_winds",
+      label: dict.settings?.toneTempleLabel || "Temple Singing Bowls",
+      desc: dict.settings?.toneTempleDesc || "Tibetan bowl harmonics with sacred breeze",
+      hz: "432 Hz",
+    },
+  ];
 
   // Close on outside click
   useEffect(() => {
@@ -101,6 +100,7 @@ export function SanctuarySettingsModal({
   const getLocaleUrl = (newLocale: Locale) => {
     if (!pathname) return `/${newLocale}`;
     const segments = pathname.split("/");
+    // segments[0] is "", segments[1] is the current locale
     segments[1] = newLocale;
     return segments.join("/");
   };
@@ -114,8 +114,8 @@ export function SanctuarySettingsModal({
           setIsOpen(!isOpen);
           playButtonClick?.();
         }}
-        aria-label="Sanctuary Settings & Ambience"
-        title="Sanctuary Settings & Ambience"
+        aria-label={dict.settings?.title || "Sanctuary Settings"}
+        title={dict.settings?.title || "Sanctuary Settings"}
         className={`group flex items-center justify-center rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-amber-400/60 ${
           compact ? "w-8 h-8 p-1.5" : "w-9 h-9 p-2"
         } ${
@@ -136,7 +136,7 @@ export function SanctuarySettingsModal({
         <div
           role="dialog"
           aria-modal="true"
-          className="absolute right-0 top-full mt-2.5 w-[320px] sm:w-[360px] max-w-[calc(100vw-1.5rem)] rounded-2xl bg-[#0b0816]/95 backdrop-blur-2xl border border-amber-500/40 shadow-2xl shadow-purple-950/80 p-5 z-50 text-slate-100 animate-in fade-in zoom-in-95 duration-200"
+          className="absolute right-0 top-full mt-2.5 w-[330px] sm:w-[380px] max-w-[calc(100vw-1.5rem)] rounded-2xl bg-[#0b0816]/95 backdrop-blur-2xl border border-amber-500/40 shadow-2xl shadow-purple-950/80 p-5 z-50 text-slate-100 animate-in fade-in zoom-in-95 duration-200"
         >
           {/* Header */}
           <div className="flex items-center justify-between border-b border-amber-500/20 pb-3 mb-4">
@@ -145,7 +145,7 @@ export function SanctuarySettingsModal({
                 <Settings className="w-3.5 h-3.5" />
               </div>
               <h4 className="font-serif-sacred font-bold text-sm text-amber-100 tracking-wide">
-                Sanctuary Settings
+                {dict.settings?.title || "Sanctuary Settings"}
               </h4>
             </div>
             <button
@@ -164,18 +164,18 @@ export function SanctuarySettingsModal({
               <div className="flex items-center justify-between">
                 <span className="text-[11px] font-mono-sacred text-amber-300/90 uppercase tracking-widest flex items-center gap-1.5">
                   <Music className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Sacred Ambience & Audio</span>
+                  <span>{dict.settings?.ambienceSection || "Sacred Ambience & Audio"}</span>
                 </span>
                 <button
                   type="button"
                   onClick={toggleMute}
-                  className={`text-[10px] font-mono-sacred px-2 py-0.5 rounded-full border transition-all ${
+                  className={`text-[10px] font-mono-sacred px-2.5 py-0.5 rounded-full border transition-all ${
                     !isMuted
                       ? "bg-amber-500/20 border-amber-400/60 text-amber-300"
                       : "bg-neutral-800/80 border-neutral-700 text-neutral-400"
                   }`}
                 >
-                  {!isMuted ? "SOUND ON" : "MUTED"}
+                  {!isMuted ? (dict.settings?.soundOn || "SOUND ON") : (dict.settings?.muted || "MUTED")}
                 </button>
               </div>
 
@@ -184,7 +184,7 @@ export function SanctuarySettingsModal({
                 <div className="flex items-center justify-between text-xs">
                   <span className="text-slate-300 flex items-center gap-1.5 font-light">
                     {isMuted ? <VolumeX className="w-3.5 h-3.5 text-slate-500" /> : <Volume2 className="w-3.5 h-3.5 text-amber-400" />}
-                    <span>Master Volume</span>
+                    <span>{dict.settings?.masterVolume || "Master Volume"}</span>
                   </span>
                   <span className="font-mono-sacred text-[11px] text-amber-400">
                     {isMuted ? "0%" : `${Math.round(volume * 100)}%`}
@@ -205,10 +205,10 @@ export function SanctuarySettingsModal({
               {/* Ambient Frequency Tone Options */}
               <div className="space-y-1.5">
                 <span className="text-[10px] font-mono-sacred text-slate-400 uppercase tracking-wider block">
-                  Harmonic Tone Mode
+                  {dict.settings?.harmonicToneMode || "Harmonic Tone Mode"}
                 </span>
                 <div className="grid grid-cols-1 gap-1.5">
-                  {AMBIENT_TONES.map((tone) => {
+                  {ambientTones.map((tone) => {
                     const isSelected = ambientMode === tone.id && !isMuted;
                     return (
                       <button
@@ -245,7 +245,7 @@ export function SanctuarySettingsModal({
               {/* SFX Switch */}
               <div className="flex items-center justify-between p-2.5 rounded-xl bg-black/40 border border-white/5">
                 <span className="text-xs text-slate-300 font-light">
-                  Card Shuffling & Flip SFX
+                  {dict.settings?.sfxLabel || "Card Shuffling & Flip SFX"}
                 </span>
                 <button
                   type="button"
@@ -256,7 +256,7 @@ export function SanctuarySettingsModal({
                       : "bg-neutral-800 border-neutral-700 text-neutral-400"
                   }`}
                 >
-                  {isSfxEnabled ? "ENABLED" : "MUTED"}
+                  {isSfxEnabled ? (dict.settings?.sfxEnabled || "ENABLED") : (dict.settings?.sfxMuted || "MUTED")}
                 </button>
               </div>
             </div>
@@ -265,27 +265,24 @@ export function SanctuarySettingsModal({
             <div className="pt-2 border-t border-white/10 space-y-2">
               <span className="text-[11px] font-mono-sacred text-amber-300/90 uppercase tracking-widest flex items-center gap-1.5">
                 <Globe className="w-3.5 h-3.5 text-amber-400" />
-                <span>Sacred Language</span>
+                <span>{dict.settings?.languageSection || "Sacred Language"}</span>
               </span>
-              <div className="grid grid-cols-3 gap-1.5 bg-black/40 p-1 rounded-xl border border-white/5">
-                {[
-                  { id: "en", label: "English" },
-                  { id: "hi", label: "हिन्दी" },
-                  { id: "ja", label: "日本語" },
-                ].map((item) => {
-                  const isActive = locale === item.id;
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-1.5 bg-black/40 p-1.5 rounded-xl border border-white/5 max-h-40 overflow-y-auto">
+                {ALL_LANGUAGES.map((item) => {
+                  const isActive = locale === item.code;
                   return (
                     <Link
-                      key={item.id}
-                      href={getLocaleUrl(item.id as Locale)}
+                      key={item.code}
+                      href={getLocaleUrl(item.code)}
                       onClick={() => setIsOpen(false)}
-                      className={`text-center py-1.5 px-2 rounded-lg text-xs font-mono-sacred transition-all ${
+                      className={`text-center py-1 px-1 rounded-lg text-[11px] font-mono-sacred truncate transition-all ${
                         isActive
                           ? "bg-amber-500/25 border border-amber-400/60 text-amber-200 font-bold shadow-md shadow-amber-500/20"
                           : "text-slate-400 hover:text-amber-200 hover:bg-white/5"
                       }`}
+                      title={`${item.nativeName} (${item.englishName})`}
                     >
-                      {item.label}
+                      {item.nativeName}
                     </Link>
                   );
                 })}
@@ -297,7 +294,7 @@ export function SanctuarySettingsModal({
               <div className="pt-2 border-t border-white/10 space-y-2">
                 <span className="text-[11px] font-mono-sacred text-amber-300/90 uppercase tracking-widest flex items-center gap-1.5">
                   <Monitor className="w-3.5 h-3.5 text-amber-400" />
-                  <span>Visual Dimension</span>
+                  <span>{dict.settings?.dimensionSection || "Visual Dimension"}</span>
                 </span>
                 <button
                   type="button"
@@ -305,10 +302,14 @@ export function SanctuarySettingsModal({
                   className="w-full flex items-center justify-between p-2.5 rounded-xl bg-black/40 border border-white/5 hover:border-amber-500/40 text-xs transition-all"
                 >
                   <span className="text-slate-300 font-light">
-                    {is2DActive ? "2D Accessible Mode" : "3D Celestial Cosmos"}
+                    {is2DActive
+                      ? (dict.settings?.mode2DLabel || "2D Accessible Mode")
+                      : (dict.settings?.mode3DLabel || "3D Celestial Cosmos")}
                   </span>
                   <span className="text-[10px] font-mono-sacred px-2 py-0.5 rounded-full bg-amber-500/20 border border-amber-400/50 text-amber-300">
-                    {is2DActive ? "SWITCH TO 3D" : "SWITCH TO 2D"}
+                    {is2DActive
+                      ? (dict.settings?.switchTo3D || "SWITCH TO 3D")
+                      : (dict.settings?.switchTo2D || "SWITCH TO 2D")}
                   </span>
                 </button>
               </div>

@@ -3,8 +3,8 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Sparkles, Shield, HeartHandshake, Eye } from "lucide-react";
-import { Locale } from "@/types/tarot";
+import { Sparkles, Shield, HeartHandshake } from "lucide-react";
+import { Locale, ALL_LANGUAGES } from "@/types/tarot";
 import { getDictionary } from "@/lib/i18n/dictionaries";
 
 interface FooterProps {
@@ -33,10 +33,18 @@ export function Footer({ locale, forceShow }: FooterProps) {
     return null;
   }
 
+  const getLocaleUrl = (targetCode: Locale) => {
+    if (!pathname) return `/${targetCode}`;
+    const segments = pathname.split("/");
+    // segments[0] is empty string, segments[1] is the current locale
+    segments[1] = targetCode;
+    return segments.join("/") || `/${targetCode}`;
+  };
+
   return (
     <footer className="w-full mystic-panel border-t border-amber-900/30 mt-20 text-slate-400 text-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           {/* Col 1: Brand & Philosophy */}
           <div className="space-y-3 md:col-span-1">
             <div className="flex items-center gap-2">
@@ -46,17 +54,17 @@ export function Footer({ locale, forceShow }: FooterProps) {
               </span>
             </div>
             <p className="text-xs text-slate-400 leading-relaxed">
-              Bridging the 1909 Pamela Colman Smith hermetic archetypes with modern sovereign artificial intelligence.
+              {dict.footer?.brandDesc || "Bridging the 1909 Pamela Colman Smith hermetic archetypes with modern sovereign artificial intelligence."}
             </p>
             <div className="pt-2 text-[11px] font-mono-sacred text-amber-400/70">
-              PUBLIC DOMAIN RWS (1909) ARCHIVE
+              {dict.footer?.archiveNotice || "PUBLIC DOMAIN RWS (1909) ARCHIVE"}
             </div>
           </div>
 
           {/* Col 2: Navigation Links */}
           <div className="space-y-2">
             <h4 className="font-mono-sacred text-xs text-amber-300 uppercase tracking-wider">
-              Sacred Portals
+              {dict.footer?.sacredPortals || "Sacred Portals"}
             </h4>
             <ul className="space-y-1.5 text-xs">
               <li>
@@ -86,20 +94,20 @@ export function Footer({ locale, forceShow }: FooterProps) {
           <div className="space-y-2">
             <h4 className="font-mono-sacred text-xs text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
               <Shield className="w-3.5 h-3.5 text-amber-400" />
-              Ethical AI Oracle
+              {dict.footer?.ethicalTitle || "Ethical AI Oracle"}
             </h4>
             <ul className="space-y-1.5 text-xs text-slate-400">
               <li className="flex items-start gap-1.5">
                 <span className="text-amber-400/80">•</span>
-                <span>The LLM never picks cards; random draws are cryptographically certified.</span>
+                <span>{dict.footer?.ethicalBullet1 || "The LLM never picks cards; random draws are cryptographically certified."}</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-amber-400/80">•</span>
-                <span>No absolute fortune-telling or deterministic medical/legal claims.</span>
+                <span>{dict.footer?.ethicalBullet2 || "No absolute fortune-telling or deterministic medical/legal claims."}</span>
               </li>
               <li className="flex items-start gap-1.5">
                 <span className="text-amber-400/80">•</span>
-                <span>Self-harm and crisis inquiries are met with compassion and immediate helpline guidance.</span>
+                <span>{dict.footer?.ethicalBullet3 || "Self-harm and crisis inquiries are met with compassion and immediate helpline guidance."}</span>
               </li>
             </ul>
           </div>
@@ -108,10 +116,10 @@ export function Footer({ locale, forceShow }: FooterProps) {
           <div className="space-y-2">
             <h4 className="font-mono-sacred text-xs text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
               <HeartHandshake className="w-3.5 h-3.5 text-amber-400" />
-              Support & Care
+              {dict.footer?.supportTitle || "Support & Care"}
             </h4>
             <p className="text-xs text-slate-400 leading-relaxed">
-              If you or someone you know is in crisis, please connect with confidential support:
+              {dict.footer?.supportDesc || "If you or someone you know is in crisis, please connect with confidential support:"}
             </p>
             <div className="text-[11px] font-mono-sacred space-y-1 text-slate-300">
               <p>US / Canada: <span className="text-amber-300">Call/Text 988</span></p>
@@ -121,15 +129,56 @@ export function Footer({ locale, forceShow }: FooterProps) {
           </div>
         </div>
 
-        {/* Disclaimer Banner */}
+        {/* ─── COMPETITOR-STYLE MULTILINGUAL LANGUAGE BAR (Screenshot 1) ─── */}
+        <div className="pt-8 pb-6 border-t border-amber-900/30 flex flex-col items-center">
+          <nav
+            aria-label="Languages"
+            className="w-full flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-5 gap-y-2.5 text-xs text-slate-400 max-w-5xl"
+          >
+            {ALL_LANGUAGES.map((lang) => {
+              const isCurrent = locale === lang.code;
+              return (
+                <Link
+                  key={lang.code}
+                  href={getLocaleUrl(lang.code)}
+                  className={`transition-colors whitespace-nowrap ${
+                    isCurrent
+                      ? "text-amber-300 font-semibold underline underline-offset-4 decoration-amber-400/60"
+                      : "text-slate-400 hover:text-amber-200"
+                  }`}
+                  title={`${lang.nativeName} (${lang.englishName})`}
+                >
+                  {lang.nativeName}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
+        {/* ─── BOTTOM LEGAL & COPYRIGHT BANNER ─── */}
         <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-4">
-          <p className="text-center sm:text-left">
-            {dict.reader.disclaimer}
-          </p>
-          <div className="flex items-center gap-4 text-[11px] font-mono-sacred text-slate-400">
-            <span>© {new Date().getFullYear()} ARCANA 3D</span>
-            <span>•</span>
-            <span className="text-amber-400/80">AUTHENTIC TAROT AI</span>
+          <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-4 text-center sm:text-left">
+            <span className="font-mono-sacred">
+              © {new Date().getFullYear()} ARCANA 3D Ltd. {dict.footer?.rightsReserved || "All rights reserved."}
+            </span>
+            <span className="hidden sm:inline text-slate-600">•</span>
+            <span className="text-[11px] text-slate-400">
+              {dict.reader?.disclaimer || "Tarot is a mirror for personal reflection and discernment."}
+            </span>
+          </div>
+
+          <div className="flex items-center gap-3 text-xs text-slate-400">
+            <Link href={`/${locale}`} className="hover:text-amber-300 transition-colors">
+              {dict.footer?.privacyPolicy || "Privacy Policy"}
+            </Link>
+            <span>·</span>
+            <Link href={`/${locale}`} className="hover:text-amber-300 transition-colors">
+              {dict.footer?.termsOfService || "Terms of Service"}
+            </Link>
+            <span>·</span>
+            <Link href={`/${locale}`} className="hover:text-amber-300 transition-colors">
+              {dict.footer?.refundPolicy || "Refund Policy"}
+            </Link>
           </div>
         </div>
       </div>
