@@ -94,14 +94,14 @@ export async function POST(req: NextRequest) {
                 systemInstruction: systemPrompt,
                 generationConfig: {
                   temperature: 0.7,
-                  maxOutputTokens: 3500,
+                  maxOutputTokens: 6000,
                 },
               });
 
-              // 20-second timeout allows thorough archetypal research
+              // 25-second timeout allows thorough archetypal research
               const streamPromise = model.generateContentStream(userPrompt);
               const timeoutPromise = new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error(`Gemini ${modelName} stream timeout`)), 20000)
+                setTimeout(() => reject(new Error(`Gemini ${modelName} stream timeout`)), 25000)
               );
 
               const resultStream = await Promise.race([streamPromise, timeoutPromise]);
@@ -138,7 +138,7 @@ export async function POST(req: NextRequest) {
             const anthropic = new Anthropic({ apiKey: anthropicApiKey });
             const responseStream = await anthropic.messages.stream({
               model: anthropicModel,
-              max_tokens: 3000,
+              max_tokens: 5000,
               temperature: 0.7,
               system: systemPrompt,
               messages: [{ role: "user", content: userPrompt }],
@@ -180,8 +180,8 @@ export async function POST(req: NextRequest) {
           const posName = spread.positions[i]?.name[activeLocale] || `Position ${i + 1}`;
           const isRev = dc.isReversed;
           const orientationStr = isRev ? "reversed" : "upright";
-          const elementalAffinity = card?.element ? `anchored in the element of ${card.element.toUpperCase()}` : "holding sacred archetypal weight";
-          const suitInsight = card?.suit ? `within the realm of ${card.suit}` : "as a primary pillar of the Major Arcana";
+          const elementalAffinity = card?.element ? `anchored in the sacred element of ${card.element.toUpperCase()}` : "holding foundational archetypal weight";
+          const suitInsight = card?.suit ? `within the spiritual domain of ${card.suit}` : "as a supreme pillar of the Major Arcana";
 
           return {
             cardId: dc.cardId,
@@ -190,17 +190,17 @@ export async function POST(req: NextRequest) {
             positionIndex: i,
             positionName: posName,
             coreEssence: `${cName} in the ${posName} reveals ${
-              isRev ? "an inward recalibration and quiet restructuring of" : "a dynamic forward illumination of"
-            } ${card?.keywords.upright.slice(0, 2).join(" and ") || "sacred energy"}.`,
+              isRev ? "an inward recalibration, shadow contemplation, and quiet restructuring of" : "a dynamic outward manifestation, illumination, and conscious empowerment of"
+            } ${card?.keywords.upright.slice(0, 3).join(", ") || "vital archetypal energies"}.`,
             contextualMeaning:
-              `Sitting in the position of "${posName}" and ${elementalAffinity} (${suitInsight}), ${cName} ${
+              `Sitting prominently in the station of "${posName}" and ${elementalAffinity} (${suitInsight}), ${cName} ${
                 isRev
-                  ? "appears reversed, signaling that this energy is operating beneath the surface, prompting internal contemplation and course-correction rather than outward action."
-                  : "stands upright, channeling direct outward clarity, vigor, and conscious manifestation."
+                  ? "presents itself in the reversed orientation. Far from indicating misfortune, this reversal signals that its raw spiritual currents are currently operating beneath the conscious threshold. It urges you to engage in rigorous internal introspection, dissolve self-limiting assumptions, and realign with your deepest authentic values before taking irreversible outer leaps."
+                  : "stands upright in full luminescent power, broadcasting direct clarity, conscious momentum, and dynamic manifestation into your physical reality."
               }\n\n` +
-              `Archetypally, this card embodies ${isRev ? card?.meanings.reversed : card?.meanings.upright}. Regarding your specific inquiry into "${question || "your current path"}", it serves as an uncompromising mirror: it calls you to examine how your past emotional conditioning or present commitments align with your deepest authentic values.\n\n` +
-              `When integrated with the surrounding cards, ${cName} urges you not to compromise your inner integrity. Embrace the subtle shifts taking place within you, allowing this symbol to awaken clarity and quiet confidence in your discernment.`,
-            advice: `Reflect deeply: How can you honor the sacred teaching of ${cName} without fear, and what truth is ready to be acknowledged today?`,
+              `Archetypally, this card channels ${isRev ? card?.meanings.reversed : card?.meanings.upright}. Visually and esoterically, its symbolism highlights the intersection between personal willpower and universal timing. Regarding your specific inquiry concerning "${question || "your current life transition"}", it serves as an uncompromising sacred mirror: it prompts you to observe where you may be giving away your personal power or clinging to obsolete expectations that no longer serve your highest growth.\n\n` +
+              `When woven into the broader tapestry of your spread, ${cName} acts as a vital bridge. It counsels you to cultivate quiet discernment over hasty reactions, hold your emotional boundaries with dignified grace, and trust that the subtle energetic shifts occurring right now are laying down the indestructible foundation for your forthcoming breakthrough.`,
+            advice: `Reflect deeply in your personal journal: What unresolved fear or truth does ${cName} invite you to embrace today, and how can you honor this guidance through one sovereign choice?`,
           };
         });
 
@@ -213,27 +213,30 @@ export async function POST(req: NextRequest) {
         if (activeLocale === "hi") {
           narrativeAnalysis =
             `${salutationStr}\n\n` +
-            `आपके प्रश्न "${question || "मार्गदर्शन और आंतरिक स्पष्टता"}" के संदर्भ में, इन पवित्र पत्तों ने आपके वर्तमान जीवन-पथ का एक अत्यंत विस्तृत और गूढ़ दर्पण प्रस्तुत किया है।\n\n` +
-            `इस प्रसार की शुरुआत में ${card1Name} आपकी उस आधारभूत शक्ति और संचित अनुभवों को उजागर करता है, जिसने आपको इस मोड़ तक पहुंचाया है। यहाँ की ऊर्जा यह दर्शाती है कि अतीत की परिस्थितियाँ अब आपके आत्म-साक्षात्कार की आधारशिला बन चुकी हैं, और जो कुछ भी आपने सीखा है, वह अब व्यर्थ नहीं जाएगा।\n\n` +
-            `वर्तमान के केंद्र में ${card2Name} की उपस्थिति यह स्पष्ट करती है कि इस समय आपके भीतर या आपके परिवेश में कौन सी सूक्ष्म शक्ति सक्रिय है। यह कार्ड आपके अंतर्मन के उस द्वंद्व या आकर्षण को रेखांकित करता है, जहाँ जल्दबाजी की बजाय आत्म-संयम, सजगता और गहरी समझ की आवश्यकता है। यह समय बाहरी कोलाहल से हटकर अपनी सच्ची प्राथमिकताओं को पहचानने का है।\n\n` +
-            `आगे बढ़ते हुए, भविष्य के क्षितिज पर ${card3Name} एक शक्तिशाली दिशा-निर्देश प्रदान करता है। यह संकेत देता है कि जब आप अपने संदेहों को छोड़कर अपने आत्म-सम्मान और नैतिक सिद्धांतों के साथ संरेखित होते हैं, तो जटिल प्रतीत होने वाले मार्ग भी स्वतः सुगम होने लगते हैं।\n\n` +
-            `टैरो कोई अटल भाग्य नहीं, बल्कि आपकी जीवित चेतना का जीवंत प्रतिबिंब है। इन तीनों कार्ड्स का यह सामंजस्य आपको यह विश्वास दिलाता है कि आपके पास अपनी दिशा तय करने का पूर्ण सामर्थ्य है। अपने अंतर्ज्ञान पर भरोसा रखें और धैर्यपूर्वक अपने मार्ग पर दृढ़ रहें।`;
+            `आपके गंभीर प्रश्न "${question || "आंतरिक मार्गदर्शन, जीवन-परिवर्तन और आत्म-स्पष्टता"}" के उत्तर में, इन 78 पवित्र ताश के पत्तों ने आपके वर्तमान आध्यात्मिक, मानसिक और व्यावहारिक जीवन का एक अत्यंत विस्तृत, बहु-आयामी और गहन दर्पण प्रस्तुत किया है।\n\n` +
+            `इस प्रसार की आधारशिला पर उपस्थित ${card1Name} आपकी उन संचित ऊर्जाओं, पिछले संघर्षों और अर्जित परिपक्वता को उद्घाटित करता है, जिसने आपके इस वर्तमान मोड़ की नींव रखी है। यहाँ की ऊर्जा यह सिद्ध करती है कि आपके अतीत के अनुभव कोई व्यर्थ बाधाएँ नहीं थीं; उन्होंने आपके भीतर एक ऐसा अडिग आत्म-विश्वास और आंतरिक शांति गढ़ी है, जो अब आपके सबसे बड़े मार्गदर्शक के रूप में कार्य कर रही है।\n\n` +
+            `वर्तमान के केंद्र में स्थित ${card2Name} उस सूक्ष्म मनोवैज्ञानिक तनाव और निर्णायक चौराहे को स्पष्ट करता है, जहाँ आपकी चेतना इस समय सक्रिय रूप से केंद्रित है। यह कार्ड आपके अंतर्मन के उस द्वंद्व को सामने लाता है, जहाँ बाहरी अपेक्षाओं और आपकी आत्मा की सच्ची पुकार के बीच संतुलन साधना अनिवार्य हो गया है। जल्दबाजी में निर्णय लेने के बजाय, यह क्षण अपनी आंतरिक लय को पहचानने और उन सीमाओं को दृढ़ करने का है, जो आपकी मानसिक शांति की रक्षा करती हैं।\n\n` +
+            `अचेतन मन और छाया-तत्वों (Shadow Aspects) के स्तर पर, यह प्रसार संकेत देता है कि जो अज्ञात भय या अनिश्चितता आपको विचलित कर रही है, वह वास्तव में आपकी छिपी हुई रचनात्मक शक्ति का आह्वान है। जब आप पुराने भावनात्मक पैटर्नों को छोड़ते हैं, तो वह ऊर्जा जो पहले चिंता में व्यय हो रही थी, स्वतः ही आपके संकल्प को सुदृढ़ करने लगती है।\n\n` +
+            `भविष्य के उन्मुक्त क्षितिज पर दृष्टि डालते हुए, ${card3Name} एक अत्यंत प्रकाशमय, स्पष्ट और सुसंगत दिशा-निर्देश प्रदान करता है। यह स्पष्ट करता है कि जैसे ही आप अपने आंतरिक सत्य के प्रति निष्ठावान होते हैं, बिखरी हुई परिस्थितियाँ स्वतः एक नए सामंजस्य में ढलने लगेंगी। जो मार्ग पहले जटिल या धुंधला प्रतीत हो रहा था, वह अब आत्म-स्वायत्तता और गरिमा के साथ आगे बढ़ने के लिए पूर्णतः प्रशस्त होगा।\n\n` +
+            `स्मरण रहे कि टैरो कोई अटल या निष्क्रिय भाग्य की घोषणा नहीं है, बल्कि यह आपकी जाग्रत चेतना का जीवंत रोडमैप है। इन पवित्र प्रतीकों के संवाद को अपने हृदय में स्थान दें, अपनी अंतःप्रेरणा पर अडिग भरोसा रखें, और पूरे आत्म-विश्वास के साथ अपने अगले कदम उठाएं।`;
         } else if (activeLocale === "ja") {
           narrativeAnalysis =
             `${salutationStr}\n\n` +
-            `あなたのお尋ねになった「${question || "魂の導きと深い明晰さ"}」に対して、タロットの神聖なるシンボルは、現在の人生の岐路を深く映し出す豊かな織物を紡ぎ出しました。\n\n` +
-            `まず、過去と基盤を象徴する位置にある【${card1Name}】は、これまでの経験と潜在的な強みがどのように現在の状況を形作ってきたかを示しています。あなたが培ってきた知恵は決して無駄ではなく、確固たる土台として息づいています。\n\n` +
-            `現在という変容の中心に現れた【${card2Name}】は、今この瞬間に直面している心理的ダイナミクスと感情の流れを照らし出しています。焦りや周囲の期待に惑わされることなく、内なる直観と冷静な洞察力をもって本質を見極めることが求められています。\n\n` +
-            `そして、未来の地平線を告げる【${card3Name}】は、調和と自己主権への道筋を示唆しています。内なる恐れを手放し、自らの価値観に誠実に行動するとき、新たな可能性の扉が静かに開かれていくでしょう。\n\n` +
-            `タロットは固定された運命ではなく、あなたの意識の鏡です。これらのアーキタイプの対話を心に留め、一歩一歩確かな確信を持ってあなたの道を進んでください。`;
+            `あなたのお尋ねになった「${question || "魂の導き、人生の変容、そして真の明晰さ"}」に対し、タロットの神聖なるアーキタイプは、現在の意識と運命の流れを余すところなく映し出す、極めて重層的で深遠なヴィジョンを織り上げました。\n\n` +
+            `まず、このスプレッドの根底に位置する【${card1Name}】は、あなたがこれまでに歩んできた軌跡、培われた不屈の精神、そして知恵の基盤を明らかにしています。過去の困難や試練は決して偶然の産物ではなく、現在の岐路においてあなたを力強く支える内なる確信の礎となっているのです。\n\n` +
+            `そして、現在の変容の中心核に現れた【${card2Name}】は、今まさにあなたの魂が直面している重要な選択と心理的ダイナミクスを照らし出しています。ここでは外部の喧騒や他者の期待に振り回されることなく、自らの中心に静かに留まり、恐れに基づいた衝動的な決断を避けることが求められています。直観と理性の調和こそが鍵となります。\n\n` +
+            `無意識の領域において、このスプレッドは長年抱えてきた古い思い込みや防衛機制を手放す絶好の好機が訪れていることを示唆しています。抑圧されていた感情や影（シャドウ）に光を当てることで、これまで浪費されていたエネルギーが真の自己実現へと転換されていきます。\n\n` +
+            `さらに未来の地平線を告げる【${card3Name}】は、自己主権の確立と新たな統合の可能性を高らかに宣言しています。あなたが自己の真実に対して誠実であり続ける限り、目前の不透明さは晴れ渡り、より確かな調和と前進への道筋が自然と開かれていくでしょう。\n\n` +
+            `タロットは固定された運命の宣告ではなく、生きているあなたの意識が紡ぎ出す羅針盤です。これらのシンボルの対話を深く受け止め、揺るぎない尊厳と静かな勇気を持って、あなたの未来へと歩みを進めてください。`;
         } else {
           narrativeAnalysis =
             `${salutationStr}\n\n` +
-            `In response to your inquiry regarding "${question || "seeking profound clarity and energetic alignment"}", the sacred cards have woven an intricate, multidimensional mirror of your current spiritual and psychological crossroads.\n\n` +
-            `At the foundation of this spread, the presence of ${card1Name} reveals the energetic momentum and underlying wisdom that brought you to this threshold. It reminds you that the tests and lessons of your recent journey were not accidental; they have quietly cultivated resilience, discernment, and an inner depth that you are now called to rely upon.\n\n` +
-            `At the center of your immediate experience, ${card2Name} captures the living tension and pivotal crossroads demanding your conscious awareness right now. This archetype illuminates where conscious willpower meets subconscious resistance. Rather than reacting impulsively to outer demands, this card invites you to pause, calibrate your inner compass, and distinguish between transient anxiety and authentic intuitive truth.\n\n` +
-            `Looking ahead to the horizon where your path continues to unfold, ${card3Name} casts a luminous ray of direction and resolution. It signifies that as you integrate these lessons with emotional honesty, the fragmentation begins to synthesize into cohesive clarity, unlocking a sustainable forward stride.\n\n` +
-            `Remember that the tarot is not a rigid decree of passive fate, but an empowering compass reflecting the currents of your living consciousness. Honor the dialogue between these archetypes, hold firm boundaries where required, and allow the quiet wisdom of this reading to steady your spirit today.`;
+            `In response to your deeply held inquiry regarding "${question || "seeking profound clarity, energetic alignment, and navigating this life transition"}", the sacred archetypes have assembled across the cosmic loom to weave an exhaustive, multidimensional mirror of your living spiritual and psychological landscape.\n\n` +
+            `At the foundational threshold of this reading, the presence of ${card1Name} illuminates the karmic bedrock and accumulated wisdom that has delivered you to this pivotal moment. It confirms that the trials, emotional investments, and patient endurance of your recent past were neither accidental nor in vain. Rather, they have quietly forged an inner reservoir of resilience and discernment—a sacred grounding that now serves as your anchor as you stand before this threshold of expansion.\n\n` +
+            `Occupying the beating heart of your present moment, ${card2Name} commands conscious vigilance over the acute friction and pivotal crossroads confronting you right now. This archetype exposes the living interface where conscious willpower meets subconscious hesitation. Rather than reacting impulsively to external pressures or adopting false urgency, this card invites you to pause in sacred stillness. It asks you to calibrate your internal moral compass, separate transient anxiety from genuine intuition, and establish impenetrable boundaries that safeguard your sovereignty.\n\n` +
+            `Beneath the surface of everyday awareness, the elemental and numerological dialogue of these cards exposes the subtle shadow currents at play. You are being asked to confront where habitual patterns of self-doubt, over-functioning, or emotional complacency have outlived their purpose. By releasing the unconscious need for external validation, you liberate tremendous creative vitality that has previously been bound up in vigilance, freeing that energy to fuel your genuine self-actualization.\n\n` +
+            `Looking forward across the unfolding horizon, ${card3Name} projects a commanding ray of integration, resolution, and emerging destiny. It signals that as you integrate these lessons with unflinching honesty and deliberate discernment, the perceived discord of the present dissolves into coherent, empowered clarity. The path forward is not one of struggle, but of intentional alignment with your highest self.\n\n` +
+            `Remember always that the tarot does not dictate an unyielding fatalism; it serves as a dynamic compass attuned to your living consciousness. Reverently hold the teachings of these archetypes, trust the quiet voice of your inner authority, and step forward with unshakeable grace, knowing you are fully equipped to author this next chapter.`;
         }
 
         const simulatedResponse: StructuredReadingResponse = {

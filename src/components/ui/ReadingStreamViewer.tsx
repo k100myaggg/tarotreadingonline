@@ -197,9 +197,9 @@ export function ReadingStreamViewer({
                     Essence: {c.coreEssence}
                   </p>
 
-                  <p className="text-sm text-slate-300 leading-relaxed mb-4">
+                  <div className="text-sm text-slate-200/90 leading-relaxed mb-4 whitespace-pre-line space-y-2">
                     {c.contextualMeaning}
-                  </p>
+                  </div>
 
                   {c.advice && (
                     <div className="pt-3 border-t border-white/5 text-xs text-slate-400 font-serif-sacred flex items-start gap-2">

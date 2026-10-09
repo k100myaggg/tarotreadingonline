@@ -96,7 +96,7 @@ Return a single JSON object with this exact structure:
 {
   "readerPersona": "${persona.name[locale] || persona.name.en}",
   "intro": "A 2-3 sentence evocative opening addressing the seeker's inquiry in the persona's voice.",
-  "overallAnalysis": "A profound, comprehensive, and multi-layered 15-20 line in-depth narrative synthesis starting exactly with '${salutation}\\n\\n'. You MUST provide at least 15-20 lines of rich interpretation structured into 4-5 articulate movements: (1) Address the seeker's core inquiry with empathy and reverence. (2) Synthesize how the drawn cards converse with each other across their positions, tracing the past momentum, present friction, and emerging potential. (3) Reveal the subconscious, psychological, and spiritual currents influencing their crossroads. (4) Provide grounded, empowering guidance for their conscious next steps.",
+  "overallAnalysis": "A profound, exhaustive, and multi-layered narrative synthesis of AT LEAST 28-35 FULL LINES (must be above 25 lines, NEVER less than 25 lines!) starting exactly with '${salutation}\\n\\n'. You MUST provide an expansive, deeply transformative reading organized into 5-6 rich movements: (1) Address the seeker's core inquiry with empathy and reverence. (2) Synthesize how the drawn cards converse with each other across their positions, tracing the past momentum, present friction, and emerging potential. (3) Reveal the subconscious, psychological, and spiritual currents influencing their crossroads. (4) Uncover the shadow dynamics, hidden gifts, and deeper lessons. (5) Provide grounded, empowering guidance and sovereign discernment for their conscious next steps. (6) A warm closing benediction.",
   "cards": [
     {
       "cardId": "string matching card ID",
@@ -105,7 +105,7 @@ Return a single JSON object with this exact structure:
       "positionIndex": 0,
       "positionName": "string",
       "coreEssence": "1 concise, evocative sentence distilling the card's vital message here",
-      "contextualMeaning": "A detailed, rich interpretation (3-4 paragraphs or 10-14 lines) exploring the card's visual symbols, elemental balance, orientation (upright or reversed), and its direct application to the seeker's question in this specific spread position.",
+      "contextualMeaning": "An exhaustive, detailed interpretation (at least 12-16 lines across 3-4 paragraphs) exploring the card's visual symbols, elemental balance, orientation (upright or reversed), psychological shadow/light dynamics, and its direct application to the seeker's question in this specific spread position.",
       "advice": "A deeply contemplative question or journal prompt inspired by this card"
     }
   ],

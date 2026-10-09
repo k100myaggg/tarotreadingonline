@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo } from "react";
 import { useFrame } from "@react-three/fiber";
 import * as THREE from "three";
 import { getCardBackTexture, getCardFrontTexture } from "./cardTextures";
@@ -12,17 +12,13 @@ interface DeckShuffle3DProps {
   isCollapsing?: boolean;
 }
 
-interface VortexCardNode {
+interface RibbonCardNode {
   id: number;
-  // Spherical coordinates
-  theta: number; // azimuth
-  phi: number;   // polar
+  layer: number; // 0 = inner, 1 = outer, 2 = crown
+  baseAngle: number;
   radius: number;
-  orbitSpeed: number;
-  tumbleSpeedX: number;
-  tumbleSpeedY: number;
-  tumbleSpeedZ: number;
-  initialRot: THREE.Euler;
+  speed: number;
+  baseY: number;
   showFront: boolean;
   cardIndex: number;
 }
@@ -56,48 +52,71 @@ export function DeckShuffle3D({
     [cardBackTexture]
   );
 
-  // Generate 52 vortex tumbling cards distributed on a Golden Spiral Torus for ultra-smooth fluid flow
-  const vortexCards = useMemo<VortexCardNode[]>(() => {
-    const total = 52;
-    const nodes: VortexCardNode[] = [];
-    const phiRatio = (1 + Math.sqrt(5)) / 2;
+  // Generate 52 collision-free cards distributed across 3 stratified non-intersecting orbital tracks
+  // Inner ring: 18 cards (radius 2.05)
+  // Outer ring: 22 cards (radius 3.15)
+  // Crown ring: 12 cards (radius 2.60, elevated Y +0.85)
+  const ribbonCards = useMemo<RibbonCardNode[]>(() => {
+    const nodes: RibbonCardNode[] = [];
+    let idCounter = 0;
 
-    for (let i = 0; i < total; i++) {
-      const y = 1 - (i / (total - 1)) * 2;
-      const theta = (2 * Math.PI * i) / phiRatio;
-      const sphereRadius = 1.7 + (i % 5) * 0.18;
-
+    // Layer 0: Inner ring (18 cards)
+    const count0 = 18;
+    for (let i = 0; i < count0; i++) {
       nodes.push({
-        id: i,
-        theta,
-        phi: Math.acos(y),
-        radius: sphereRadius,
-        orbitSpeed: 0.5 + (i % 3) * 0.15,
-        tumbleSpeedX: 0.4 + (i % 7) * 0.08,
-        tumbleSpeedY: 0.35 + (i % 5) * 0.09,
-        tumbleSpeedZ: 0.28 + (i % 6) * 0.07,
-        initialRot: new THREE.Euler(
-          (i * 0.6) % (Math.PI * 2),
-          (i * 1.1) % (Math.PI * 2),
-          (i * 0.8) % (Math.PI * 2)
-        ),
+        id: idCounter++,
+        layer: 0,
+        baseAngle: (i / count0) * Math.PI * 2,
+        radius: 2.05,
+        speed: 0.52,
+        baseY: -0.15,
+        showFront: i % 3 === 0,
+        cardIndex: (idCounter * 3) % allCards.length,
+      });
+    }
+
+    // Layer 1: Outer counter-rotating ring (22 cards)
+    const count1 = 22;
+    for (let i = 0; i < count1; i++) {
+      nodes.push({
+        id: idCounter++,
+        layer: 1,
+        baseAngle: (i / count1) * Math.PI * 2,
+        radius: 3.15,
+        speed: -0.38,
+        baseY: 0.05,
         showFront: i % 2 === 0,
-        cardIndex: i % allCards.length,
+        cardIndex: (idCounter * 5) % allCards.length,
+      });
+    }
+
+    // Layer 2: Elevated Crown ring (12 cards)
+    const count2 = 12;
+    for (let i = 0; i < count2; i++) {
+      nodes.push({
+        id: idCounter++,
+        layer: 2,
+        baseAngle: (i / count2) * Math.PI * 2,
+        radius: 2.60,
+        speed: 0.42,
+        baseY: 0.82,
+        showFront: i % 2 === 1,
+        cardIndex: (idCounter * 7) % allCards.length,
       });
     }
 
     return nodes;
   }, []);
 
-  // Golden Celestial Stardust Particles around the vortex
+  // Golden celestial stardust particles orbiting around the vortex
   const particleGeo = useMemo(() => {
-    const pCount = 120;
+    const pCount = 140;
     const positions = new Float32Array(pCount * 3);
     for (let i = 0; i < pCount; i++) {
       const angle = (i / pCount) * Math.PI * 2;
-      const radius = 2.0 + Math.sin(i * 4) * 0.8;
+      const radius = 2.1 + (i % 5) * 0.28;
       positions[i * 3] = Math.cos(angle) * radius;
-      positions[i * 3 + 1] = (Math.random() - 0.5) * 1.8;
+      positions[i * 3 + 1] = (Math.sin(i * 1.5) - 0.2) * 1.2;
       positions[i * 3 + 2] = Math.sin(angle) * radius;
     }
     const geo = new THREE.BufferGeometry();
@@ -105,21 +124,15 @@ export function DeckShuffle3D({
     return geo;
   }, []);
 
-  // Whole vortex slow rotation and levitation
+  // Smooth gentle levitation of the entire cosmic group
   useFrame((state, delta) => {
     if (!groupRef.current) return;
     const t = state.clock.getElapsedTime();
-    const rotSpeed = isCollapsing ? 1.2 : 0.28;
-    groupRef.current.rotation.y += delta * rotSpeed;
-    groupRef.current.rotation.x = THREE.MathUtils.damp(
-      groupRef.current.rotation.x,
-      Math.sin(t * 0.3) * 0.08,
-      2,
-      delta
-    );
+    const groupSpeed = isCollapsing ? 0.8 : 0.15;
+    groupRef.current.rotation.y += delta * groupSpeed;
     groupRef.current.position.y = THREE.MathUtils.damp(
       groupRef.current.position.y,
-      Math.sin(t * 0.6) * 0.06,
+      Math.sin(t * 0.7) * 0.05,
       2,
       delta
     );
@@ -127,9 +140,9 @@ export function DeckShuffle3D({
 
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
-      {/* Central mystical pulsing core light */}
-      <pointLight position={[0, 0, 0]} intensity={isCollapsing ? 4.5 : 2.8} color="#ffd875" distance={10} />
-      <pointLight position={[0, 0.5, 0]} intensity={1.5} color="#c084fc" distance={8} />
+      {/* Central mystical pulsating core light */}
+      <pointLight position={[0, 0, 0]} intensity={isCollapsing ? 4.5 : 3.0} color="#ffd875" distance={10} />
+      <pointLight position={[0, 0.6, 0]} intensity={1.8} color="#c084fc" distance={8} />
 
       {/* Orbiting Stardust Particles */}
       <points geometry={particleGeo}>
@@ -137,13 +150,13 @@ export function DeckShuffle3D({
           size={0.035}
           color="#ffd56b"
           transparent
-          opacity={isCollapsing ? 0.3 : 0.75}
+          opacity={isCollapsing ? 0.25 : 0.75}
           blending={THREE.AdditiveBlending}
         />
       </points>
 
-      {vortexCards.map((card) => (
-        <VortexCardMesh
+      {ribbonCards.map((card) => (
+        <RibbonCardMesh
           key={card.id}
           card={card}
           edgeMat={goldEdgeMat}
@@ -155,20 +168,18 @@ export function DeckShuffle3D({
   );
 }
 
-function VortexCardMesh({
+function RibbonCardMesh({
   card,
   edgeMat,
   backMat,
   isCollapsing,
 }: {
-  card: VortexCardNode;
+  card: RibbonCardNode;
   edgeMat: THREE.Material;
   backMat: THREE.Material;
   isCollapsing: boolean;
 }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const currentPos = useRef(new THREE.Vector3());
-  const currentRot = useRef(new THREE.Euler());
 
   const frontMat = useMemo(() => {
     if (!card.showFront) return backMat;
@@ -198,44 +209,47 @@ function VortexCardMesh({
     const time = state.clock.getElapsedTime();
 
     if (isCollapsing) {
-      // Butter-smooth magnetic snap into central stacked deck at [0, -0.2, 0]
-      const stackY = -0.2 + (card.id % 24) * 0.009;
-      meshRef.current.position.x = THREE.MathUtils.damp(meshRef.current.position.x, 0, 7, delta);
-      meshRef.current.position.y = THREE.MathUtils.damp(meshRef.current.position.y, stackY, 7, delta);
-      meshRef.current.position.z = THREE.MathUtils.damp(meshRef.current.position.z, 0, 7, delta);
+      // Magnetic glide into central stacked deck at [0, -0.2, 0] without colliding
+      const stackY = -0.2 + (card.id % 52) * 0.007;
+      meshRef.current.position.x = THREE.MathUtils.damp(meshRef.current.position.x, 0, 7.5, delta);
+      meshRef.current.position.y = THREE.MathUtils.damp(meshRef.current.position.y, stackY, 7.5, delta);
+      meshRef.current.position.z = THREE.MathUtils.damp(meshRef.current.position.z, 0, 7.5, delta);
 
-      meshRef.current.rotation.x = THREE.MathUtils.damp(meshRef.current.rotation.x, -Math.PI / 2, 7, delta);
-      meshRef.current.rotation.y = THREE.MathUtils.damp(meshRef.current.rotation.y, 0, 7, delta);
-      meshRef.current.rotation.z = THREE.MathUtils.damp(meshRef.current.rotation.z, (card.id % 7 - 3) * 0.015, 7, delta);
+      meshRef.current.rotation.x = THREE.MathUtils.damp(meshRef.current.rotation.x, -Math.PI / 2, 7.5, delta);
+      meshRef.current.rotation.y = THREE.MathUtils.damp(meshRef.current.rotation.y, 0, 7.5, delta);
+      meshRef.current.rotation.z = THREE.MathUtils.damp(meshRef.current.rotation.z, (card.id % 7 - 3) * 0.012, 7.5, delta);
 
-      // Subtle scale compression
       meshRef.current.scale.setScalar(THREE.MathUtils.damp(meshRef.current.scale.x, 0.95, 5, delta));
       return;
     }
 
-    // Dynamic fluid orbital swirl: golden ratio angles modulated by harmonic time
-    const angle = card.theta + time * card.orbitSpeed * 0.45;
-    const r = card.radius + Math.sin(time * 1.1 + card.id * 0.3) * 0.18;
+    // Synchronized collision-free orbital movement along the card's track
+    const angle = card.baseAngle + time * card.speed;
+    const undulation = Math.sin(angle * 2 + time * 1.2) * 0.12;
 
-    const targetX = r * Math.sin(card.phi) * Math.cos(angle);
-    const targetY = r * Math.cos(card.phi) + Math.sin(time * 0.9 + card.id * 0.4) * 0.15;
-    const targetZ = r * Math.sin(card.phi) * Math.sin(angle);
+    const targetX = Math.cos(angle) * card.radius;
+    const targetY = card.baseY + undulation;
+    const targetZ = Math.sin(angle) * card.radius;
 
-    // Silky position damp
-    meshRef.current.position.x = THREE.MathUtils.damp(meshRef.current.position.x, targetX, 5, delta);
-    meshRef.current.position.y = THREE.MathUtils.damp(meshRef.current.position.y, targetY, 5, delta);
-    meshRef.current.position.z = THREE.MathUtils.damp(meshRef.current.position.z, targetZ, 5, delta);
+    // Smooth position damp
+    meshRef.current.position.x = THREE.MathUtils.damp(meshRef.current.position.x, targetX, 6, delta);
+    meshRef.current.position.y = THREE.MathUtils.damp(meshRef.current.position.y, targetY, 6, delta);
+    meshRef.current.position.z = THREE.MathUtils.damp(meshRef.current.position.z, targetZ, 6, delta);
 
-    // Natural graceful tumbling
-    const rotSpeedFactor = 0.5;
-    meshRef.current.rotation.x += delta * card.tumbleSpeedX * rotSpeedFactor;
-    meshRef.current.rotation.y += delta * card.tumbleSpeedY * rotSpeedFactor;
-    meshRef.current.rotation.z += delta * card.tumbleSpeedZ * rotSpeedFactor;
+    // Tangential orientation aligned with flight path — completely eliminates surface-clipping intersections!
+    // Facing outward slightly banked towards the center
+    const targetRotY = -angle + Math.PI / 2;
+    const targetRotX = 0.18 * Math.sin(angle + time); // gentle aerodynamic bank
+    const targetRotZ = 0.08 * Math.cos(angle * 2 + time); // subtle float wave
+
+    meshRef.current.rotation.x = THREE.MathUtils.damp(meshRef.current.rotation.x, targetRotX, 6, delta);
+    meshRef.current.rotation.y = THREE.MathUtils.damp(meshRef.current.rotation.y, targetRotY, 6, delta);
+    meshRef.current.rotation.z = THREE.MathUtils.damp(meshRef.current.rotation.z, targetRotZ, 6, delta);
   });
 
   return (
     <mesh ref={meshRef} material={materials} castShadow receiveShadow>
-      <boxGeometry args={[0.55, 0.94, 0.01]} />
+      <boxGeometry args={[0.50, 0.88, 0.01]} />
     </mesh>
   );
 }

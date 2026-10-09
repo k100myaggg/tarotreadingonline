@@ -546,37 +546,6 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
                 </div>
               </div>
 
-              {/* Reversals Toggle */}
-              <div className="pt-1.5 border-t border-white/5">
-                <div className="flex items-center justify-between px-3 py-1.5 rounded-xl bg-black/50 border border-white/5">
-                  <div className="flex flex-col">
-                    <span className="text-[11px] font-serif-sacred text-amber-200 flex items-center gap-1.5">
-                      <span>✦</span>
-                      <span>{locale === "hi" ? "उलटे कार्ड्स (Reversed Cards)" : "Allow Reversed Cards"}</span>
-                    </span>
-                    <span className="text-[9px] font-mono-sacred text-slate-400">
-                      {allowReversals
-                        ? (locale === "hi" ? "पारंपरिक 50/50 आंतरिक छाया अध्ययन" : "Traditional 50/50 RWS shadow & internal flow")
-                        : (locale === "hi" ? "केवल सीधे कार्ड्स (100% Upright)" : "Upright only (100% face-up)")}
-                    </span>
-                  </div>
-
-                  <button
-                    type="button"
-                    onClick={() => setAllowReversals(!allowReversals)}
-                    className={`relative inline-flex h-5 w-10 shrink-0 cursor-pointer rounded-full border border-amber-500/40 transition-colors duration-200 ease-in-out focus:outline-none ${
-                      allowReversals ? "bg-amber-500" : "bg-neutral-800"
-                    }`}
-                  >
-                    <span
-                      className={`pointer-events-none inline-block h-4 w-4 transform rounded-full bg-black/90 shadow ring-0 transition duration-200 ease-in-out ${
-                        allowReversals ? "translate-x-5 bg-amber-950" : "translate-x-0 bg-neutral-400"
-                      }`}
-                    />
-                  </button>
-                </div>
-              </div>
-
               {/* Start Divination Button */}
               <div className="pt-1">
                 <button
@@ -842,11 +811,11 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>
+          </div>
 
-            {/* Full Site Footer at the end of Reading Results */}
-            <div className="mt-16 w-full -mx-4 sm:-mx-6 lg:-mx-8">
-              <Footer locale={locale} forceShow />
-            </div>
+          {/* Full Site Footer at the end of Reading Results - 100% full-width edge-to-edge */}
+          <div className="w-full mt-16 border-t border-amber-500/10">
+            <Footer locale={locale} forceShow />
           </div>
         </div>
       )}

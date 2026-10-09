@@ -98,22 +98,17 @@ function FloatingCardItem({
     let targetScale = scale;
 
     if (isSelected) {
-      // Selected: card steps FORWARD into clear view
-      targetY += 0.14;
-      targetZ += 1.25;
-      targetRotX = 0;
-      targetRotY = 0;
-      targetRotZ = 0;
-      targetGlow = hovered ? 1.4 : 1.1;
-      targetScale = scale * (hovered ? 1.20 : 1.15);
+      // Selected: card stays exactly in its slot/rotation, simply sliding upwards along Y
+      targetY += 0.22;
+      targetZ += 0.06;
+      targetGlow = hovered ? 1.3 : 1.1;
+      targetScale = scale; // Maintain exact scale so neighbors are never crowded or disturbed
     } else if (hovered) {
-      // Hover: gentle lift, forward step, and interactive cursor tilt
+      // Hover: subtle upward lift in-slot without displacement or enlargement
       targetY += 0.08;
-      targetZ += 0.55;
-      targetRotX = baseRotation.x - state.pointer.y * 0.12;
-      targetRotY = state.pointer.x * 0.12;
+      targetZ += 0.03;
       targetGlow = 0.85;
-      targetScale = scale * 1.10;
+      targetScale = scale; // Maintain exact scale
     }
 
     const dampRate = isSelected ? 8 : hovered ? 7 : 4.5;
