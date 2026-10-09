@@ -19,6 +19,7 @@ import { Locale, StructuredReadingResponse } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import { FollowupChat } from "@/components/ui/FollowupChat";
+import { Footer } from "@/components/ui/Footer";
 import { SanctuarySettingsModal } from "@/components/ui/SanctuarySettingsModal";
 import { PersonaAvatar } from "@/components/ui/PersonaAvatar";
 import {
@@ -851,10 +852,12 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                   el.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
               }}
+              followupChatNode={<FollowupChat locale={locale} />}
             />
 
-            <div className="mt-8">
-              <FollowupChat locale={locale} />
+            {/* Full Site Footer at the end of Reading Results */}
+            <div className="mt-16 w-full -mx-4 sm:-mx-6 lg:-mx-8">
+              <Footer locale={locale} forceShow />
             </div>
           </div>
         </div>

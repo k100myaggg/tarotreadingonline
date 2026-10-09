@@ -17,6 +17,7 @@ import { Locale, StructuredReadingResponse } from "@/types/tarot";
 import { Fallback2DCardField } from "@/components/3d/Fallback2DCardField";
 import { ReadingStreamViewer } from "@/components/ui/ReadingStreamViewer";
 import { FollowupChat } from "@/components/ui/FollowupChat";
+import { Footer } from "@/components/ui/Footer";
 import { SanctuarySettingsModal } from "@/components/ui/SanctuarySettingsModal";
 import { ReadingTypeConfig } from "@/lib/tarot/readingTypes";
 import { calculateYesNoVerdict, YesNoVerdict } from "@/lib/tarot/yesNoLogic";
@@ -820,29 +821,31 @@ export function DedicatedReadingRoom({ config, locale }: DedicatedReadingRoomPro
                   el.scrollIntoView({ behavior: "smooth", block: "center" });
                 }
               }}
+              followupChatNode={<FollowupChat locale={locale} />}
             />
-
-            <div className="mt-8">
-              <FollowupChat locale={locale} />
-            </div>
 
             {/* Bottom Actions: Draw Another Card / Reset */}
             <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 border-t border-amber-500/20 pt-6">
               <button
                 type="button"
                 onClick={resetReading}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 font-serif-sacred text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/50 text-amber-200 text-xs font-semibold uppercase tracking-wider transition-all flex items-center justify-center gap-2"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Ask Another Question</span>
               </button>
               <Link
                 href={`/${locale}/spreads`}
-                className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-amber-200 font-mono-sacred text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-6 py-3 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 text-slate-300 hover:text-amber-200 text-xs font-medium uppercase tracking-wider transition-all flex items-center justify-center gap-2"
               >
                 <span>Explore All Readings</span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
+            </div>
+
+            {/* Full Site Footer at the end of Reading Results */}
+            <div className="mt-16 w-full -mx-4 sm:-mx-6 lg:-mx-8">
+              <Footer locale={locale} forceShow />
             </div>
           </div>
         </div>

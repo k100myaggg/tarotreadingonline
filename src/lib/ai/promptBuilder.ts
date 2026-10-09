@@ -96,7 +96,7 @@ Return a single JSON object with this exact structure:
 {
   "readerPersona": "${persona.name[locale] || persona.name.en}",
   "intro": "A 2-3 sentence evocative opening addressing the seeker's inquiry in the persona's voice.",
-  "overallAnalysis": "A comprehensive, beautifully composed 10-15 line in-depth narrative synthesis starting exactly with '${salutation}\\n\\n'. Directly interpret their situation, synthesize how the drawn cards converse with each other across their positions, and illuminate the core psychological and spiritual currents answering their question.",
+  "overallAnalysis": "A profound, comprehensive, and multi-layered 15-20 line in-depth narrative synthesis starting exactly with '${salutation}\\n\\n'. You MUST provide at least 15-20 lines of rich interpretation structured into 4-5 articulate movements: (1) Address the seeker's core inquiry with empathy and reverence. (2) Synthesize how the drawn cards converse with each other across their positions, tracing the past momentum, present friction, and emerging potential. (3) Reveal the subconscious, psychological, and spiritual currents influencing their crossroads. (4) Provide grounded, empowering guidance for their conscious next steps.",
   "cards": [
     {
       "cardId": "string matching card ID",
@@ -104,9 +104,9 @@ Return a single JSON object with this exact structure:
       "orientation": "upright" or "reversed",
       "positionIndex": 0,
       "positionName": "string",
-      "coreEssence": "1 concise sentence distilling the card's vital message here",
-      "contextualMeaning": "2-3 paragraphs weaving the card's canonical meaning and symbols directly into the seeker's question and position role",
-      "advice": "1 specific contemplative question or internal reflection inspired by this card"
+      "coreEssence": "1 concise, evocative sentence distilling the card's vital message here",
+      "contextualMeaning": "A detailed, rich interpretation (3-4 paragraphs or 10-14 lines) exploring the card's visual symbols, elemental balance, orientation (upright or reversed), and its direct application to the seeker's question in this specific spread position.",
+      "advice": "A deeply contemplative question or journal prompt inspired by this card"
     }
   ],
   "spreadSynthesis": "A holistic 2-3 paragraph synthesis explaining how all cards interact, noting the elemental balance, major arcana presence, and overall narrative trajectory.",

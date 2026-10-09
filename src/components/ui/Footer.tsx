@@ -9,14 +9,27 @@ import { getDictionary } from "@/lib/i18n/dictionaries";
 
 interface FooterProps {
   locale: Locale;
+  forceShow?: boolean;
 }
 
-export function Footer({ locale }: FooterProps) {
+export function Footer({ locale, forceShow }: FooterProps) {
   const dict = getDictionary(locale);
   const pathname = usePathname();
 
-  // The 3D reading room is a dedicated full-screen experience and should not have the global 4-column footer
-  if (pathname?.includes("/reading")) {
+  // The 3D reading rooms are dedicated interactive experiences during steps 1-3
+  const isDedicatedReadingRoom = [
+    "/reading",
+    "/card-of-the-day",
+    "/yes-or-no-tarot",
+    "/love-tarot-reading",
+    "/relationship-tarot-reading",
+    "/two-choices-tarot-reading",
+    "/question-tarot-reading",
+    "/month-ahead-tarot-reading",
+    "/career-tarot-reading",
+  ].some((r) => pathname?.includes(r));
+
+  if (isDedicatedReadingRoom && !forceShow) {
     return null;
   }
 

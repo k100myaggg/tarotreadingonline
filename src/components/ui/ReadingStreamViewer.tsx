@@ -28,6 +28,7 @@ interface ReadingStreamViewerProps {
   crisisData?: any;
   locale: Locale;
   onSelectFollowup?: (question: string) => void;
+  followupChatNode?: React.ReactNode;
 }
 
 export function ReadingStreamViewer({
@@ -37,6 +38,7 @@ export function ReadingStreamViewer({
   crisisData,
   locale,
   onSelectFollowup,
+  followupChatNode,
 }: ReadingStreamViewerProps) {
   const [isPosterModalOpen, setIsPosterModalOpen] = useState(false);
   const { drawnCards, question, personaId, setSpreadId, setStep, resetReading } = useReadingStore();
@@ -252,6 +254,13 @@ export function ReadingStreamViewer({
               </button>
             ))}
           </div>
+        </div>
+      )}
+
+      {/* ─── 5b. DIALOGUE WITH PERSONA (FOLLOW-UP CHAT DIRECTLY UNDER SUGGESTIONS) ─── */}
+      {reading && !isStreaming && followupChatNode && (
+        <div className="pt-2">
+          {followupChatNode}
         </div>
       )}
 
