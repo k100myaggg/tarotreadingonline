@@ -359,7 +359,7 @@ function createProceduralCardFront(
     roundRect(ctx, W / 2 - 40, 38, 80, 36, 8);
     ctx.stroke();
     ctx.fillStyle = "#f3e5ab";
-    ctx.font = "bold 20px 'Cinzel', 'Times New Roman', serif";
+    ctx.font = "bold 20px 'Onest', sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
     ctx.fillText(numeral, W / 2, 56);
@@ -367,7 +367,7 @@ function createProceduralCardFront(
 
   // ─── Arcana tag ───
   ctx.fillStyle = "#d4af37";
-  ctx.font = "bold 14px 'Courier New', monospace";
+  ctx.font = "600 13px 'Onest', sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
   const tagText = arcana === "major" ? "MAJOR ARCANA" : (suit || "").toUpperCase();
@@ -415,7 +415,7 @@ function createProceduralCardFront(
 
   // ─── Card Name ───
   ctx.fillStyle = "#f3e5ab";
-  ctx.font = "bold 28px 'Cinzel', 'Times New Roman', serif";
+  ctx.font = "bold 26px 'Onest', sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "top";
 

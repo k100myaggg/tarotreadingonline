@@ -215,18 +215,18 @@ export function ReadingPosterModal({
     // 4. Header: Sacred Seal & Title
     ctx.textAlign = "center";
     ctx.fillStyle = colors.accent;
-    ctx.font = "600 22px 'Cinzel', serif, Georgia";
-    ctx.letterSpacing = "6px";
-    ctx.fillText("✦  ARCANA SACRED ORACLE  ✦", width / 2, pad + 60);
+    ctx.font = "bold 22px 'Onest', sans-serif";
+    ctx.letterSpacing = "4px";
+    ctx.fillText("✦  ARCANA 3D ORACLE  ✦", width / 2, pad + 60);
 
     const dateStr = new Date().toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
       year: "numeric",
-    }).toUpperCase();
-    ctx.font = "400 15px 'Cinzel Decorative', monospace";
+    });
+    ctx.font = "500 14px 'Onest', sans-serif";
     ctx.fillStyle = colors.textMuted;
-    ctx.letterSpacing = "3px";
+    ctx.letterSpacing = "2px";
     ctx.fillText(`DIVINE TRANSMISSION · ${dateStr}`, width / 2, pad + 95);
 
     // 5. Seeker's Inquiry (Quote Box)
@@ -325,14 +325,14 @@ export function ReadingPosterModal({
       const posName = drawnCard.positionName || `Position ${i + 1}`;
 
       ctx.fillStyle = colors.accent;
-      ctx.font = "bold 16px 'Cinzel', serif";
-      ctx.letterSpacing = "1.5px";
-      ctx.fillText(cardName.toUpperCase(), cx + cardW / 2, badgeY);
+      ctx.font = "bold 16px 'Onest', sans-serif";
+      ctx.letterSpacing = "1px";
+      ctx.fillText(cardName, cx + cardW / 2, badgeY);
 
       ctx.fillStyle = drawnCard.isReversed ? "#e879f9" : colors.accentGlow;
-      ctx.font = "600 12px 'Cinzel', monospace";
-      ctx.letterSpacing = "2px";
-      ctx.fillText(`${posName.toUpperCase()} · ${statusText}`, cx + cardW / 2, badgeY + 22);
+      ctx.font = "600 12px 'Onest', sans-serif";
+      ctx.letterSpacing = "1.5px";
+      ctx.fillText(`${posName} · ${statusText}`, cx + cardW / 2, badgeY + 22);
     }
 
     // 7. Oracle Key Synthesis / Actionable Wisdom
@@ -350,10 +350,10 @@ export function ReadingPosterModal({
 
     // Box Header
     ctx.fillStyle = colors.accent;
-    ctx.font = "600 16px 'Cinzel', serif";
-    ctx.letterSpacing = "4px";
+    ctx.font = "bold 16px 'Onest', sans-serif";
+    ctx.letterSpacing = "2px";
     ctx.fillText(
-      "✦ SACRED SYNTHESIS & GUIDANCE ✦",
+      "✦ Sacred Guidance & Synthesis ✦",
       width / 2,
       synthesisY + 44
     );
@@ -365,28 +365,28 @@ export function ReadingPosterModal({
       "Trust the subtle currents revealed in this spread. What you seek is already seeking you.";
 
     ctx.fillStyle = colors.textPrimary;
-    ctx.font = "300 21px 'Playfair Display', Georgia, serif";
-    ctx.letterSpacing = "0.5px";
+    ctx.font = "400 20px 'Onest', sans-serif";
+    ctx.letterSpacing = "0.2px";
     wrapText(
       ctx,
       coreAdvice,
       width / 2,
       synthesisY + 88,
       synthBoxW - 80,
-      34,
+      32,
       format === "story" ? 9 : 4
     );
 
     // 8. Footer: Brand & Website Watermark
     ctx.fillStyle = colors.accent;
-    ctx.font = "500 14px 'Cinzel', monospace";
-    ctx.letterSpacing = "4px";
-    ctx.fillText("WWW.TAROTREADINGONLINE.COM", width / 2, height - pad - 30);
+    ctx.font = "600 14px 'Onest', sans-serif";
+    ctx.letterSpacing = "2px";
+    ctx.fillText("tarotreadingonline.com", width / 2, height - pad - 30);
 
     ctx.fillStyle = colors.textMuted;
-    ctx.font = "300 12px 'Cinzel', sans-serif";
-    ctx.letterSpacing = "2px";
-    ctx.fillText("SEEK YOUR TRUTH · SHARE THE LIGHT", width / 2, height - pad - 10);
+    ctx.font = "400 12px 'Onest', sans-serif";
+    ctx.letterSpacing = "1.5px";
+    ctx.fillText("Seek Your Truth · Share The Light", width / 2, height - pad - 10);
 
     // Generate preview URL
     const url = canvas.toDataURL("image/png");

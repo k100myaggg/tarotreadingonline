@@ -28,16 +28,27 @@
   }
 }
 
-/* Monospace labels and sacred geometry tags */
-.font-mono-sacred {
-  font-family: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "Courier New", monospace;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+/* Global Typography: 100% unified under Onest */
+*,
+*::before,
+*::after {
+  font-family: var(--font-onest), "Onest", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
 }
 
-/* Serif for sacred reading text */
+body,
+h1, h2, h3, h4, h5, h6,
+p, span, div, a, button, input, textarea, select {
+  font-family: var(--font-onest), "Onest", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+/* Backward compatibility for utility classes to enforce Onest */
 .font-serif-sacred {
-  font-family: "Cinzel", "Cormorant Garamond", "Playfair Display", Georgia, "Times New Roman", serif;
+  font-family: var(--font-onest), "Onest", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+}
+
+.font-mono-sacred {
+  font-family: var(--font-onest), "Onest", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  letter-spacing: 0.04em;
 }
 
 /* Restrained Gold Border & Glow */
