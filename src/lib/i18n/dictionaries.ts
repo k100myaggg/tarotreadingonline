@@ -3,16 +3,52 @@ import hi from "@/data/locales/hi.json";
 import ja from "@/data/locales/ja.json";
 import zh from "@/data/locales/zh.json";
 import zhTW from "@/data/locales/zh-TW.json";
+import ko from "@/data/locales/ko.json";
 import es from "@/data/locales/es.json";
+import de from "@/data/locales/de.json";
+import pt from "@/data/locales/pt.json";
+import fr from "@/data/locales/fr.json";
+import it from "@/data/locales/it.json";
+import nl from "@/data/locales/nl.json";
+import ru from "@/data/locales/ru.json";
+import uk from "@/data/locales/uk.json";
+import he from "@/data/locales/he.json";
+import th from "@/data/locales/th.json";
+import tr from "@/data/locales/tr.json";
+import pl from "@/data/locales/pl.json";
+import da from "@/data/locales/da.json";
+import no from "@/data/locales/no.json";
+import vi from "@/data/locales/vi.json";
+import hu from "@/data/locales/hu.json";
+import fi from "@/data/locales/fi.json";
+import id from "@/data/locales/id.json";
 import { Locale, ALL_LANGUAGES } from "@/types/tarot";
 
-const rawDictionaries: Partial<Record<Locale, any>> = {
+const rawDictionaries: Record<Locale, any> = {
   en,
-  hi,
-  ja,
-  zh,
   "zh-TW": zhTW,
+  zh,
+  ja,
+  ko,
   es,
+  de,
+  pt,
+  fr,
+  it,
+  nl,
+  ru,
+  uk,
+  he,
+  th,
+  tr,
+  pl,
+  da,
+  no,
+  vi,
+  hu,
+  fi,
+  id,
+  hi,
 };
 
 export type Dictionary = typeof en;

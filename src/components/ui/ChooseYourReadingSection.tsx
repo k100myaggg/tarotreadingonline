@@ -277,13 +277,13 @@ export function ChooseYourReadingSection({ locale }: ChooseYourReadingSectionPro
               {/* 2. Badge, Title & Subtitle */}
               <div className="mt-4 text-center flex flex-col items-center w-full px-1">
                 <span className="text-[9px] font-mono-sacred text-amber-400/90 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 uppercase tracking-wider mb-1">
-                  {getReadingTypeBadge(reading, locale)}
+                  {(dict as any).featuredReadings?.[reading.slug]?.badge || getReadingTypeBadge(reading, locale)}
                 </span>
                 <h3 className="font-serif-sacred text-sm sm:text-base font-bold text-amber-100 group-hover:text-amber-200 transition-colors leading-tight">
-                  {reading.name[locale] || reading.name.en}
+                  {(dict as any).featuredReadings?.[reading.slug]?.name || reading.name[locale] || reading.name.en}
                 </h3>
                 <p className="font-serif-sacred italic text-[11px] sm:text-xs text-slate-300 font-light mt-1 leading-tight line-clamp-2">
-                  {reading.subtitle[locale] || reading.subtitle.en}
+                  {(dict as any).featuredReadings?.[reading.slug]?.subtitle || reading.subtitle[locale] || reading.subtitle.en}
                 </p>
               </div>
             </Link>

@@ -119,10 +119,10 @@ export default async function HomePage({ params }: HomePageProps) {
                   </span>
                 </div>
                 <h3 className="font-serif-sacred text-lg font-bold text-amber-200 mb-2">
-                  {spread.name[activeLocale] || spread.name.en}
+                  {(dict as any).spreads?.[spread.id]?.name || spread.name[activeLocale] || spread.name.en}
                 </h3>
                 <p className="text-xs text-slate-300 leading-relaxed">
-                  {spread.description[activeLocale] || spread.description.en}
+                  {(dict as any).spreads?.[spread.id]?.desc || spread.description[activeLocale] || spread.description.en}
                 </p>
               </div>
 
@@ -159,13 +159,13 @@ export default async function HomePage({ params }: HomePageProps) {
             >
               <PersonaAvatar personaId={persona.id} size="lg" className="mb-4" />
               <h3 className="font-serif-sacred text-xl font-bold text-amber-200 mb-1">
-                {persona.name[activeLocale] || persona.name.en}
+                {(dict as any).personas?.[persona.id]?.name || persona.name[activeLocale] || persona.name.en}
               </h3>
               <p className="font-mono-sacred text-xs text-amber-400/80 mb-3 tracking-wide">
-                {persona.title[activeLocale] || persona.title.en}
+                {(dict as any).personas?.[persona.id]?.title || persona.title[activeLocale] || persona.title.en}
               </p>
               <p className="text-xs text-slate-300 leading-relaxed mb-4">
-                {persona.description[activeLocale] || persona.description.en}
+                {(dict as any).personas?.[persona.id]?.desc || persona.description[activeLocale] || persona.description.en}
               </p>
               <div className="pt-3 border-t border-white/5 text-[11px] font-mono-sacred text-slate-400 italic">
                 {dict.personasSection?.toneLabel || "Tone"}: {persona.tone}

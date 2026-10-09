@@ -169,5 +169,110 @@
     "seekerPack": "Pack Buscador (10 Créditos) - $4.99",
     "mysticPack": "Pack Místico (30 Créditos) - $11.99",
     "oraclePack": "Pack Oráculo (100 Créditos) - $29.99"
+  },
+  "featuredReadings": {
+    "card-of-the-day": {
+      "name": "Carta del Día",
+      "subtitle": "Define el tono de tu jornada",
+      "badge": "Tirada Diaria Gratis"
+    },
+    "yes-or-no-tarot": {
+      "name": "Tarot Sí o No",
+      "subtitle": "Respuesta clara y decisiva",
+      "badge": "1 Carta · Al Instante"
+    },
+    "two-choices-tarot-reading": {
+      "name": "Dos Opciones",
+      "subtitle": "Compara el Camino A frente al Camino B",
+      "badge": "5 Cartas · Decisiones"
+    },
+    "love-tarot-reading": {
+      "name": "Tarot del Amor",
+      "subtitle": "Verdad del corazón y romance futuro",
+      "badge": "3 Cartas · Romance"
+    },
+    "relationship-tarot-reading": {
+      "name": "Tarot de Pareja",
+      "subtitle": "Claridad y dinámica entre dos almas",
+      "badge": "3 Cartas · Vínculos"
+    },
+    "question-tarot-reading": {
+      "name": "Consulta Específica",
+      "subtitle": "Respuestas claras a cualquier duda vital",
+      "badge": "3 Cartas · Orientación"
+    },
+    "month-ahead-tarot-reading": {
+      "name": "El Mes por Delante",
+      "subtitle": "Pronóstico de 4 semanas y temas clave",
+      "badge": "4 Cartas · Mensual"
+    },
+    "career-tarot-reading": {
+      "name": "Carrera & Propósito",
+      "subtitle": "Desarrollo laboral, dones y éxito",
+      "badge": "3 Cartas · Trabajo"
+    }
+  },
+  "spreads": {
+    "single": {
+      "name": "Luz Diaria / Visión (1 Carta)",
+      "desc": "Una carta enfocada para la energía de hoy o una duda concreta."
+    },
+    "three_card": {
+      "name": "Pasado, Presente, Futuro",
+      "desc": "La clásica trinidad que revela raíces, fuerzas vivas y potencial futuro."
+    },
+    "decision_ab": {
+      "name": "Opción A vs Opción B",
+      "desc": "Tirada comparativa equilibrada para elegir entre dos caminos."
+    },
+    "celtic_cross": {
+      "name": "Cruz Celta (10 Cartas)",
+      "desc": "La arquitectura hermética más profunda para una comprensión integral."
+    },
+    "card_of_the_day": {
+      "name": "Carta del Día",
+      "desc": "Arquetipo diario para orientar tus 24 horas."
+    },
+    "yes_or_no": {
+      "name": "Tarot Sí o No",
+      "desc": "Veredicto inmediato y decantado para tus dudas."
+    },
+    "love_three_card": {
+      "name": "Tirada del Amor (3 Cartas)",
+      "desc": "Tu corazón, el otro corazón y el desenlace futuro."
+    },
+    "relationship_spread": {
+      "name": "Tirada Relacional",
+      "desc": "Ilumina la dinámica y aprendizajes compartidos."
+    },
+    "question_three_card": {
+      "name": "Tirada de Pregunta (3 Cartas)",
+      "desc": "Situación, factor oculto y guía definitiva."
+    },
+    "month_ahead_four_card": {
+      "name": "Mes Entrante (4 Cartas)",
+      "desc": "Temas semanales para las próximas cuatro semanas."
+    },
+    "career_three_card": {
+      "name": "Carrera y Vocación (3 Cartas)",
+      "desc": "Oportunidades laborales, dones y estrategia de logro."
+    }
+  },
+  "personas": {
+    "sage": {
+      "name": "El Sabio Místico",
+      "title": "Guardián de las Corrientes Herméticas",
+      "desc": "Interpreta arquetipos y ciclos cósmicos con serena sabiduría."
+    },
+    "empath": {
+      "name": "La Empática Intuitiva",
+      "title": "Espejo del Corazón y el Alma",
+      "desc": "Centrada en sanación emocional, compasión y relaciones."
+    },
+    "strategist": {
+      "name": "El Estratega Directo",
+      "title": "Espada de la Verdad y la Acción",
+      "desc": "Disipa dudas con orientación práctica, realista y contundente."
+    }
   }
 }

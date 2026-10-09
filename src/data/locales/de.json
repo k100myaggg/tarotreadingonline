@@ -1,0 +1,279 @@
+{
+  "nav": {
+    "title": "Arcana 3D",
+    "subtitle": "Heiliges AI Tarot",
+    "reading": "Neue Legung",
+    "daily": "Tageskarte",
+    "cards": "78 Karten",
+    "spreads": "Legemuster",
+    "dashboard": "Meine Reise",
+    "credits": "Guthaben",
+    "readingsDropdown": "Tarot-Legungen",
+    "creditPill": "CREDIT",
+    "sacredBalance": "Heiliges Guthaben",
+    "freeDailyCreditDesc": "1 tägliches Gratis-Guthaben",
+    "view": "Ansehen",
+    "sanctuaryHeader": "HEILIGTUM"
+  },
+  "hero": {
+    "tagline": "Das Antike Deck Trifft Höchste Intelligenz",
+    "headline": "Ein Lebendiges 3D AI Tarot Heiligtum",
+    "subheading": "Stelle deine Frage, mische das Deck im echten 3D-Raum und erhalte eine authentische Deutung nach klassischer hermetischer Weisheit.",
+    "cta": "Das Orakel Befragen",
+    "dailyCta": "Tageskarte Ziehen",
+    "exploreCards": "Karten-Archiv Durchstöbern",
+    "freeNotice": "Deine erste Legung ist komplett kostenlos – keine Registrierung nötig."
+  },
+  "physics3d": {
+    "title": "Dreidimensionale Kartenphysik & Klang",
+    "desc": "Karten schweben im volumetrischen Raum. Mische, betrachte holografische Rückseiten, wähle Karten mit haptischer Resonanz und sieh zu, wie sie auf Samt gewendet werden."
+  },
+  "chooseReading": {
+    "title": "Wähle Deine Legung",
+    "badge": "BEGEHRTE URBILDER · ECHTER 3D-KOSMOS · GEWEIHTE ORAKEL"
+  },
+  "spreadsSection": {
+    "title": "Heilige Legemuster",
+    "desc": "Wähle die Geometrie, die deine aktuelle Weggabelung widerspiegelt.",
+    "cardSingular": "1 KARTE",
+    "cardPlural": "KARTEN",
+    "freeBadge": "GRATIS",
+    "creditsBadge": "CREDITS",
+    "selectSpread": "Legemuster Wählen"
+  },
+  "personasSection": {
+    "title": "Drei Souveräne Deutungsstimmen",
+    "desc": "Dasselbe Muster spricht unterschiedlich, je nachdem, wen du wählst. Finde den Begleiter, der mit deiner Seele schwingt.",
+    "toneLabel": "Tonfall"
+  },
+  "foundations": {
+    "randomTitle": "Kryptografischer Zufall",
+    "randomDesc": "Jede Ziehung nutzt serverseitige CSPRNG-Algorithmen. Die KI darf niemals selbst Karten wählen.",
+    "streamTitle": "Live Gestreamte Einsicht",
+    "streamDesc": "Verzögerungsfreies Streaming erweckt die Worte des Lesers ohne Ladezeiten zum Leben.",
+    "ethicsTitle": "Ethischer Spiegel",
+    "ethicsDesc": "Verankert in persönlicher Autonomie. Frei von Fatalismus oder leeren Versprechungen."
+  },
+  "settings": {
+    "title": "Einstellungen des Heiligtums",
+    "ambienceSection": "Heilige Klänge & Atmosphäre",
+    "soundOn": "TON AN",
+    "muted": "STUMM",
+    "masterVolume": "Gesamtlautstärke",
+    "harmonicToneMode": "Frequenz-Modus",
+    "toneSolfeggioLabel": "528Hz Solfeggio",
+    "toneSolfeggioDesc": "Wunderfrequenz für Erneuerung & Herzöffnung",
+    "toneNebulaLabel": "Kosmischer Nebel",
+    "toneNebulaDesc": "Tiefer Raumklang für meditative Zentrierung",
+    "toneTempleLabel": "Tempel-Klangschalen",
+    "toneTempleDesc": "Tibetische Schalenklänge mit heiliger Brise",
+    "sfxLabel": "Misch- & Wende-SFX",
+    "sfxEnabled": "AKTIVIERT",
+    "sfxMuted": "STUMM",
+    "languageSection": "Sprache",
+    "dimensionSection": "Visuelle Dimension",
+    "mode2DLabel": "2D Barrierefrei",
+    "mode3DLabel": "3D Kosmos",
+    "switchTo2D": "ZU 2D WECHSELN",
+    "switchTo3D": "ZU 3D WECHSELN"
+  },
+  "readingRoom": {
+    "startDivination": "START",
+    "aligningFreq": "URBILDLICHE FREQUENZEN WERDEN EINGESTIMMT",
+    "shufflingHeader": "Karten werden gemischt... Bitte meditiere über deine Frage",
+    "coalescingDeck": "DECK WIRD GESAMMELT...",
+    "finishShuffling": "MISCHEN BEENDEN",
+    "cutRitualBadge": "HEILIGES RITUAL · PERSÖNLICHE ENERGIEPRÄGUNG",
+    "cutRitualTitle": "Das Heilige Deck Abheben",
+    "cutRitualHint": "Tippe oder klicke dort, wo deine Intuition dich ruft, um das Deck zu teilen...",
+    "fanOutCards": "KARTEN AUSBREITEN",
+    "selectCardsPrompt": "Wähle",
+    "moreCards": "weitere Karte(n)",
+    "allCardsSelected": "Alle Karten gewählt! Deute unten.",
+    "synthesizeReading": "DEUTUNG SYNTHETISIEREN",
+    "revealAllCards": "ALLE KARTEN AUFDECKEN",
+    "askAnotherQuestion": "NEUE FRAGE STELLEN",
+    "exploreAllReadings": "ALLE LEGUNGEN ANSEHEN",
+    "actionAnchor": "Handlungsanker",
+    "suggestedContemplations": "Empfohlene Kontemplationen",
+    "goDeeper": "Tiefer in dieses Muster blicken",
+    "askFollowup": "Den Leser fragen",
+    "creditCost": "1 Credit",
+    "synthesizedTitle": "Heiliges Orakel"
+  },
+  "footer": {
+    "brandDesc": "Verbindet Pamela Colman Smiths RWS-Urbilder von 1909 mit moderner künstlicher Intelligenz.",
+    "archiveNotice": "GEMEINFREIES RWS (1909) ARCHIV",
+    "sacredPortals": "Heilige Portale",
+    "ethicalTitle": "Ethisches KI-Orakel",
+    "ethicalBullet1": "Karten werden durch zertifizierten Zufall gezogen, niemals von der KI.",
+    "ethicalBullet2": "Keine fatalistischen Vorhersagen oder medizinische Diagnosen.",
+    "ethicalBullet3": "Krisenfragen werden achtsam an Hilfestellen weitergeleitet.",
+    "supportTitle": "Hilfe & Unterstützung",
+    "supportDesc": "Befindest du dich in einer Krise, wende dich bitte an professionelle Stellen:",
+    "rightsReserved": "Alle Rechte vorbehalten.",
+    "privacyPolicy": "Datenschutzerklärung",
+    "termsOfService": "Nutzungsbedingungen",
+    "refundPolicy": "Rückerstattungsrichtlinie",
+    "authenticAi": "AUTHENTISCHES TAROT AI"
+  },
+  "readingForm": {
+    "questionLabel": "Was liegt dir auf dem Herzen?",
+    "questionPlaceholder": "Z.B.: Welche energetische Wende erwartet mich beruflich in den kommenden Wochen?",
+    "questionHint": "Max. 200 Zeichen. Offene Fragen eröffnen tiefere Antworten.",
+    "optionsPrompt": "Vergleichst du zwei Wege? (Optional)",
+    "optionALabel": "Weg / Option A",
+    "optionAPlaceholder": "Das neue Angebot annehmen",
+    "optionBLabel": "Weg / Option B",
+    "optionBPlaceholder": "Den bestehenden Pfad weitergehen",
+    "chooseSpread": "Legemuster Wählen",
+    "choosePersona": "Tarot-Leser Wählen",
+    "shufflePrompt": "Mischen & 3D-Heiligtum Betreten",
+    "freeGuestNotice": "Die erste Legung ist kostenlos – keine Registrierung."
+  },
+  "reader": {
+    "shufflingDeck": "Die 78 archetypischen Ströme mischen sich...",
+    "fieldInstruction": "Wähle {required} Karten aus dem schwebenden Feld ({selected} gewählt)",
+    "revealButton": "Karten Aufdecken",
+    "drawUnderway": "Legung wird ausgebreitet und der Leser angerufen...",
+    "streamIntro": "Die Karten haben sich in heiliger Ordnung gefügt.",
+    "practicalStepTitle": "Praktischer Handlungsschritt",
+    "followupTitle": "Tiefer nachfragen",
+    "followupPlaceholder": "Stelle eine Folgefrage zu diesen Karten...",
+    "followupSend": "Leser fragen (1 Credit)",
+    "extraCardButton": "Klärende Zusatzkarte ziehen (1 Credit)",
+    "disclaimer": "Tarot ist ein Spiegel zur Selbstreflexion und ersetzt keinen ärztlichen Rat.",
+    "sharePoster": "Poster Teilen",
+    "overallAnalysis": "Gesamtanalyse der Legung",
+    "deepSynthesis": "Tiefensynthese",
+    "cardBreakdown": "Einzelkarten-Offenbarungen",
+    "goDeeper": "Tiefer in diese Legung eintauchen",
+    "askThis": "Dies fragen",
+    "readingSaved": "Deine Legung wurde gespeichert",
+    "storyReady": "Bild Fertig",
+    "downloadPosterDesc": "Lade ein stimmungsvolles Poster für deine Social-Media-Stories herunter.",
+    "downloadPosterBtn": "Als Bild Herunterladen",
+    "rateReadingTitle": "Wie war deine Legung?",
+    "rateReadingDesc": "Hilf uns, das Orakel zu verfeinern. Gib eine Bewertung ab.",
+    "rateSuccess": "✦ Danke, Suchender! Dein Feedback ist im Kosmos vermerkt. ✦",
+    "rateFeedbackPlaceholder": "Teile deine Gedanken oder Erkenntnisse (optional)...",
+    "submitFeedback": "Feedback Absenden",
+    "exploreOtherTitle": "Weitere Legungen Entdecken",
+    "exploreOtherDesc": "Besuche einen weiteren Raum für andere Lebensbereiche.",
+    "enterRoom": "Raum Betreten"
+  },
+  "credits": {
+    "current": "Guthaben",
+    "freeDaily": "Tägliches Gratis-Guthaben",
+    "streakDays": "Tage in Folge",
+    "purchasePacks": "Guthaben Erwerben",
+    "seekerPack": "Sucher-Paket (10 Credits) - $4.99",
+    "mysticPack": "Mystiker-Paket (30 Credits) - $11.99",
+    "oraclePack": "Orakel-Paket (100 Credits) - $29.99"
+  },
+  "featuredReadings": {
+    "card-of-the-day": {
+      "name": "Tageskarte",
+      "subtitle": "Stimme dich auf den Tag ein",
+      "badge": "Tägliche Gratis-Ziehung"
+    },
+    "yes-or-no-tarot": {
+      "name": "Ja oder Nein Tarot",
+      "subtitle": "Klare & unmittelbare Entscheidung",
+      "badge": "1 Karte · Sofort"
+    },
+    "two-choices-tarot-reading": {
+      "name": "Zwei Wege Tarot",
+      "subtitle": "Weg A gegen Weg B vergleichen",
+      "badge": "5 Karten · Entscheidung"
+    },
+    "love-tarot-reading": {
+      "name": "Liebestarot",
+      "subtitle": "Herzensdynamik & Liebeszukunft",
+      "badge": "3 Karten · Romantik"
+    },
+    "relationship-tarot-reading": {
+      "name": "Beziehungstarot",
+      "subtitle": "Begegnung, Harmonie & Band",
+      "badge": "3 Karten · Partnerschaft"
+    },
+    "question-tarot-reading": {
+      "name": "Einzelfrage-Legung",
+      "subtitle": "Klare Antworten auf Lebensfragen",
+      "badge": "3 Karten · Rat"
+    },
+    "month-ahead-tarot-reading": {
+      "name": "Monatsausblick",
+      "subtitle": "4-Wochen-Vorschau und Themen",
+      "badge": "4 Karten · Zukunft"
+    },
+    "career-tarot-reading": {
+      "name": "Karriere & Berufung",
+      "subtitle": "Berufsweg, Talente & Erfolg",
+      "badge": "3 Karten · Erfolg"
+    }
+  },
+  "spreads": {
+    "single": {
+      "name": "Tageslicht & Klarheit (1 Karte)",
+      "desc": "Eine fokussierte Karte für die Energie des heutigen Tages."
+    },
+    "three_card": {
+      "name": "Vergangenheit, Gegenwart, Zukunft",
+      "desc": "Klassische Dreifaltigkeit: Ursprung, Gegenwart und Zukunft."
+    },
+    "decision_ab": {
+      "name": "Weg A vs. Weg B (5 Karten)",
+      "desc": "Ausgewogener Vergleich zweier Richtungen."
+    },
+    "celtic_cross": {
+      "name": "Keltisches Kreuz (10 Karten)",
+      "desc": "Das klassische Zehn-Karten-Muster für umfassende Einsicht."
+    },
+    "card_of_the_day": {
+      "name": "Tageskarte",
+      "desc": "Tägliche geistige Ausrichtung für 24 Stunden."
+    },
+    "yes_or_no": {
+      "name": "Ja oder Nein",
+      "desc": "Einprägsame und präzise Antwort."
+    },
+    "love_three_card": {
+      "name": "Liebeslegung (3 Karten)",
+      "desc": "Dein Herz, das Partnerherz und die Zukunft."
+    },
+    "relationship_spread": {
+      "name": "Beziehungsspiegel (3 Karten)",
+      "desc": "Beleuchtet das gemeinsame Band."
+    },
+    "question_three_card": {
+      "name": "Fragelegung (3 Karten)",
+      "desc": "Status quo, Verstecktes und Ausweg."
+    },
+    "month_ahead_four_card": {
+      "name": "Monatsvorschau (4 Karten)",
+      "desc": "Die wöchentlichen Leitthemen des nächsten Monats."
+    },
+    "career_three_card": {
+      "name": "Beruf & Sinn (3 Karten)",
+      "desc": "Gaben, Wendepunkte und Strategie."
+    }
+  },
+  "personas": {
+    "sage": {
+      "name": "Der Mystische Weise",
+      "title": "Hüter Hermetischer Ströme",
+      "desc": "Deutet durch Urbilder und kosmische Zyklen mit ruhiger Klarheit."
+    },
+    "empath": {
+      "name": "Die Intuitive Empathin",
+      "title": "Spiegel des Herzens",
+      "desc": "Fokussiert auf emotionale Heilung und sanfte Ermutigung."
+    },
+    "strategist": {
+      "name": "Der Klare Stratege",
+      "title": "Schwert der Wahrheit und Tatkraft",
+      "desc": "Beseitigt Zweifel mit pragmatischen, handlungsorientierten Schritten."
+    }
+  }
+}

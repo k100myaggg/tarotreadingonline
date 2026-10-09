@@ -169,5 +169,110 @@
     "seekerPack": "探索者禮包 (10積分) - $4.99",
     "mysticPack": "秘術師禮包 (30積分) - $11.99",
     "oraclePack": "神諭者禮包 (100積分) - $29.99"
+  },
+  "featuredReadings": {
+    "card-of-the-day": {
+      "name": "今日運勢卡",
+      "subtitle": "奠定今日心靈基調",
+      "badge": "每日免費神諭"
+    },
+    "yes-or-no-tarot": {
+      "name": "是非題占卜",
+      "subtitle": "直面困惑的明確指引",
+      "badge": "1張牌 · 即時解答"
+    },
+    "two-choices-tarot-reading": {
+      "name": "雙重抉擇牌陣",
+      "subtitle": "對比路徑A與路徑B的能量",
+      "badge": "5張牌 · 抉擇指引"
+    },
+    "love-tarot-reading": {
+      "name": "愛情塔羅解讀",
+      "subtitle": "探索內心情感與未來走向",
+      "badge": "3張牌 · 浪漫情緣"
+    },
+    "relationship-tarot-reading": {
+      "name": "關係深度剖析",
+      "subtitle": "洞悉彼此羈絆與能量互動",
+      "badge": "3張牌 · 關係和諧"
+    },
+    "question-tarot-reading": {
+      "name": "專屬問題占卜",
+      "subtitle": "針對人生所有困惑的精準洞察",
+      "badge": "3張牌 · 解答疑惑"
+    },
+    "month-ahead-tarot-reading": {
+      "name": "未來一個月運勢",
+      "subtitle": "透視未來4週每週主題與契機",
+      "badge": "4張牌 · 月度預測"
+    },
+    "career-tarot-reading": {
+      "name": "事業與天賦使命",
+      "subtitle": "解鎖職業突破與財富潛能",
+      "badge": "3張牌 · 事業指引"
+    }
+  },
+  "spreads": {
+    "single": {
+      "name": "每日微光・即時啟示（1張牌）",
+      "desc": "專注於單張卡牌，為今日能量或單一迫切問題提供清晰濃縮的指引。"
+    },
+    "three_card": {
+      "name": "過去・現在・未來（3張牌）",
+      "desc": "經典的時間軸三位一體，揭示根源、當下推動力與即將展現的潛能。"
+    },
+    "decision_ab": {
+      "name": "抉擇A vs 抉擇B（5張牌）",
+      "desc": "平衡對比牌陣，專為化解十字路口的猶豫而設，評估兩種不同方向的長遠結果。"
+    },
+    "celtic_cross": {
+      "name": "凱爾特十字牌陣（10張牌）",
+      "desc": "最權威的赫爾墨斯十牌幾何架構，全方位透視深層因果與命運軌跡。"
+    },
+    "card_of_the_day": {
+      "name": "今日之牌",
+      "desc": "調諧今日思維，照亮當下24小時的心靈羅盤。"
+    },
+    "yes_or_no": {
+      "name": "是非題占卜",
+      "desc": "專為直接問題打造的即時決策判定。"
+    },
+    "love_three_card": {
+      "name": "愛情三牌陣",
+      "desc": "你的心聲、對方的情感，以及兩人間顯化的未來。"
+    },
+    "relationship_spread": {
+      "name": "關係互動牌陣",
+      "desc": "照亮雙方共織的真實紐帶與潛在功課。"
+    },
+    "question_three_card": {
+      "name": "專屬問題三牌陣",
+      "desc": "現狀、隱藏因素與決定性指引。"
+    },
+    "month_ahead_four_card": {
+      "name": "未來月度四牌陣",
+      "desc": "未來四週逐週能量主題與成長課題。"
+    },
+    "career_three_card": {
+      "name": "事業使命三牌陣",
+      "desc": "天賦綻放、職業轉折與成功實踐策略。"
+    }
+  },
+  "personas": {
+    "sage": {
+      "name": "神秘智者",
+      "title": "古典赫爾墨斯秘流守護者",
+      "desc": "以原型、星體相位與深邃宇宙週期為鏡，給予平靜而超然的宏觀洞見。"
+    },
+    "empath": {
+      "name": "直覺共情者",
+      "title": "心靈與內在小孩之鏡",
+      "desc": "專注於情緒療癒、自我慈悲與關係安全感，帶來溫柔包容的心靈撫慰。"
+    },
+    "strategist": {
+      "name": "果決戰略家",
+      "title": "澄澈意志與清晰之劍",
+      "desc": "斬斷迷茫與幻覺，提供直接、具體且可落地的戰略實踐指引。"
+    }
   }
 }

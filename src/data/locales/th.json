@@ -16,9 +16,9 @@
     "sanctuaryHeader": "SANCTUARY"
   },
   "hero": {
-    "tagline": "The Ancient Deck Meets Sovereign Intelligence",
-    "headline": "A Living 3D AI Tarot Sanctuary",
-    "subheading": "Ask your question, shuffle the floating deck in real-time 3D, and receive an authentic, streamed interpretation steeped in classical hermetic wisdom.",
+    "tagline": "ไพ่ทาโรต์โบราณผสานปัญญาประดิษฐ์ชั้นสูง",
+    "headline": "วิหารไพ่ทาโรต์ 3D มีชีวิตด้วยพลัง AI",
+    "subheading": "ตั้งจิตอธิษฐานถามคำถาม สับไพ่ในมิติ 3D แบบเรียลไทม์ และรับคำทำนายที่เปี่ยมด้วยปัญญาโบราณอย่างลึกซึ้ง",
     "cta": "Consult the Oracle",
     "dailyCta": "Claim Daily Card",
     "exploreCards": "Browse Deck Archive"
@@ -28,7 +28,7 @@
     "desc": "Cards float in a volumetric orbital field. Shuffle, inspect holographic card backs, select cards with real-time feedback, and watch them flip on a sacred velvet spread."
   },
   "chooseReading": {
-    "title": "Choose your Reading",
+    "title": "ไทย Tarot",
     "badge": "HIGH-DEMAND SACRED ARCHETYPES · REAL-TIME 3D DIVINATION · DEDICATED ORACLES"
   },
   "spreadsSection": {

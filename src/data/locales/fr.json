@@ -1,0 +1,279 @@
+{
+  "nav": {
+    "title": "Arcana 3D",
+    "subtitle": "Tarot Sacré par IA",
+    "reading": "Nouveau Tirage",
+    "daily": "Carte du Jour",
+    "cards": "78 Cartes",
+    "spreads": "Tirages",
+    "dashboard": "Mon Chemin",
+    "credits": "Crédits",
+    "readingsDropdown": "Tirages",
+    "creditPill": "CRÉDIT",
+    "sacredBalance": "Solde Sacré",
+    "freeDailyCreditDesc": "1 tirage divinatoire quotidien gratuit",
+    "view": "Voir",
+    "sanctuaryHeader": "SANCTUAIRE"
+  },
+  "hero": {
+    "tagline": "Le Deck Antique Rencontre l'Intelligence Souveraine",
+    "headline": "Un Sanctuaire 3D Vivant de Tarot IA",
+    "subheading": "Posez votre question, mélangez les cartes dans un espace 3D en temps réel et recevez une interprétation authentique empreinte de sagesse hermétique.",
+    "cta": "Consulter l'Oracle",
+    "dailyCta": "Tirer la Carte du Jour",
+    "exploreCards": "Explorer les 78 Arcanes",
+    "freeNotice": "Votre premier tirage est entièrement gratuit — sans inscription."
+  },
+  "physics3d": {
+    "title": "Physique des Cartes en 3D & Son Sacré",
+    "desc": "Les cartes flottent dans un champ orbital volumétrique. Mélangez, examinez les dos holographiques, sélectionnez vos cartes avec retour tactile et observez leur révélation sur velours."
+  },
+  "chooseReading": {
+    "title": "Choisissez Votre Tirage",
+    "badge": "ARCHÉTYPES ÉLEVÉS · DIVINATION 3D TEMPS RÉEL · ORACLES DÉDIÉS"
+  },
+  "spreadsSection": {
+    "title": "Géométries des Tirages Sacrés",
+    "desc": "Choisissez la disposition qui fait écho à votre carrefour de vie actuel.",
+    "cardSingular": "1 CARTE",
+    "cardPlural": "CARTES",
+    "freeBadge": "GRATUIT",
+    "creditsBadge": "CRÉDITS",
+    "selectSpread": "Choisir le Tirage"
+  },
+  "personasSection": {
+    "title": "Trois Voix de Lecteurs Souverains",
+    "desc": "Le même tirage résonne différemment selon le guide choisi. Sélectionnez la présence qui correspond à votre âme.",
+    "toneLabel": "Ton"
+  },
+  "foundations": {
+    "randomTitle": "Aléatoire Cryptographique",
+    "randomDesc": "Chaque tirage repose sur un CSPRNG certifié côté serveur. Le modèle d'IA ne choisit jamais les cartes.",
+    "streamTitle": "Synthèse en Streaming",
+    "streamDesc": "Un flux fluide et instantané donne vie aux paroles de votre lecteur sans aucun écran de chargement.",
+    "ethicsTitle": "Miroir de Réflexion Éthique",
+    "ethicsDesc": "Fondé sur l'autonomie et le discernement personnels. Zéro fatalisme ni promesses illusoires."
+  },
+  "settings": {
+    "title": "Paramètres du Sanctuaire",
+    "ambienceSection": "Ambiance & Audio Sacré",
+    "soundOn": "SON ACTIVÉ",
+    "muted": "MUET",
+    "masterVolume": "Volume Principal",
+    "harmonicToneMode": "Mode Fréquentiel",
+    "toneSolfeggioLabel": "Solfeggio 528Hz",
+    "toneSolfeggioDesc": "Fréquence miraculeuse de renouveau et d'ouverture du cœur",
+    "toneNebulaLabel": "Nébuleuse Céleste",
+    "toneNebulaDesc": "Bourdon cosmique profond pour l'ancrage méditatif",
+    "toneTempleLabel": "Bols Chantants du Temple",
+    "toneTempleDesc": "Harmoniques de bols tibétains avec brise sacrée",
+    "sfxLabel": "Effets de Mélange & de Révélation",
+    "sfxEnabled": "ACTIVÉ",
+    "sfxMuted": "MUET",
+    "languageSection": "Langue Sacrée",
+    "dimensionSection": "Dimension Visuelle",
+    "mode2DLabel": "Mode 2D Accessible",
+    "mode3DLabel": "Mode 3D Cosmique",
+    "switchTo2D": "PASSER EN 2D",
+    "switchTo3D": "PASSER EN 3D"
+  },
+  "readingRoom": {
+    "startDivination": "COMMENCER",
+    "aligningFreq": "ALIGNEMENT DES FRÉQUENCES ARCHÉTYPALES",
+    "shufflingHeader": "Mélange des cartes... Méditez sur votre question",
+    "coalescingDeck": "RASSEMBLEMENT DU JEU...",
+    "finishShuffling": "TERMINER LE MÉLANGE",
+    "cutRitualBadge": "RITUEL SACRÉ · EMPREINTE ÉNERGÉTIQUE PERSONNELLE",
+    "cutRitualTitle": "Couper le Jeu Sacré",
+    "cutRitualHint": "Cliquez ou touchez à l'endroit où votre intuition vous invite à couper le jeu...",
+    "fanOutCards": "DÉPLOYER LES CARTES",
+    "selectCardsPrompt": "Choisissez",
+    "moreCards": "carte(s) supplémentaire(s)",
+    "allCardsSelected": "Toutes les cartes sont choisies ! Découvrez la synthèse ci-dessous.",
+    "synthesizeReading": "SYNTHÉTISER LE TIRAGE",
+    "revealAllCards": "RÉVÉLER TOUTES LES CARTES",
+    "askAnotherQuestion": "POSER UNE AUTRE QUESTION",
+    "exploreAllReadings": "EXPLORER TOUS LES TIRAGES",
+    "actionAnchor": "Ancrage Pratique",
+    "suggestedContemplations": "Contemplations Suggérées",
+    "goDeeper": "Approfondir ce Tirage",
+    "askFollowup": "Interroger le Lecteur",
+    "creditCost": "1 Crédit",
+    "synthesizedTitle": "Oracle Sacré"
+  },
+  "footer": {
+    "brandDesc": "L'alliance des archétypes RWS de 1909 de Pamela Colman Smith et de l'intelligence artificielle souveraine.",
+    "archiveNotice": "ARCHIVES DU DOMAINE PUBLIC RWS (1909)",
+    "sacredPortals": "Portails Sacrés",
+    "ethicalTitle": "Oracle IA Éthique",
+    "ethicalBullet1": "Tirages cryptographiquement aléatoires, jamais décidés par l'IA.",
+    "ethicalBullet2": "Aucun fatalisme ni affirmations d'ordre médical ou juridique.",
+    "ethicalBullet3": "Les situations de détresse sont accueillies avec compassion et orientation d'aide.",
+    "supportTitle": "Soutien & Écoute",
+    "supportDesc": "Si vous ou un proche traversez une épreuve difficile, contactez une ligne d'écoute :",
+    "rightsReserved": "Tous droits réservés.",
+    "privacyPolicy": "Politique de Confidentialité",
+    "termsOfService": "Conditions d'Utilisation",
+    "refundPolicy": "Politique de Remboursement",
+    "authenticAi": "AUTHENTIQUE TAROT IA"
+  },
+  "readingForm": {
+    "questionLabel": "Quelle est l'essence de votre demande ?",
+    "questionPlaceholder": "Ex. : Quelle mutation énergétique m'appelle dans ma carrière créative ces prochains mois ?",
+    "questionHint": "Max 200 caractères. Une question ouverte apporte des réponses plus riches.",
+    "optionsPrompt": "Vous hésitez entre deux chemins ? (Optionnel)",
+    "optionALabel": "Chemin / Option A",
+    "optionAPlaceholder": "Accepter le nouveau contrat",
+    "optionBLabel": "Chemin / Option B",
+    "optionBPlaceholder": "Conserver mon indépendance",
+    "chooseSpread": "Sélectionner la Disposition",
+    "choosePersona": "Choisir le Lecteur",
+    "shufflePrompt": "Mélanger & Entrer dans le Sanctuaire 3D",
+    "freeGuestNotice": "Premier tirage gratuit — sans inscription."
+  },
+  "reader": {
+    "shufflingDeck": "Mélange des 78 courants archétypaux...",
+    "fieldInstruction": "Sélectionnez {required} cartes dans le champ flottant ({selected} choisies)",
+    "revealButton": "Révéler les Cartes",
+    "drawUnderway": "Disposition des cartes et invocation du lecteur...",
+    "streamIntro": "Les cartes se sont ordonnées selon l'ordre sacré.",
+    "practicalStepTitle": "Ancrage Pratique",
+    "followupTitle": "Approfondir cette disposition",
+    "followupPlaceholder": "Posez une question complémentaire liée à ces cartes...",
+    "followupSend": "Demander au Lecteur (1 Crédit)",
+    "extraCardButton": "Tirer une Carte d'Éclairage (1 Crédit)",
+    "disclaimer": "Le tarot est un miroir d'introspection personnelle et ne remplace pas un avis médical ou juridique.",
+    "sharePoster": "Partager le Poster",
+    "overallAnalysis": "Analyse Globale du Tirage",
+    "deepSynthesis": "Synthèse Profonde",
+    "cardBreakdown": "Révélation de Chaque Carte",
+    "goDeeper": "Approfondir ce tirage",
+    "askThis": "Poser cette question",
+    "readingSaved": "Votre tirage est sauvegardé",
+    "storyReady": "Image Prête",
+    "downloadPosterDesc": "Téléchargez un poster élégant pour vos stories Instagram ou WhatsApp.",
+    "downloadPosterBtn": "Enregistrer l'Image",
+    "rateReadingTitle": "Comment s'est passé votre tirage ?",
+    "rateReadingDesc": "Aidez-nous à affiner notre oracle en partageant votre avis.",
+    "rateSuccess": "✦ Merci, cher chercheur ! Votre avis a été enregistré dans le cosmos. ✦",
+    "rateFeedbackPlaceholder": "Partagez vos impressions ou réflexions (optionnel)...",
+    "submitFeedback": "Envoyer le Retour",
+    "exploreOtherTitle": "Découvrir Nos Autres Tirages",
+    "exploreOtherDesc": "Rejoignez une autre salle dédiée pour explorer d'autres aspects de votre vie.",
+    "enterRoom": "Entrer dans la Salle"
+  },
+  "credits": {
+    "current": "Solde",
+    "freeDaily": "Recharge Quotidienne Gratuite",
+    "streakDays": "Jours Consécutifs",
+    "purchasePacks": "Acquérir des Crédits",
+    "seekerPack": "Pack Chercheur (10 Crédits) - $4.99",
+    "mysticPack": "Pack Mystique (30 Crédits) - $11.99",
+    "oraclePack": "Pack Oracle (100 Crédits) - $29.99"
+  },
+  "featuredReadings": {
+    "card-of-the-day": {
+      "name": "Carte du Jour",
+      "subtitle": "Donnez le ton à votre journée",
+      "badge": "Tirage Quotidien Gratuit"
+    },
+    "yes-or-no-tarot": {
+      "name": "Tarot Oui ou Non",
+      "subtitle": "Verdict clair et décisif",
+      "badge": "1 Carte · Immédiat"
+    },
+    "two-choices-tarot-reading": {
+      "name": "Tarot des Deux Choix",
+      "subtitle": "Comparer la voie A et la voie B",
+      "badge": "5 Cartes · Décision"
+    },
+    "love-tarot-reading": {
+      "name": "Tarot de l'Amour",
+      "subtitle": "Dynamique du cœur & avenir amoureux",
+      "badge": "3 Cartes · Romance"
+    },
+    "relationship-tarot-reading": {
+      "name": "Tarot Relationnel",
+      "subtitle": "Éclairer le lien entre deux âmes",
+      "badge": "3 Cartes · Harmonie"
+    },
+    "question-tarot-reading": {
+      "name": "Tirage Question Précise",
+      "subtitle": "Réponses claires à toute interrogation",
+      "badge": "3 Cartes · Clarté"
+    },
+    "month-ahead-tarot-reading": {
+      "name": "Mois à Venir",
+      "subtitle": "Prévisions sur 4 semaines et thèmes clés",
+      "badge": "4 Cartes · Évolution"
+    },
+    "career-tarot-reading": {
+      "name": "Carrière & Vocation",
+      "subtitle": "Voie professionnelle, talents et succès",
+      "badge": "3 Cartes · Prospérité"
+    }
+  },
+  "spreads": {
+    "single": {
+      "name": "Lumière & Clarté du Jour (1 Carte)",
+      "desc": "Une carte précise pour l'énergie d'aujourd'hui ou une question pressante."
+    },
+    "three_card": {
+      "name": "Passé, Présent, Futur",
+      "desc": "La trinité classique révélant les origines, les forces en jeu et l'avenir."
+    },
+    "decision_ab": {
+      "name": "Option A vs Option B",
+      "desc": "Un tirage comparatif équilibré pour peser deux voies distinctes."
+    },
+    "celtic_cross": {
+      "name": "Croix Celtique (10 Cartes)",
+      "desc": "Le tirage sacré à dix cartes le plus complet pour une vue d'ensemble."
+    },
+    "card_of_the_day": {
+      "name": "Carte du Jour",
+      "desc": "Orientation quotidienne pour guider vos 24 prochaines heures."
+    },
+    "yes_or_no": {
+      "name": "Oui ou Non",
+      "desc": "Une réponse directe et intuitive à une question fermée."
+    },
+    "love_three_card": {
+      "name": "Tirage de l'Amour (3 Cartas)",
+      "desc": "Votre cœur, l'autre personne et l'énergie future."
+    },
+    "relationship_spread": {
+      "name": "Tirage Relationnel",
+      "desc": "Met en lumière le lien partagé et les leçons communes."
+    },
+    "question_three_card": {
+      "name": "Tirage d'Interrogation",
+      "desc": "Situation présente, forces cachées et orientation finale."
+    },
+    "month_ahead_four_card": {
+      "name": "Mois à Venir (4 Cartes)",
+      "desc": "Les thèmes majeurs des quatre prochaines semaines."
+    },
+    "career_three_card": {
+      "name": "Carrière & Vocation",
+      "desc": "Atouts professionnels, défis et stratégie d'accomplissement."
+    }
+  },
+  "personas": {
+    "sage": {
+      "name": "Le Sage Mystique",
+      "title": "Gardien des Courants Hermétiques",
+      "desc": "Interprète à travers les symboles sacrés et les cycles cosmiques avec sérénité."
+    },
+    "empath": {
+      "name": "L'Empathique Intuitive",
+      "title": "Miroir du Cœur et de l'Enfant Intérieur",
+      "desc": "Guidance bienveillante axée sur la guérison émotionnelle et la compassion."
+    },
+    "strategist": {
+      "name": "Le Stratège Direct",
+      "title": "Épée de Vérité et de Décision",
+      "desc": "Dissipe les doutes avec des conseils nets, concrets et immédiatement applicables."
+    }
+  }
+}

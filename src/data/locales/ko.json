@@ -1,0 +1,279 @@
+{
+  "nav": {
+    "title": "Arcana 3D",
+    "subtitle": "신성한 AI 타로",
+    "reading": "새로운 리딩",
+    "daily": "오늘의 카드",
+    "cards": "78장 카드",
+    "spreads": "스프레드",
+    "dashboard": "나의 여정",
+    "credits": "크레딧",
+    "readingsDropdown": "타로 리딩",
+    "creditPill": "크레딧",
+    "sacredBalance": "보유 크레딧",
+    "freeDailyCreditDesc": "매일 무료 점술 1회",
+    "view": "보기",
+    "sanctuaryHeader": "신전 메뉴"
+  },
+  "hero": {
+    "tagline": "고대 타로와 신성한 인공지능의 만남",
+    "headline": "3D 우주에서 경험하는 AI 타로 신전",
+    "subheading": "마음속 질문을 던지고, 실시간 3D 공간에서 카드를 셔플하여 고전 헤르메스 지혜가 담긴 스트리밍 리딩을 경험해보세요.",
+    "cta": "신탁 시작하기",
+    "dailyCta": "오늘의 카드 뽑기",
+    "exploreCards": "78장 덱 둘러보기",
+    "freeNotice": "첫 리딩은 완전 무료입니다. 회원가입이 필요 없습니다."
+  },
+  "physics3d": {
+    "title": "3차원 카드 물리 엔진 & 신성한 사운드",
+    "desc": "카드가 입체 궤도 공간에 떠오릅니다. 셔플하고, 홀로그램 카드 뒷면을 확인하며, 실시간 피드백으로 카드를 선택하고 벨벳 위에 펼쳐지는 카드를 확인하세요."
+  },
+  "chooseReading": {
+    "title": "원하는 리딩 선택하기",
+    "badge": "대표 원형 리딩 · 실시간 3D 점술 · 맞춤형 신탁"
+  },
+  "spreadsSection": {
+    "title": "신성한 스프레드 기하학",
+    "desc": "현재 삶의 갈림길과 가장 잘 맞는 배열법을 선택하세요.",
+    "cardSingular": "1장",
+    "cardPlural": "장",
+    "freeBadge": "무료",
+    "creditsBadge": "크레딧",
+    "selectSpread": "스프레드 선택"
+  },
+  "personasSection": {
+    "title": "세 명의 고유한 리더 음성",
+    "desc": "같은 스프레드라도 선택하는 리더에 따라 통찰의 깊이가 달라집니다. 당신의 영혼과 공명하는 안내자를 선택하세요.",
+    "toneLabel": "어조"
+  },
+  "foundations": {
+    "randomTitle": "암호화 진성 무작위성",
+    "randomDesc": "모든 카드 뽑기는 서버 측 CSPRNG 알고리즘을 사용합니다. AI 모델이 임의로 카드를 고를 수 없습니다.",
+    "streamTitle": "실시간 스트리밍 해석",
+    "streamDesc": "초고속 스트리밍으로 기다림 없이 리더의 직관적인 해석이 전달됩니다.",
+    "ethicsTitle": "윤리적 성찰의 거울",
+    "ethicsDesc": "개인의 자율성과 분별력을 존중합니다. 운명론이나 거짓된 확신을 배제합니다."
+  },
+  "settings": {
+    "title": "신전 설정",
+    "ambienceSection": "신성한 앰비언스 & 사운드",
+    "soundOn": "사운드 켜짐",
+    "muted": "음소거",
+    "masterVolume": "마스터 볼륨",
+    "harmonicToneMode": "주파수 모드",
+    "toneSolfeggioLabel": "528Hz 솔페지오",
+    "toneSolfeggioDesc": "치유와 마음의 확장을 위한 기적의 주파수",
+    "toneNebulaLabel": "천상의 성운",
+    "toneNebulaDesc": "명상적 안정을 위한 깊은 우주 드론",
+    "toneTempleLabel": "사원 싱잉볼",
+    "toneTempleDesc": "티베트 싱잉볼의 맑은 배음",
+    "sfxLabel": "카드 셔플 & 플립 효과음",
+    "sfxEnabled": "활성화",
+    "sfxMuted": "음소거",
+    "languageSection": "언어 설정",
+    "dimensionSection": "시각적 차원",
+    "mode2DLabel": "2D 접근성 모드",
+    "mode3DLabel": "3D 우주 공간 모드",
+    "switchTo2D": "2D 모드로 전환",
+    "switchTo3D": "3D 모드로 전환"
+  },
+  "readingRoom": {
+    "startDivination": "시작하기",
+    "aligningFreq": "원형 주파수 동기화 중",
+    "shufflingHeader": "카드를 셔플하고 있습니다... 질문에 집중하세요",
+    "coalescingDeck": "덱을 정돈하는 중...",
+    "finishShuffling": "셔플 완료",
+    "cutRitualBadge": "신성한 의식 · 개인 에너지 각인",
+    "cutRitualTitle": "신성한 덱 컷팅하기",
+    "cutRitualHint": "직관이 이끄는 곳을 탭하여 덱을 두 개로 나누세요...",
+    "fanOutCards": "카드를 부채꼴로 펼치기",
+    "selectCardsPrompt": "선택",
+    "moreCards": "장 더 선택",
+    "allCardsSelected": "모든 카드가 선택되었습니다! 아래에서 결과를 확인하세요.",
+    "synthesizeReading": "신탁 종합 해석하기",
+    "revealAllCards": "모든 카드 뒤집기",
+    "askAnotherQuestion": "다른 질문하기",
+    "exploreAllReadings": "모든 리딩 둘러보기",
+    "actionAnchor": "실천 가이드",
+    "suggestedContemplations": "추천 성찰 질문",
+    "goDeeper": "더 깊은 질문하기",
+    "askFollowup": "리더에게 묻기",
+    "creditCost": "1 크레딧",
+    "synthesizedTitle": "신성한 오라클"
+  },
+  "footer": {
+    "brandDesc": "1909년 파멜라 콜먼 스미스의 타로 원형과 현대 소버린 AI의 만남.",
+    "archiveNotice": "퍼블릭 도메인 RWS (1909) 아카이브",
+    "sacredPortals": "신성한 포털",
+    "ethicalTitle": "윤리적 AI 오라클",
+    "ethicalBullet1": "카드는 무작위 난수로 뽑히며 AI가 카드를 임의 조작하지 않습니다.",
+    "ethicalBullet2": "절대적 운명론이나 의료/법적 확언을 하지 않습니다.",
+    "ethicalBullet3": "위기 상담은 전문 상담 기관으로 신속히 안내합니다.",
+    "supportTitle": "지원 및 케어",
+    "supportDesc": "심리적 위기 상황 시 전문 상담 기관에 문의하세요:",
+    "rightsReserved": "All rights reserved.",
+    "privacyPolicy": "개인정보처리방침",
+    "termsOfService": "이용약관",
+    "refundPolicy": "환불 정책",
+    "authenticAi": "AUTHENTIC TAROT AI"
+  },
+  "readingForm": {
+    "questionLabel": "마음속에 품고 있는 질문은 무엇인가요?",
+    "questionPlaceholder": "예: 다가오는 계절 나의 커리어와 창작 활동에 어떤 에너지가 작용할까요?",
+    "questionHint": "최대 200자. 열린 질문일수록 깊은 통찰을 얻을 수 있습니다.",
+    "optionsPrompt": "두 가지 길 사이에서 고민 중이신가요? (선택 사항)",
+    "optionALabel": "선택지 / 경로 A",
+    "optionAPlaceholder": "새로운 제안 수락하기",
+    "optionBLabel": "선택지 / 경로 B",
+    "optionBPlaceholder": "현재 길을 지키며 독립하기",
+    "chooseSpread": "스프레드(배열법) 선택",
+    "choosePersona": "타로 리더 선택",
+    "shufflePrompt": "셔플하고 3D 신전 입장하기",
+    "freeGuestNotice": "첫 리딩은 완전 무료입니다. 가입이 필요 없습니다."
+  },
+  "reader": {
+    "shufflingDeck": "78개의 원형 에너지를 셔플 중입니다...",
+    "fieldInstruction": "떠오른 카드 중에서 {required}장을 선택하세요 (현재 {selected}장 선택됨)",
+    "revealButton": "카드 뒤집기",
+    "drawUnderway": "카드를 배열하고 리더의 통찰을 불러오는 중입니다...",
+    "streamIntro": "카드가 신성한 질서에 따라 놓였습니다.",
+    "practicalStepTitle": "실천을 위한 지침",
+    "followupTitle": "이 배열에 대해 더 깊이 질문하기",
+    "followupPlaceholder": "이 카드들에 관한 추가 질문을 입력하세요...",
+    "followupSend": "리더에게 질문하기 (1 크레딧)",
+    "extraCardButton": "조언 카드 1장 더 뽑기 (1 크레딧)",
+    "disclaimer": "타로는 자기 성찰을 위한 도구이며 의료·법률 전문가의 조언을 대신하지 않습니다.",
+    "sharePoster": "포스터 공유하기",
+    "overallAnalysis": "전체 리딩 분석",
+    "deepSynthesis": "심층 종합 해석",
+    "cardBreakdown": "각 카드의 상세 계시",
+    "goDeeper": "더 깊은 통찰 탐색하기",
+    "askThis": "이 질문하기",
+    "readingSaved": "리딩이 저장되었습니다",
+    "storyReady": "이미지 생성 완료",
+    "downloadPosterDesc": "인스타그램 스토리나 메신저에 공유할 수 있는 포스터를 다운로드하세요.",
+    "downloadPosterBtn": "이미지로 저장하기",
+    "rateReadingTitle": "이번 리딩은 어떠셨나요?",
+    "rateReadingDesc": "더 나은 오라클을 위해 소중한 피드백을 남겨주세요.",
+    "rateSuccess": "✦ 감사합니다! 당신의 피드백이 우주에 기록되었습니다. ✦",
+    "rateFeedbackPlaceholder": "느낀 점이나 소감을 적어주세요 (선택 사항)...",
+    "submitFeedback": "피드백 제출하기",
+    "exploreOtherTitle": "다른 신성한 리딩 둘러보기",
+    "exploreOtherDesc": "삶의 다양한 고민을 위해 전용 리딩 룸을 방문해보세요.",
+    "enterRoom": "신전 입장하기"
+  },
+  "credits": {
+    "current": "잔액",
+    "freeDaily": "일일 무료 충전",
+    "streakDays": "일 연속 방문",
+    "purchasePacks": "크레딧 충전하기",
+    "seekerPack": "구도자 팩 (10 크레딧) - $4.99",
+    "mysticPack": "신비가 팩 (30 크레딧) - $11.99",
+    "oraclePack": "오라클 팩 (100 크레딧) - $29.99"
+  },
+  "featuredReadings": {
+    "card-of-the-day": {
+      "name": "오늘의 카드",
+      "subtitle": "오늘 하루를 이끄는 기조",
+      "badge": "무료 일일 점술"
+    },
+    "yes-or-no-tarot": {
+      "name": "예스 or 노 타로",
+      "subtitle": "명쾌하고 빠른 직관적 답변",
+      "badge": "1장 · 즉시 판별"
+    },
+    "two-choices-tarot-reading": {
+      "name": "두 가지 선택 타로",
+      "subtitle": "경로 A와 경로 B 비교 분석",
+      "badge": "5장 · 결단 지원"
+    },
+    "love-tarot-reading": {
+      "name": "사랑의 타로 리딩",
+      "subtitle": "마음의 진실과 로맨스의 미래",
+      "badge": "3장 · 애정운"
+    },
+    "relationship-tarot-reading": {
+      "name": "관계 조화 리딩",
+      "subtitle": "두 사람의 유대와 역동성 조명",
+      "badge": "3장 · 관계운"
+    },
+    "question-tarot-reading": {
+      "name": "인생 질문 리딩",
+      "subtitle": "모든 고민을 위한 명확한 나침반",
+      "badge": "3장 · 맞춤 답변"
+    },
+    "month-ahead-tarot-reading": {
+      "name": "한 달 전망 타로",
+      "subtitle": "앞으로 4주간의 테마와 흐름",
+      "badge": "4장 · 월간 운세"
+    },
+    "career-tarot-reading": {
+      "name": "커리어 & 소명",
+      "subtitle": "직업적 성장, 재능, 성공 전략",
+      "badge": "3장 · 커리어운"
+    }
+  },
+  "spreads": {
+    "single": {
+      "name": "오늘의 통찰 (1장)",
+      "desc": "오늘의 에너지나 단일 질문을 위한 명확하고 집중된 조언."
+    },
+    "three_card": {
+      "name": "과거, 현재, 미래 (3장)",
+      "desc": "근원, 현재 흐름, 다가올 잠재력을 밝히는 클래식 삼위일체 스프레드."
+    },
+    "decision_ab": {
+      "name": "선택지 A vs B (5장)",
+      "desc": "기로에 선 결정을 돕기 위해 장단점과 결과를 균형 있게 분석합니다."
+    },
+    "celtic_cross": {
+      "name": "켈틱 크로스 (10장)",
+      "desc": "상황의 심층적 원인과 운명의 궤적을 짚어주는 가장 권위 있는 10장 배열법."
+    },
+    "card_of_the_day": {
+      "name": "오늘의 카드",
+      "desc": "하루를 조율하는 신성한 아르카나 메시지."
+    },
+    "yes_or_no": {
+      "name": "예스 or 노",
+      "desc": "단순하고 명확한 질문에 대한 직관적 답."
+    },
+    "love_three_card": {
+      "name": "애정운 (3장)",
+      "desc": "나의 마음, 상대방의 마음, 두 사람의 미래."
+    },
+    "relationship_spread": {
+      "name": "관계 리딩 (3장)",
+      "desc": "소중한 관계의 진실과 발전 방향."
+    },
+    "question_three_card": {
+      "name": "질문 리딩 (3장)",
+      "desc": "현상, 보이지 않는 요인, 결정적 조언."
+    },
+    "month_ahead_four_card": {
+      "name": "월간 전망 (4장)",
+      "desc": "앞으로 4주간 주차별 핵심 테마."
+    },
+    "career_three_card": {
+      "name": "커리어 (3장)",
+      "desc": "현재 역량, 기회, 성공을 위한 전략."
+    }
+  },
+  "personas": {
+    "sage": {
+      "name": "신비의 현자",
+      "title": "고대 헤르메스 전통의 수호자",
+      "desc": "원형과 우주의 주기를 통해 차분하고 초연한 통찰을 제공합니다."
+    },
+    "empath": {
+      "name": "직관의 공감자",
+      "title": "마음과 내면아이의 거울",
+      "desc": "정서적 치유와 관계 회복, 따스한 위로를 전합니다."
+    },
+    "strategist": {
+      "name": "명철한 전략가",
+      "title": "명확성과 실행력의 검",
+      "desc": "환상을 걷어내고 명확하고 구체적인 실천 전략을 제시합니다."
+    }
+  }
+}
