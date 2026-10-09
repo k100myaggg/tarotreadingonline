@@ -73,32 +73,27 @@ export function Header({ locale }: HeaderProps) {
     return segments.join("/");
   };
 
-  // Curated, highest-intent & high-volume tarot categories (Refined, no generic clutter)
+  // Curated, highest-intent tarot categories (Clean, friendly navigation)
   const readingOptions = [
     {
+      href: `/${locale}/card-of-the-day`,
+      label: locale === "hi" ? "दिन का कार्ड" : locale === "ja" ? "今日のカード" : "Daily Tarot",
+    },
+    {
       href: `/${locale}/yes-or-no-tarot`,
-      label: locale === "hi" ? "हाँ या ना टैरो" : locale === "ja" ? "イエス・ノー リーディング" : "Yes/No Reading",
-      badge: "XVII · Instant Verdict",
+      label: locale === "hi" ? "हाँ या ना टैरो" : locale === "ja" ? "イエス・ノー リーディング" : "Yes or No",
     },
     {
       href: `/${locale}/love-tarot-reading`,
       label: locale === "hi" ? "प्रेम और संबंध टैरो" : locale === "ja" ? "愛と絆のリーディング" : "Love & Relationship",
-      badge: "XIV · Romance",
     },
     {
       href: `/${locale}/career-tarot-reading`,
       label: locale === "hi" ? "करियर और जीवन उद्देश्य" : locale === "ja" ? "キャリア＆ライフパーパス" : "Career & Purpose",
-      badge: "IV · Wealth & Growth",
-    },
-    {
-      href: `/${locale}/card-of-the-day`,
-      label: locale === "hi" ? "दिन का कार्ड" : locale === "ja" ? "今日のカード" : "Card of the Day",
-      badge: "XXI · Daily Guide",
     },
     {
       href: `/${locale}/spreads`,
-      label: locale === "hi" ? "समस्त टैरो विन्यास" : locale === "ja" ? "すべてのリーディング" : "All Spreads & Celtic Cross",
-      badge: "Overview",
+      label: locale === "hi" ? "समस्त टैरो विन्यास" : locale === "ja" ? "すべてのリーディング" : "Tarot Spreads",
     },
   ];
 
@@ -153,26 +148,24 @@ export function Header({ locale }: HeaderProps) {
                 aria-haspopup="true"
               >
                 <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-                <span className="font-serif-sacred font-semibold">Readings</span>
+                <span className="font-medium">Readings</span>
                 <ChevronDown className="w-3.5 h-3.5 text-amber-400 group-hover:rotate-180 transition-transform duration-200" />
               </button>
 
-              {/* Glass Dropdown Popover matching competitor */}
-              <div className="absolute left-0 top-full pt-2 w-64 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
-                <div className="rounded-2xl p-2 bg-[#090714]/95 backdrop-blur-2xl border border-amber-500/30 shadow-2xl shadow-purple-950/70 space-y-1">
+              {/* Clean Glass Dropdown Popover */}
+              <div className="absolute left-0 top-full pt-2 w-56 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-all duration-200 z-50">
+                <div className="rounded-2xl p-1.5 bg-[#090714]/95 backdrop-blur-2xl border border-amber-500/25 shadow-2xl shadow-purple-950/70 space-y-0.5">
                   {readingOptions.map((opt) => (
                     <Link
                       key={opt.href}
                       href={opt.href}
                       onClick={() => playButtonClick?.()}
-                      className="flex items-center justify-between px-3 py-2 rounded-xl text-xs font-serif-sacred text-slate-200 hover:text-amber-200 hover:bg-amber-500/15 border border-transparent hover:border-amber-500/30 transition-all group/item"
+                      className="flex items-center justify-between px-3 py-2.5 rounded-xl text-xs text-slate-200 hover:text-amber-200 hover:bg-amber-500/10 transition-all group/item"
                     >
                       <span className="font-medium group-hover/item:translate-x-0.5 transition-transform">
                         {opt.label}
                       </span>
-                      <span className="text-[9px] font-mono-sacred text-amber-400/70 group-hover/item:text-amber-300 px-1.5 py-0.5 rounded bg-black/40">
-                        {opt.badge}
-                      </span>
+                      <ArrowRight className="w-3 h-3 text-amber-400/40 group-hover/item:text-amber-300 group-hover/item:translate-x-0.5 transition-all" />
                     </Link>
                   ))}
                 </div>
@@ -286,10 +279,10 @@ export function Header({ locale }: HeaderProps) {
               </Link>
             </div>
 
-            {/* Sacred Readings Accordion Section */}
+            {/* Readings Section */}
             <div className="space-y-1 mb-4">
-              <span className="font-mono-sacred text-[10px] text-amber-400 tracking-widest uppercase px-1">
-                ✦ SACRED READINGS (DEDICATED ROOMS) ✦
+              <span className="text-[11px] font-semibold text-amber-400 tracking-wider uppercase px-1">
+                Readings
               </span>
               <div className="grid grid-cols-1 gap-1.5 pt-1">
                 {readingOptions.map((opt) => (
@@ -297,12 +290,10 @@ export function Header({ locale }: HeaderProps) {
                     key={opt.href}
                     href={opt.href}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-between p-2.5 rounded-xl bg-black/40 border border-white/5 hover:border-amber-500/30 text-xs font-serif-sacred text-slate-200 hover:text-amber-200 transition-all"
+                    className="flex items-center justify-between p-2.5 rounded-xl bg-black/40 border border-white/5 hover:border-amber-500/30 text-xs text-slate-200 hover:text-amber-200 transition-all"
                   >
                     <span className="font-medium">{opt.label}</span>
-                    <span className="text-[9px] font-mono-sacred text-amber-400/80 px-2 py-0.5 rounded bg-amber-500/10 border border-amber-500/20">
-                      {opt.badge}
-                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 text-amber-400/50" />
                   </Link>
                 ))}
               </div>

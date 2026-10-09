@@ -2,7 +2,6 @@
 
 import React, { useMemo, useRef, useState, useCallback, useEffect } from "react";
 import { useFrame, useThree, ThreeEvent } from "@react-three/fiber";
-import { Html } from "@react-three/drei";
 import * as THREE from "three";
 import { useReadingStore } from "@/stores/useReadingStore";
 import { getCardBackTexture } from "./cardTextures";
@@ -135,11 +134,8 @@ function FloatingCardItem({
     const g = glowIntensity.current;
     const shimmer = Math.sin(time * 2.8 + floatPhase) * 0.25 + 0.75;
 
-    if (isSelected && hovered) {
-      cardEdgeMat.emissive.setRGB(0.95 * g * shimmer, 0.4 * g * shimmer, 0.3 * g * shimmer);
-    } else {
-      cardEdgeMat.emissive.setRGB(0.95 * g * shimmer, 0.76 * g * shimmer, 0.24 * g * shimmer);
-    }
+    // Warm golden luminescence
+    cardEdgeMat.emissive.setRGB(0.95 * g * shimmer, 0.76 * g * shimmer, 0.24 * g * shimmer);
   });
 
   const handlePointerOver = useCallback((e: ThreeEvent<PointerEvent>) => {
@@ -178,27 +174,6 @@ function FloatingCardItem({
         receiveShadow
       >
         <boxGeometry args={[0.55, 0.94, 0.012]} />
-
-        {/* Selection confirmation badge attached directly to upper face of the card */}
-        {isSelected && selectionOrder && (
-          <Html position={[0, 0.36, 0.04]} center pointerEvents="none">
-            <div
-              className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full font-mono-sacred text-[9px] font-extrabold tracking-wider shadow-xl whitespace-nowrap select-none border transition-all duration-150 ${
-                hovered
-                  ? "bg-gradient-to-r from-rose-300 via-rose-200 to-rose-300 border-rose-950/40 text-rose-950 shadow-rose-400/60 scale-105"
-                  : "bg-gradient-to-r from-amber-300 via-amber-200 to-amber-300 border-amber-950/30 text-neutral-950 shadow-amber-400/70"
-              }`}
-            >
-              <span
-                className={`w-1.5 h-1.5 rounded-full ${
-                  hovered ? "bg-rose-950" : "bg-amber-950 animate-ping"
-                }`}
-              />
-              <span>{hovered ? `DESELECT CARD ${selectionOrder}` : `CARD ${selectionOrder}`}</span>
-              <span className="text-[8px] font-bold opacity-80">✕</span>
-            </div>
-          </Html>
-        )}
       </mesh>
     </group>
   );

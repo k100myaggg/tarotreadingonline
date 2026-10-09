@@ -708,42 +708,14 @@ export default function ReadingPage({ params }: ReadingPageProps) {
         <>
           {/* Top Pinned Instructions */}
           <div className="fixed top-16 left-0 right-0 z-20 pointer-events-none text-center px-4">
-            <h2 className="font-serif-sacred text-2xl sm:text-3xl text-amber-100 font-bold drop-shadow">
-              Please select {requiredPicks} {requiredPicks === 1 ? "card" : "cards"} ({userPickIndices.length} {userPickIndices.length === 1 ? "card" : "cards"} selected)
+            <h2 className="text-xl sm:text-2xl text-amber-100 font-semibold drop-shadow">
+              Select {requiredPicks} {requiredPicks === 1 ? "card" : "cards"}
             </h2>
-            <p className="text-xs font-mono-sacred text-amber-400/80 mt-1">
+            <p className="text-xs text-amber-200/80 mt-1 font-medium">
               {picksRemaining > 0
-                ? `Click cards in the cosmos to choose · Click again or use pills below to deselect`
-                : "All sacred cards chosen. Cast the spread below."}
+                ? `${userPickIndices.length} of ${requiredPicks} selected`
+                : "All cards selected"}
             </p>
-
-            {/* Selected Card Pills for Instant 1-Click Deselection */}
-            {userPickIndices.length > 0 && (
-              <div className="flex flex-wrap items-center justify-center gap-2 mt-2.5 pointer-events-auto animate-in fade-in zoom-in-95 duration-200">
-                {userPickIndices.map((idx, order) => (
-                  <button
-                    key={idx}
-                    type="button"
-                    onClick={() => togglePickIndex(idx)}
-                    className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/85 border border-amber-400/60 text-amber-200 font-mono-sacred text-[11px] hover:bg-rose-950/80 hover:border-rose-400 hover:text-rose-200 transition-all shadow-lg shadow-black/80 group"
-                    title="Click to deselect this card"
-                  >
-                    <span className="w-1.5 h-1.5 rounded-full bg-amber-400 group-hover:bg-rose-400" />
-                    <span className="font-bold">CARD {order + 1}</span>
-                    <span className="text-[9px] text-slate-400 group-hover:text-rose-300">#{(idx % 78) + 1}</span>
-                    <span className="text-xs ml-0.5 text-amber-400 group-hover:text-rose-300 font-bold">✕</span>
-                  </button>
-                ))}
-                <button
-                  type="button"
-                  onClick={clearPicks}
-                  className="px-2.5 py-1 rounded-full bg-black/60 border border-white/20 text-slate-400 font-mono-sacred text-[10px] hover:text-rose-300 hover:border-rose-500/40 transition-all"
-                  title="Clear all selections"
-                >
-                  Clear All
-                </button>
-              </div>
-            )}
           </div>
 
           {/* Bottom Pinned Reveal Spread Action Button */}
