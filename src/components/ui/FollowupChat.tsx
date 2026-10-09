@@ -30,12 +30,15 @@ export function FollowupChat({ locale }: FollowupChatProps) {
   const [guidanceCard, setGuidanceCard] = useState<any>(null);
   const [isDrawingGuidance, setIsDrawingGuidance] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll when new messages or loading starts
+  // Auto-scroll inside the messages container only, never jumping or scrolling the outer page
   useEffect(() => {
-    if (isLoading || followups.length > 0) {
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messagesContainerRef.current) {
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
     }
   }, [isLoading, followups.length]);
 
@@ -231,7 +234,7 @@ export function FollowupChat({ locale }: FollowupChatProps) {
       })()}
 
       {/* Messages Stream */}
-      <div className="space-y-4 my-6 max-h-[420px] overflow-y-auto pr-2 [scrollbar-gutter:stable]">
+      <div ref={messagesContainerRef} className="space-y-4 my-6 max-h-[420px] overflow-y-auto pr-2 [scrollbar-gutter:stable]">
         {followups.length === 0 && (
           <div className="text-center py-8 text-slate-500 text-xs font-mono-sacred">
             ✦ Ask a question to delve deeper into your spread, or draw a clarifying card above ✦
@@ -270,8 +273,6 @@ export function FollowupChat({ locale }: FollowupChatProps) {
             </span>
           </div>
         )}
-
-        <div ref={messagesEndRef} />
       </div>
 
       {errorMessage && (

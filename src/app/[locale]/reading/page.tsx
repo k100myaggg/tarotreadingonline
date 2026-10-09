@@ -787,15 +787,15 @@ export default function ReadingPage({ params }: ReadingPageProps) {
               <Sparkles className="w-4 h-4 text-amber-300 animate-spin" />
               <span className="font-serif-sacred font-bold text-xs sm:text-sm text-amber-100">
                 {locale === "hi"
-                  ? "जेमिनी एआई गहन ब्रह्मांडीय शोध व विश्लेषण कर रहा है..."
-                  : "Gemini AI is Conducting Deep Cosmic Research..."}
+                  ? "पवित्र प्रतीकों व ब्रह्मांडीय ऊर्जाओं का गूढ़ विश्लेषण..."
+                  : "Channeling Archetypal Wisdom & Cosmic Guidance..."}
               </span>
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             </div>
             <p className="font-mono-sacred text-[11px] text-amber-300/80 mt-2 drop-shadow">
               {locale === "hi"
-                ? "प्राचीन प्रतीकों व 78 कार्ड्स की ऊर्जाओं का गहन संश्लेषण जारी है"
-                : "CONSULTING CELESTIAL ARCHIVES · WEAVING 15-LINE COMPREHENSIVE GUIDANCE"}
+                ? "प्राचीन 78 कार्ड्स की शक्तियों का समन्वय · गहन बहु-आयामी मार्गदर्शन"
+                : "CONSULTING CELESTIAL ARCHIVES · WEAVING MULTIDIMENSIONAL SPIRITUAL INSIGHT"}
             </p>
           </div>
 
@@ -850,8 +850,7 @@ export default function ReadingPage({ params }: ReadingPageProps) {
                 setFollowupInput(suggestedQ);
                 const el = document.getElementById("followup-input");
                 if (el) {
-                  el.focus();
-                  el.scrollIntoView({ behavior: "smooth", block: "center" });
+                  el.focus({ preventScroll: true });
                 }
               }}
               followupChatNode={<FollowupChat locale={locale} />}

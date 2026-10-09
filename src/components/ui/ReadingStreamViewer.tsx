@@ -100,7 +100,7 @@ export function ReadingStreamViewer({
               {reading?.readerPersona || "The Oracle Voice"}
             </h3>
             <p className="font-mono-sacred text-[11px] text-amber-400/70">
-              {isStreaming ? "TRANSCRIBING SACRED CURRENTS VIA GEMINI AI..." : "SYNTHESIS MANIFESTED"}
+              {isStreaming ? "TRANSCRIBING SACRED CURRENTS & CELESTIAL GUIDANCE..." : "SYNTHESIS MANIFESTED"}
             </p>
           </div>
         </div>
